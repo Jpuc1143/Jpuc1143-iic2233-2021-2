@@ -1,0 +1,5 @@
+# Archivo generado durante edición
+*.swp
+
+# Copia local de los csv
+*.original
