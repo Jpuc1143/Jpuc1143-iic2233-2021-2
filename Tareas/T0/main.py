@@ -13,12 +13,12 @@ class Menu(Enum):
     login = auto()
 
 # Cargar todos los csv
-posts = csv.readCsv("publicaciones.csv", 5)[1:]
+posts = csv.read_csv("publicaciones.csv", 5)[1:]
 
-comments_array = csv.readCsv("comentarios.csv", 3)
+comments_array = csv.read_csv("comentarios.csv", 3)
 comments = {data[1]: data for data in comments_array[1:]}
 
-users_array = csv.readCsv("usuarios.csv", 0)
+users_array = csv.read_csv("usuarios.csv", 0)
 users = {user[0] for user in users_array[1:]}
 
 

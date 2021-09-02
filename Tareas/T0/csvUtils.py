@@ -1,4 +1,4 @@
-def readCsv(path, max_split):
+def read_csv(path, max_split):
     data = []
 
     file = open(path, "r")
@@ -7,6 +7,6 @@ def readCsv(path, max_split):
 
     return data
 
-def writeCsv(path):
+def write_csv(path):
     # TODO: implementar
     pass
