@@ -16,13 +16,31 @@ class Hotel:
         Comida('Pollo y Arroz', 20, 0.1)
         ]
 
-    # COMPLETAR
+    @property
     def energia(self):
-        pass
+        return self.__energia
 
-    # COMPLETAR
+    @energia.setter
+    def energia(self, value):
+        if value > self.max_energia:
+            self.__energia = self.max_energia
+        elif value < 0:
+            self.__energia = 0
+        else:
+            self.__energia = value
+
+    @property
     def dias(self):
-        pass
+        return self.__dias
+
+    @dias.setter
+    def dias(self, value):
+        if value > self.__dias:
+            self.__dias = value
+
+        if value < 0:
+            self.__dias = 0
+
 
     def hotel_en_buen_estado(self):
         """
@@ -42,8 +60,9 @@ class Hotel:
         return True
 
     def imprimir_estado(self):
-        # COMPLETAR
-        pass
+        print(f"Día: {self.__dias}")
+        print(f"Energía cuidador: {100*self.__energia//self.max_energia}% ({self.__energia}/{self.max_energia})")
+        print(f"Mascotas hospedadas: {len(self.mascotas)}")
 
     def recibir_mascota(self, mascotas):
         self.mascotas += (mascotas)
@@ -69,8 +88,18 @@ class Hotel:
             print(mascota)
 
     def nuevo_dia(self):
-        # COMPLETAR
-        pass
+        if self.hotel_en_buen_estado():
+            self.__dias += 1
+            self.__energia = self.max_energia
+
+            for mascota in self.mascotas:
+                mascota.saciedad -= randint(5,10)
+                mascota.entretencion -= randint(0,10)
+
+        else:
+            print("Debido a tu falta de cuidado, el hotel a tenido que cerrar")
+            print(f"GAME OVER: duraste {self.__dias} dias.")
+            self.funcionando = False
 
     def revisar_energia(self):
         if self.energia >= min(p.COSTO_ENERGIA_ALIMENTAR, 
@@ -84,5 +113,5 @@ class Hotel:
         print(f'{mascota.nombre} salió a pasear feliz!')
 
     def alimentar_mascota(self, mascota):
-        # COMPLETAR
-        pass
+        mascota.comer(choice(self.comidas))
+        self.__energia -= p.COSTO_ENERGIA_ALIMENTAR
