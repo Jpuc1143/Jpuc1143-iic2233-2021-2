@@ -16,7 +16,13 @@ class Menu(Enum):
 posts = csv.read_csv("publicaciones.csv", 5)[1:]
 
 comments_array = csv.read_csv("comentarios.csv", 3)
-comments = {data[1]: data for data in comments_array[1:]}
+#comments = {data[1]: data for data in comments_array[1:]}
+comments = dict()
+for comment in comments_array[1:]:
+    if comment[0] not in comments:
+        comments[comment[0]] = [comment]
+    else:
+        comments[comment[0]].append(comment)
 
 users_array = csv.read_csv("usuarios.csv", 0)
 users = {user[0] for user in users_array[1:]}
@@ -25,6 +31,7 @@ users = {user[0] for user in users_array[1:]}
 menu_state = Menu.start
 logged_in = False
 current_post = None
+
 # No hay switch en Python :(
 while True:
     options = dict()
@@ -83,7 +90,9 @@ while True:
         print(f"Descripción:\n{post[5]}\n")
 
         print("Comentarios:")
-        print("TODO")
+        for comment in comments[post[0]]:
+            print(f"{comment[2]} <{comment[1]}> {comment[3]}")
+        print("")
 
         options = {
             "q": ("Salir de DCCommerce", Menu.exit),
