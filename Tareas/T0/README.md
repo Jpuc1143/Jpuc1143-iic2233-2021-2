@@ -1,114 +1,73 @@
-# Tarea X: Nombre de la tarea :school_satchel:
-
-
-Un buen ```README.md``` puede marcar una gran diferencia en la facilidad con la que corregimos una tarea, y consecuentemente cómo funciona su programa, por lo en general, entre más ordenado y limpio sea éste, mejor será 
-
-Para nuestra suerte, GitHub soporta el formato [MarkDown](https://es.wikipedia.org/wiki/Markdown), el cual permite utilizar una amplia variedad de estilos de texto, tanto para resaltar cosas importantes como para separar ideas o poner código de manera ordenada ([pueden ver casi todas las funcionalidades que incluye aquí](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet))
-
-Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **concisos** (a menos que lo consideren necesario) pero **tampoco pueden** faltar cosas. Lo importante es que sea claro y limpio 
-
-**Dejar claro lo que NO pudieron implementar y lo que no funciona a la perfección. Esto puede sonar innecesario pero permite que el ayudante se enfoque en lo que sí podría subir su puntaje.**
+# Tarea 0: DCCommerce :school_satchel:
 
 ## Consideraciones generales :octocat:
 
-<Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
-con detalles de último minuto y consideraciones como por ejemplo cambiar algo
-en cierta línea del código o comentar una función>
-
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
-Explicación: mantén el emoji correspondiente, de manera honesta, para cada item. Si quieres, también puedes agregarlos a los títulos:
-- ❌ si **NO** completaste lo pedido
-- ✅ si completaste **correctamente** lo pedido
-- 🟠 si el item está **incompleto** o tiene algunos errores
 #### Menú de Inicio (14pts) (14%)
-##### ❌✅🟠 Requisitos
-##### ❌✅🟠 Iniciar sesión
-##### ❌✅🟠 Ingresar como usuario anónimo
-##### ❌✅🟠 Registrar usuario
-##### ❌✅🟠 Salir
+##### ✅ Requisitos
+##### ✅ Iniciar sesión
+##### ✅ Ingresar como usuario anónimo
+##### ✅ Registrar usuario
+##### ✅ Salir
 #### Flujo del programa (35pts) (35%) 
-##### ❌✅🟠 Menú Principal
-##### ❌✅🟠 Menú Publicaciones
-##### ❌✅🟠 Menú Publicaciones Realizadas
+##### ✅ Menú Principal
+##### ✅ Menú Publicaciones
+##### ✅ Menú Publicaciones Realizadas
 #### Entidades 15pts (15%)
-##### ❌✅🟠 Usuarios
-##### ❌✅🟠 Publicaciones
-##### ❌✅🟠 Comentarios
+##### ✅ Usuarios
+##### ✅ Publicaciones
+##### ✅ Comentarios
 #### Archivos: 15 pts (15%)
-##### ❌✅🟠 Manejo de Archivos
+##### ✅ Manejo de Archivos
 #### General: 21 pts (21%)
-##### ❌✅🟠 Menús
-##### ❌✅🟠 Parámetros
-##### ❌✅🟠 Módulos
-##### ❌✅🟠 PEP8
+##### ✅ Menús
+##### ✅ Parámetros
+##### ✅ Módulos
+##### ✅ PEP8
 ## Ejecución :computer:
-El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
-1. ```archivo.ext``` en ```ubicación```
-2. ```directorio``` en ```ubicación```
-3. ...
+El módulo principal de la tarea a ejecutar es  ```main.py```. Además se debe crear los siguientes archivos y directorios adicionales:
+1. ```publicaciones.csv``` en ```./```
+2. ```usuarios.csv``` en ```./```
+3. ```comentarios.csv``` en ```./```
 
 
 ## Librerías :books:
 ### Librerías externas utilizadas
 La lista de librerías externas que utilicé fue la siguiente:
 
-1. ```librería_1```: ```función() / módulo```
-2. ```librería_2```: ```función() / módulo``` (debe instalarse)
-3. ...
+1. ```datetime```: se usan las funciones ```now()``` y ```strftime()``` para obtener el dia y hora actual.
+2. ```enum```: se usa la clase ```Enum``` para hacer más claro la transición de los menús en el código.
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
-1. ```librería_1```: Contiene a ```ClaseA```, ```ClaseB```, (ser general, tampoco es necesario especificar cada una)...
-2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
-3. ...
+1. ```csv_utils```: Contiene a ```read_csv``` y ```write_csv``` para la transormación entre los datos _csv_ y las estructuras de _Python_.
+2. ```user_actions```: Hecha para hacer modular las acciones de los usuarios como publicar comentarios, registrarse o borrar publicaciones.
+3. ```parametros```: Además de las constantes mencionadas en el enunciado, contiene un _Enum_ para facilitar la lectura del código.
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
 
-1. <Descripción/consideración 1 y justificación del por qué es válido/a> 
-2. <Descripción/consideración 2 y justificación del por qué es válido/a>
-3. ...
+1. El contenido de todos los csv siempre va a estar bien formateados.
+2. El log-in de los usuarios se rige con un codigo de honor y no necesita contraseña. 
+3. Los archivos csv son una abstracción de la conexión entre la aplicación y los servidores de DCCommerce.
 
-PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
+Consideraciones adicionales:
+
+1. El programa no está diseñado para una cantidad gigante de publicaciones o comentarios, ya que, se muestran todas las publicaciones al mismo tiempo y se escriben todos los datos de nuevo a los _csv_ cuando hay un cambio.
+2. Debido al uso de archivos _csv_ en vez de un _DBMS_, se hicieron unas decisiones de diseño... _"interesantes"_... para la creación del programa.
 
 
 -------
 
 
-
-**EXTRA:** si van a explicar qué hace específicamente un método, no lo coloquen en el README mismo. Pueden hacerlo directamente comentando el método en su archivo. Por ejemplo:
-
-```python
-class Corrector:
-
-    def __init__(self):
-          pass
-
-    # Este método coloca un 6 en las tareas que recibe
-    def corregir(self, tarea):
-        tarea.nota  = 6
-        return tarea
-```
-
-Si quieren ser más formales, pueden usar alguna convención de documentación. Google tiene la suya, Python tiene otra y hay muchas más. La de Python es la [PEP287, conocida como reST](https://www.python.org/dev/peps/pep-0287/). Lo más básico es documentar así:
-
-```python
-def funcion(argumento):
-    """
-    Mi función hace X con el argumento
-    """
-    return argumento_modificado
-```
-Lo importante es que expliquen qué hace la función y que si saben que alguna parte puede quedar complicada de entender o tienen alguna función mágica usen los comentarios/documentación para que el ayudante entienda sus intenciones.
-
 ## Referencias de código externo :book:
 
 Para realizar mi tarea saqué código de:
-1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
-
+1. <https://stackoverflow.com/a/40003478>: este está implementado en el archivo ```main.py``` en las líneas 3 a la 7 y hace que la sentencia ```import``` sea multi-linea y este más organizada
+2. <https://docs.python.org/3/library/enum.html?highlight=enum>: este está implementado en el archivo ```parametros.py``` en las líneas 10 a la 23 y hace que la los estados de los menus tengan un nombre textual en vez de ser número para que sean m
 
 
 ## Descuentos
-La guía de descuentos se encuentra [link](https://github.com/IIC2233/syllabus/blob/main/Tareas/Descuentos.md).
+Por favor no.
