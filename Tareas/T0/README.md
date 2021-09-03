@@ -57,6 +57,7 @@ Consideraciones adicionales:
 
 1. El programa no está diseñado para una cantidad gigante de publicaciones o comentarios, ya que, se muestran todas las publicaciones al mismo tiempo y se escriben todos los datos de nuevo a los _csv_ cuando hay un cambio.
 2. Debido al uso de archivos _csv_ en vez de un _DBMS_, se hicieron unas decisiones de diseño... _"interesantes"_... para la creación del programa.
+    * Por ejemplo, cada publicación tiene su propio _ID_ único que tambien se usa para encontrar la publicacion en la lista de publicaciones. Para poder mantener el _ID_ incluso cuando se eliminara una publicacion, se hiso que ese elemento se convirtiera en un ```NONE``` para que mantuviera su posiciones las demas publicaciones. Es por esto que en ```publicaciones.csv``` hay espacios vacios en donde solian haber publicaciones.
 
 
 -------
