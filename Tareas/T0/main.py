@@ -2,7 +2,7 @@ from enum import Enum, auto
 
 import parametros
 import csvUtils as csv
-from userActions import publish_comment, register_user, find_self_posts
+from userActions import publish_comment, register_user, find_self_posts, publish_post
 
 # TODO: Citar codigo de enum https://docs.python.org/3/library/enum.html?highlight=enum
 class Menu(Enum):
@@ -15,6 +15,7 @@ class Menu(Enum):
     PUBLISH_COMMENT = auto()
     REGISTER = auto()
     SELF_POSTS = auto()
+    PUBLISH_POST = auto()
 
 # Cargar todos los csv
 posts = csv.read_csv("publicaciones.csv", 5)[1:]
@@ -101,9 +102,11 @@ while True:
 
         if logged_in:
             options = {"w": ("Volver al menú anterior", Menu.main)}
+            options["a"] = ("Crear publicación", Menu.PUBLISH_POST) 
         else:
             options = {"w": ("Volver al menú anterior", Menu.start)}
         options["q"] = ("Salir de DCCommerce", Menu.exit)
+        
 
         for post in reversed(shown_posts):
             options[post[0]] = (f"{post[1]} (${post[4]})", Menu.view_post)
@@ -120,8 +123,11 @@ while True:
         print(f"Descripción:\n{post[5]}\n")
 
         print("Comentarios:")
-        for comment in comments[post[0]]:
-            print(f"{comment[2]} <{comment[1]}> {comment[3]}")
+        if post[0] in comments:
+            for comment in comments[post[0]]:
+                print(f"{comment[2]} <{comment[1]}> {comment[3]}")
+        else:
+            print("No hay comentarios")
         print("")
 
         options = {
@@ -159,6 +165,36 @@ while True:
         if comment_text is not "":
             publish_comment(comment_text, current_user, current_post, comments)
 
+        menu_state = Menu.view_post
+        continue
+
+    elif menu_state == Menu.PUBLISH_POST:
+        print("Ingrese la información de su publicacion. Ingrese nada para cancelar.")
+        title = input("Título: ")
+        if title is "":
+            menu_state = Menu.posts
+            continue
+        
+        price = input("Precio: ")
+        while True:
+            if price.isnumeric or price is "":
+                break
+            else:
+                price = input("El precio debe ser un número: ")
+
+        if price is "":
+            menu_state = Menu.posts
+            continue
+        
+        desc = input("Descripción: ")
+        if desc is "":
+            menu_state = Menu.posts
+            continue
+
+        current_post = publish_post(title, price, desc, current_user, posts)
+        print(current_post)
+        if show_only_self_posts:
+            shown_posts = find_self_posts(current_user, posts)
         menu_state = Menu.view_post
         continue
 

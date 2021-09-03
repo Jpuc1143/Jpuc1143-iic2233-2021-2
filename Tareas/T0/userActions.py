@@ -17,7 +17,10 @@ def register_user(user, users):
 def publish_comment(text, user, post, comments):
     post += 1
     comment = [str(post), user, datetime.now().strftime("%Y/%m/%d %H:%M:%S"), text]
-    comments[str(post)].append(comment)
+    if str(post) in comments:
+        comments[str(post)].append(comment)
+    else:
+        comments[str(post)] = [comment]
     csv.write_csv("comentarios.csv", comments)
 
 def find_self_posts(user, posts):
@@ -28,6 +31,9 @@ def find_self_posts(user, posts):
 
     return result
 
-def publish_post():
-    pass
+def publish_post(title, price, desc, user, posts):
+    current_date = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+    posts.append([str(len(posts) + 1), title, user, current_date, price, desc])
+    csv.write_csv("publicaciones.csv", posts)
+    return len(posts) - 1
 
