@@ -2,6 +2,7 @@ from enum import Enum, auto
 
 import parametros
 import csvUtils as csv
+from userActions import publish_comment
 
 # TODO: Citar codigo de enum https://docs.python.org/3/library/enum.html?highlight=enum
 class Menu(Enum):
@@ -11,12 +12,12 @@ class Menu(Enum):
     view_post = auto()
     exit = auto()
     login = auto()
+    PUBLISH_COMMENT = auto()
 
 # Cargar todos los csv
 posts = csv.read_csv("publicaciones.csv", 5)[1:]
 
 comments_array = csv.read_csv("comentarios.csv", 3)
-#comments = {data[1]: data for data in comments_array[1:]}
 comments = dict()
 for comment in comments_array[1:]:
     if comment[0] not in comments:
@@ -30,6 +31,7 @@ users = {user[0] for user in users_array[1:]}
 
 menu_state = Menu.start
 logged_in = False
+current_user = None
 current_post = None
 
 # No hay switch en Python :(
@@ -37,6 +39,8 @@ while True:
     options = dict()
     if menu_state == Menu.start:
         logged_in = False
+        current_user = None
+
         print("Bienvenidos a DCCommerce!\n")
         print("Que desea hacer?")
 
@@ -59,8 +63,9 @@ while True:
         
         if user_input in users:
             logged_in = True
-            menu_state = Menu.posts
-            print("Ha ingresado con éxito a DCCommerce!")
+            current_user = user_input
+            menu_state = Menu.main
+            print("")
         else:
             menu_state = Menu.start
             print("ERROR: usuario no existe")
@@ -104,6 +109,27 @@ while True:
         if current_post != len(posts) - 1:
             options["d"] = ("Ver siguiente publicación", Menu.view_post)
 
+        if logged_in:
+            options["s"] = ("Publicar comentario", Menu.PUBLISH_COMMENT)
+
+    elif menu_state == Menu.main:
+        print(f"Bienvenido de vuelta {current_user}!")
+
+        options = {
+            "a": ("Ver todas las publicaciones", Menu.posts),
+            "s": ("Ver publicaciones realizadas", None),
+            "w": ("Log out", Menu.start),
+            "q": ("Salir de DCCommere", Menu.exit)
+                }
+
+    elif menu_state == Menu.PUBLISH_COMMENT:
+        print("Escriba su comentario. Deje vacio para cancelar:")
+        comment_text = input()
+        if comment_text is not "":
+            publish_comment(comment_text, current_user, current_post, comments)
+
+        menu_state = Menu.view_post
+        continue
 
     elif menu_state == None:
         print("You done goofed") # TODO: hacer esto más formal
