@@ -46,8 +46,8 @@ if __name__ == "__main__":
             break
 
         elif menu_state == Menu.REGISTER:
-            print("TODO")
-            user_name = input("Ingrese su nuevo nombre de usuario. Este no puede TODO: ")
+            print(f"El nombre de usuario no puede tener más de {MAX_CARACTERES}, menos de {MIN_CARACTERES} o una ','")
+            user_name = input("Ingrese su nuevo nombre de usuario: ")
             if user_name == "":
                 menu_state = Menu.START
             else:
@@ -56,7 +56,7 @@ if __name__ == "__main__":
                     current_user = user_name
                     menu_state = Menu.MAIN
                 else:
-                    print("Este no es un nombre de usuario valido o ya existe")
+                    print("ERROR: Este no es un nombre de usuario valido o ya existe.")
 
             continue
 
@@ -88,22 +88,27 @@ if __name__ == "__main__":
 
             print("Lista de publicaciones:\n")
 
-            if logged_in:
-                options = {"w": ("Volver al menú anterior", Menu.MAIN)}
-                options["a"] = ("Crear publicación", Menu.PUBLISH_POST)
+            options = dict()
+            if len(shown_posts) == 0:
+                print("No hay publicaciones disponibles")
             else:
-                options = {"w": ("Volver al menú anterior", Menu.START)}
-            options["q"] = ("Salir de DCCommerce", Menu.EXIT)
+                for post in reversed(shown_posts):
+                    if post is not None:
+                        options[post[0]] = (f"{post[1]} (${post[4]})", Menu.VIEW_POST)
 
-            for post in reversed(shown_posts):
-                if post is not None:
-                    options[post[0]] = (f"{post[1]} (${post[4]})", Menu.VIEW_POST)
+            if logged_in:
+                options["s"] = ("Crear publicación", Menu.PUBLISH_POST)
+                options["w"] = ("Volver al menú anterior", Menu.MAIN)
+            else:
+                options["w"] = ("Volver al menú anterior", Menu.START)
+
+            options["q"] = ("Salir de DCCommerce", Menu.EXIT)
 
         elif menu_state == Menu.VIEW_POST:
             post = posts[current_post]
-
-            print(f"ID: {post[0]}")
+            
             print(f"Nombre: {post[1]}")
+            print(f"ID: {post[0]}")
             print(f"Precio: ${post[4]}")
             print(f"Vendedor: {post[2]}")
             print(f"Fecha de Publicación: {post[3]}")
@@ -117,31 +122,30 @@ if __name__ == "__main__":
                 print("No hay comentarios")
             print("")
 
-            options = {
-                "q": ("Salir de DCCommerce", Menu.EXIT),
-                "w": ("Volver al menú anterior", Menu.POSTS)
-                }
+            options = dict()
+            if logged_in:
+                options["s"] = ("Publicar comentario", Menu.PUBLISH_COMMENT)
 
             if current_post != int(shown_posts[0][0]) - 1:
                 options["a"] = ("Ver publicación anterior", Menu.VIEW_POST)
             if current_post != int(shown_posts[-1][0]) - 1:
                 options["d"] = ("Ver siguiente publicación", Menu.VIEW_POST)
 
-            if logged_in:
-                options["s"] = ("Publicar comentario", Menu.PUBLISH_COMMENT)
-
             if current_user == post[2]:
                 options["x"] = ("Eliminar publicación",  Menu.DELETE_POST)
 
+            options["w"] = ("Salir de DCCommerce", Menu.EXIT)
+            options["q"] = ("Volver al menú anterior", Menu.POSTS)
+
         elif menu_state == Menu.MAIN:
             show_only_self_posts = False
-            print(f"Bienvenido de vuelta {current_user}!")
+            print(f"Bienvenido {current_user}!")
 
             options = {
                 "a": ("Ver todas las publicaciones", Menu.POSTS),
                 "s": ("Ver publicaciones realizadas", Menu.SELF_POSTS),
                 "w": ("Log out", Menu.START),
-                "q": ("Salir de DCCommere", Menu.EXIT)
+                "q": ("Salir de DCCommerce", Menu.EXIT)
                     }
 
         elif menu_state == Menu.SELF_POSTS:
@@ -159,7 +163,7 @@ if __name__ == "__main__":
             continue
 
         elif menu_state == Menu.PUBLISH_POST:
-            print("Ingrese la información de su publicacion. Ingrese nada para cancelar.")
+            print("Ingrese la información de su publicacion. Deje vacio para cancelar.")
             title = input("Título: ")
             if title is "":
                 menu_state = Menu.POSTS
@@ -195,10 +199,6 @@ if __name__ == "__main__":
                 menu_state = Menu.VIEW_POST
             continue
 
-        elif menu_state is None:
-            print("You done goofed")  # TODO: hacer esto más formal
-            exit()
-
         while True:
             for option in options:
                 print(f"[{option}] - {options[option][0]} ")
@@ -206,7 +206,7 @@ if __name__ == "__main__":
             user_input = input("INPUT: ").strip()
             print("")
             if user_input not in options:
-                print("Comando no válido, intentelo nuevamente")
+                print("ERROR: Comando no válido, intentelo nuevamente")
 
             else:
                 if menu_state == Menu.POSTS and user_input.isnumeric():
