@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
         elif menu_state == Menu.REGISTER:
             print("El nombre de usuario no puede tener"
-                  f" más de {MAX_CARACTERES}, menos de {MIN_CARACTERES} o una ','")
+                  f" más de {MAX_CARACTERES} caracteres, menos de {MIN_CARACTERES} o una ','")
             user_name = input("Ingrese su nuevo nombre de usuario: ")
             if user_name == "":
                 menu_state = Menu.START
