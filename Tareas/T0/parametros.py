@@ -7,7 +7,8 @@ MIN_CARACTERES = 1
 MAX_CARACTERES = 15
 
 
-# TODO: Citar codigo de enum https://docs.python.org/3/library/enum.html?highlight=enum
+# Código de Enum adaptado de https://docs.python.org/3/library/enum.html?highlight=enum,
+# en la sección "Using automatic values"
 class Menu(Enum):
     START = auto()
     MAIN = auto()

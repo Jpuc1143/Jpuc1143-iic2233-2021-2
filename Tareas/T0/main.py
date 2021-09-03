@@ -1,6 +1,10 @@
 import csv_utils as csv
-from parametros import Menu
-from user_actions import publish_comment, register_user, find_self_posts, publish_post, delete_post
+from parametros import Menu, MIN_CARACTERES, MAX_CARACTERES
+# Import de multi-linea adaptado de https://stackoverflow.com/a/40003478
+from user_actions import (
+        publish_comment, register_user,
+        find_self_posts, publish_post, delete_post
+)
 
 if __name__ == "__main__":
     # Cargar todos los csv
@@ -46,7 +50,8 @@ if __name__ == "__main__":
             break
 
         elif menu_state == Menu.REGISTER:
-            print(f"El nombre de usuario no puede tener más de {MAX_CARACTERES}, menos de {MIN_CARACTERES} o una ','")
+            print("El nombre de usuario no puede tener"
+                  f" más de {MAX_CARACTERES}, menos de {MIN_CARACTERES} o una ','")
             user_name = input("Ingrese su nuevo nombre de usuario: ")
             if user_name == "":
                 menu_state = Menu.START
@@ -106,7 +111,7 @@ if __name__ == "__main__":
 
         elif menu_state == Menu.VIEW_POST:
             post = posts[current_post]
-            
+
             print(f"Nombre: {post[1]}")
             print(f"ID: {post[0]}")
             print(f"Precio: ${post[4]}")
