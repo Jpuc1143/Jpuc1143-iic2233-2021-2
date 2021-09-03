@@ -7,8 +7,9 @@ def read_csv(path, max_split):
 
     return data
 
+
 def write_csv(path, data):
-    file = open(path, "r")    
+    file = open(path, "r")
     header = file.readline()
     file.close()
 
