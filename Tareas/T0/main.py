@@ -140,8 +140,8 @@ if __name__ == "__main__":
             if current_user == post[2]:
                 options["x"] = ("Eliminar publicación",  Menu.DELETE_POST)
 
-            options["w"] = ("Salir de DCCommerce", Menu.EXIT)
-            options["q"] = ("Volver al menú anterior", Menu.POSTS)
+            options["w"] = ("Volver al menú anterior", Menu.POSTS)
+            options["q"] = ("Salir de DCCommerce", Menu.EXIT)
 
         elif menu_state == Menu.MAIN:
             show_only_self_posts = False
