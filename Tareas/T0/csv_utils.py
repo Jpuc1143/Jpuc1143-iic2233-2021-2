@@ -1,7 +1,7 @@
 def read_csv(path, max_split):
     data = []
 
-    file = open(path, "r")
+    file = open(path, "r", encoding="utf-8")
     for line in file:
         data.append(line.strip().split(",", max_split))
 
@@ -9,11 +9,11 @@ def read_csv(path, max_split):
 
 
 def write_csv(path, data):
-    file = open(path, "r")
+    file = open(path, "r", encoding="utf-8")
     header = file.readline()
     file.close()
 
-    file = open(path, "w")
+    file = open(path, "w", encoding="utf-8")
     file.write(header)
 
     # Yo: Mamá podemos tener polimorfismo hoy día?
