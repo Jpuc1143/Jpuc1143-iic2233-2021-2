@@ -177,7 +177,7 @@ if __name__ == "__main__":
 
             price = input("Precio: ")
             while True:
-                if price.isnumeric or price is "":
+                if price.isnumeric() or price is "":
                     break
                 else:
                     price = input("El precio debe ser un número: ")

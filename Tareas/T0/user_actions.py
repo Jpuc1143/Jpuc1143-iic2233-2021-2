@@ -44,7 +44,8 @@ def publish_post(title, price, desc, user, posts):
 
 def delete_post(post, posts, comments):
     # Eliminar los comentarios primero
-    del comments[str(post + 1)]
+    if str(post + 1) in comments:
+        del comments[str(post + 1)]
     csv.write_csv("comentarios.csv", comments)
 
     # Y luego el post
