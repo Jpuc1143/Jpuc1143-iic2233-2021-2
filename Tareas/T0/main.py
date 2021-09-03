@@ -1,6 +1,6 @@
 import csv_utils as csv
 from parametros import Menu
-from user_actions import publish_comment, register_user, find_self_posts, publish_post
+from user_actions import publish_comment, register_user, find_self_posts, publish_post, delete_post
 
 if __name__ == "__main__":
     # Cargar todos los csv
@@ -81,7 +81,10 @@ if __name__ == "__main__":
             if show_only_self_posts:
                 shown_posts = find_self_posts(current_user, posts)
             else:
-                shown_posts = posts
+                shown_posts = []
+                for post in posts:
+                    if post is not None:
+                        shown_posts.append(post)
 
             print("Lista de publicaciones:\n")
 
@@ -93,7 +96,8 @@ if __name__ == "__main__":
             options["q"] = ("Salir de DCCommerce", Menu.EXIT)
 
             for post in reversed(shown_posts):
-                options[post[0]] = (f"{post[1]} (${post[4]})", Menu.VIEW_POST)
+                if post is not None:
+                    options[post[0]] = (f"{post[1]} (${post[4]})", Menu.VIEW_POST)
 
         elif menu_state == Menu.VIEW_POST:
             post = posts[current_post]
@@ -125,6 +129,9 @@ if __name__ == "__main__":
 
             if logged_in:
                 options["s"] = ("Publicar comentario", Menu.PUBLISH_COMMENT)
+
+            if current_user == post[2]:
+                options["x"] = ("Eliminar publicación",  Menu.DELETE_POST)
 
         elif menu_state == Menu.MAIN:
             show_only_self_posts = False
@@ -178,6 +185,14 @@ if __name__ == "__main__":
             if show_only_self_posts:
                 shown_posts = find_self_posts(current_user, posts)
             menu_state = Menu.VIEW_POST
+            continue
+
+        elif menu_state == Menu.DELETE_POST:
+            if input("¿Está seguro? (\"si\" para continuar): ").casefold() == "si":
+                delete_post(current_post, posts, comments)
+                menu_state = Menu.POSTS
+            else:
+                menu_state = Menu.VIEW_POST
             continue
 
         elif menu_state is None:

@@ -3,7 +3,10 @@ def read_csv(path, max_split):
 
     file = open(path, "r", encoding="utf-8")
     for line in file:
-        data.append(line.strip().split(",", max_split))
+        if line == "\n":
+            data.append(None)
+        else:
+            data.append(line.strip().split(",", max_split))
 
     return data
 
@@ -30,6 +33,9 @@ def write_csv(path, data):
 
     else:
         for line in data:
-            file.write(",".join(line) + "\n")
+            if line is None:
+                file.write("\n")
+            else:
+                file.write(",".join(line) + "\n")
 
     file.close()

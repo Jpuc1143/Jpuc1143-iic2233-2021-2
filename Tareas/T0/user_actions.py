@@ -29,7 +29,7 @@ def publish_comment(text, user, post, comments):
 def find_self_posts(user, posts):
     result = []
     for post in posts:
-        if post[2] == user:
+        if post is not None and post[2] == user:
             result.append(post)
 
     return result
@@ -40,3 +40,13 @@ def publish_post(title, price, desc, user, posts):
     posts.append([str(len(posts) + 1), title, user, current_date, price, desc])
     csv.write_csv("publicaciones.csv", posts)
     return len(posts) - 1
+
+
+def delete_post(post, posts, comments):
+    # Eliminar los comentarios primero
+    del comments[str(post + 1)]
+    csv.write_csv("comentarios.csv", comments)
+
+    # Y luego el post
+    posts[post] = None
+    csv.write_csv("publicaciones.csv", posts)

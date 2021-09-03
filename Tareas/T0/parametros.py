@@ -19,3 +19,4 @@ class Menu(Enum):
     REGISTER = auto()
     SELF_POSTS = auto()
     PUBLISH_POST = auto()
+    DELETE_POST = auto()
