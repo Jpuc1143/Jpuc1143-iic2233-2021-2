@@ -49,9 +49,10 @@ Por otro lado, los módulos que fueron creados fueron los siguientes:
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
 
-1. El contenido de todos los csv siempre va a estar bien formateados.
-2. El log-in de los usuarios se rige con un codigo de honor y no necesita contraseña. 
-3. Los archivos csv son una abstracción de la conexión entre la aplicación y los servidores de DCCommerce.
+1. El contenido de todos los _csv_ siempre va a estar bien formateados.
+    * Adicionalmente, los espacios vacios son de publicaciones eliminadas.
+3. El log-in de los usuarios se rige con un codigo de honor y no necesita contraseña. 
+4. Los archivos csv son una abstracción de la conexión entre la aplicación y los servidores de DCCommerce.
 
 Consideraciones adicionales:
 
