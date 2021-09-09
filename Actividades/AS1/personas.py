@@ -3,7 +3,7 @@ from random import randint
 
 
 # Recuerda definir esta clase como abstracta!
-class Persona:
+class Persona(ABC):
 
     def __init__(self, nombre, edad, tiene_pase, juegos):
         # No modificar
@@ -48,15 +48,20 @@ class Persona:
         self.__salud = valor
 
     def revision_juegos(self):
-        # COMPLETAR
-        pass
+        return (not self.esperando) and len(self.juegos) > 0
 
     def siguiente_juego(self):
-        # COMPLETAR
-        pass
+        return self.juegos.pop(0)
 
     # --------------
     # Completa los métodos abstractos aqui
+    @abstractmethod
+    def actuar(self):
+        pass
+
+    @abstractmethod
+    def definir_estados(self):
+        pass
 
     # --------------
 
@@ -68,14 +73,17 @@ class Persona:
 
 
 # Recuerda completar la herencia!
-class Adulto:
+class Adulto(Persona):
 
-    def __init__(self):
-        # COMPLETAR
-        pass
+    def __init__(self, nombre, edad, tiene_pase, juegos, dinero):
+        self.dinero = dinero
+        super().__init__(nombre, edad, tiene_pase, juegos)
 
     # --------------
     # Completa el método abstracto aquí
+    def definir_estados(self):
+        self.felicidad = self.edad * self.dinero
+        self.salud = self.edad * randint(1, 3)
 
     # --------------
 
@@ -98,14 +106,17 @@ class Adulto:
 
 
 # Recuerda completar la herencia!
-class Nino:
+class Nino(Persona):
 
-    def __init__(self):
-        # COMPLETAR
-        pass
+    def __init__(self, nombre, edad, tiene_pase, juegos, padre):
+        self.padre = padre
+        super().__init__(nombre, edad, tiene_pase, juegos)
 
     # --------------
     # Completa el método abstracto aquí
+    def definir_estados(self):
+        self.salud = self.edad * randint(1,5)
+        self.felicidad = len(self.padre) * 10
 
     # --------------
 
