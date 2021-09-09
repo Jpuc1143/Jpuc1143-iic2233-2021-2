@@ -3,20 +3,23 @@ import parametros as p
 
 
 # Recuerda completar la herencia!
-class AtraccionTerrorifica:
+class AtraccionTerrorifica(AtraccionAdrenalinica):
 
-    def __init__(self):
-        # COMPLETAR
-        pass
+    def __init__(self, nombre, capacidad, salud_necesaria):
+        super().__init__(nombre, capacidad, salud_necesaria)
+        self.efecto_salud = p.SALUD_TERROR
+        self.efecto_felicidad = p.FELICIDAD_TERROR
 
     def iniciar_juego(self, personas):
-        # COMPLETAR
-        pass
-
+        for persona in personas:
+            if persona.salud <= 2 * self.salud_necesaria:
+                print(f"{persona.nombre} necesita capacitación antes de entrar")
+                persona.definir_estados()
+        
+        super().iniciar_juego(personas)
 
 # Recuerda completar la herencia!
-class CasaEmbrujada:
+class CasaEmbrujada(AtraccionTerrorifica, AtraccionFamiliar):
 
     def iniciar_juego(self, personas):
-        # COMPLETAR
-        pass
+        AtraccionFamiliar.iniciar_juego(self, personas)

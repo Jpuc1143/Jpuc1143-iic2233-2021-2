@@ -115,7 +115,7 @@ class Nino(Persona):
     # --------------
     # Completa el método abstracto aquí
     def definir_estados(self):
-        self.salud = self.edad * randint(1,5)
+        self.salud = self.edad * randint(1, 5)
         self.felicidad = len(self.padre) * 10
 
     # --------------
