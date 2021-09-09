@@ -7,7 +7,7 @@ class AtraccionTerrorifica(AtraccionAdrenalinica):
 
     def __init__(self, nombre, capacidad, salud_necesaria):
         super().__init__(nombre, capacidad, salud_necesaria)
-        self.efecto_salud = 100000 #  p.SALUD_TERROR
+        self.efecto_salud =  p.SALUD_TERROR
         self.efecto_felicidad = p.FELICIDAD_TERROR
 
     def iniciar_juego(self, personas):
@@ -22,5 +22,4 @@ class AtraccionTerrorifica(AtraccionAdrenalinica):
 class CasaEmbrujada(AtraccionTerrorifica, AtraccionFamiliar):
 
     def iniciar_juego(self, personas):
-        print("AAAAAA", self.efecto_salud)
         AtraccionFamiliar.iniciar_juego(self, personas)
