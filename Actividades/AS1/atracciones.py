@@ -105,4 +105,4 @@ class MontanaAcuatica(AtraccionAdrenalinica, AtraccionAcuatica):
             if persona.salud <= self.salud_necesaria * self.dificultad:
                 persona.tiene_pase = False
 
-            efecto_atraccion(persona) # TODO: revisar
+            AtraccionAdrenalinica.efecto_atraccion(self, persona) # TODO: revisar
