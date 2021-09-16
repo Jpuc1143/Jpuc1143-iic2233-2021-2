@@ -12,5 +12,12 @@ def verificar_sintomas(invitade):
 
 
 def entregar_invitados(diccionario_invitades):
-    # Completar
-    pass
+    lista_final = []
+    for nombre, invitade in diccionario_invitades.items():
+        try:
+            verificar_sintomas(invitade)
+            lista_final.append(nombre)
+        except RiesgoCovid as err:
+            err.alerta_de_covid()
+
+    return lista_final
