@@ -22,7 +22,7 @@ class Tienda(Thread):
         delay = randint(1, 10)
         print(f"{self.nombre} cocinara durante {delay} segundos")
         sleep(delay)
-        print(f"{self.nombre} termino de preparar el pedido")
+        print(f"{self.nombre} termino de preparar el pedido {pedido.id_}")
 
     def run(self):
         while self.abierta:
