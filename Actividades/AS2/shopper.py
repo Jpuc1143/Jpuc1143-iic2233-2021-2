@@ -3,7 +3,7 @@ from time import sleep
 from random import randint
 
 
-class Shopper:
+class Shopper(Thread):
 
     evento_disponible = Event()
 
@@ -15,7 +15,10 @@ class Shopper:
         self.distancia_destino = 0
         self.pedido_actual = None
         self.termino_jornada = False
-        # COMPLETAR DESDE AQUI
+
+        self.nombre = nombre
+        self.velocidad = velocidad
+
 
     @property
     def ocupado(self):
@@ -35,12 +38,26 @@ class Shopper:
         print(f"El pedido {pedido.id_} fue asignado a {self.nombre}")
 
     def avanzar(self):
-        # Completar
-        pass
+        self.posicion += 1
+        sleep(1/self.velocidad)
+        print(f"{self.nombre} avanzó hasta la posición {self.posicion} TODO: {1/self.velocidad}")
 
     def run(self):
-        # Completar
-        pass
+        while not self.termino_jornada:
+            if self.ocupado:
+                self.avanzar()
+
+                if self.posicion == self.distancia_tienda:
+                    print(f"{self.nombre} llego a la tienda")
+                    self.pedido_actual.evento_llego_repartidor.set()
+                    self.pedido_actual.evento_pedido_listo.wait()
+
+                elif self.posicion == self.distancia_destino:
+                    print(f"{self.nombre} llego a su destino")
+                    self.pedido_actual.entregado = True
+                    Shopper.evento_disponible.set()
+                    self.posicion = 0
+                    self.pedido_actual = None
 
 
 if __name__ == "__main__":
