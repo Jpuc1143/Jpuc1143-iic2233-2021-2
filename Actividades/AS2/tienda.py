@@ -29,13 +29,13 @@ class Tienda(Thread):
         while self.abierta:
             self.lock.acquire()
             if len(self.cola_pedidos) > 0:
-               pedido = self.cola_pedidos.pop(0)
+               pedido = self.cola_pedidos.pop(0)[0]
                self.lock.release()
 
                self.preparar_pedido(pedido)
                pedido.evento_pedido_listo.set()
                pedido.evento_llego_repartidor.wait()
-               print(f"Pedido {pedido.id} ha sido retirado")
+               print(f"Pedido {pedido.id_} de {self.nombre} ha sido retirado")
 
             else:
                 self.lock.release()

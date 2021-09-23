@@ -40,7 +40,7 @@ class Shopper(Thread):
     def avanzar(self):
         self.posicion += 1
         sleep(1/self.velocidad)
-        print(f"{self.nombre} avanzó hasta la posición {self.posicion} TODO: {1/self.velocidad}")
+        print(f"{self.nombre} avanzó hasta la posición {self.posicion}")
 
     def run(self):
         while not self.termino_jornada:

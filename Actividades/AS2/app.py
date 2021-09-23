@@ -26,12 +26,12 @@ class DCComidApp(Thread):
             Shopper.evento_disponible.clear()
 
     def run(self):
-        for item in pedidos:
+        for item in self.pedidos:
             pedido = Pedido(item[0], item[1], item[2])
             shopper = self.obtener_shopper()
             shopper.asignar_pedido(pedido)
-            self.tienda.ingresar_pedido(pedido)
-            sleep.randint(1, 5)
+            self.tiendas[item[1]].ingresar_pedido(pedido, shopper)
+            sleep(randint(1, 5))
 
 
 if __name__ == '__main__':
