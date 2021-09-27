@@ -17,15 +17,31 @@ en cierta línea del código o comentar una función>
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
-* <Nombre item pauta<sub>1</sub>>: Hecha completa
-* <Nombre item pauta<sub>2</sub>>: Me faltó hacer <insertar qué cosa faltó>
-    * <Nombre subitem pauta<sub>2.1</sub>>: Hecha completa 
-    * <Nombre subitem pauta<sub>2.2</sub>>: Me faltó hacer <insertar qué cosa faltó>
-    * ...
-* <Nombre item pauta<sub>3</sub>>: Me faltó hacer <insertar qué cosa faltó>
-* ...
-* <Nombre item pauta<sub>n</sub>>: Me faltó hacer <insertar qué cosa faltó>
-
+Explicación: mantén el emoji correspondiente, de manera honesta, para cada item. Si quieres, también puedes agregarlos a los títulos:
+- ❌ si **NO** completaste lo pedido
+- ✅ si completaste **correctamente** lo pedido
+- 🟠 si el item está **incompleto** o tiene algunos errores
+#### Programación Orientada a Objetos: 38 pts (27%)
+##### ❌✅🟠  Diagrama <explicacion\>
+##### ❌✅🟠 Definición de clases, atributos y métodos <explicacion\>
+##### ❌✅🟠 Relaciones entre clases <explicacion\>
+#### Simulaciones: 12 pts (8%)
+##### ❌✅🟠 Crear partida <explicacion\>
+#### Acciones: 43 pts (30%)
+##### ❌✅🟠 Tributo <explicacion\>
+##### ❌✅🟠 Objeto <explicacion\>
+##### ❌✅🟠 Ambiente <explicacion\>
+##### ❌✅🟠 Arena <explicacion\>
+#### Consola: 34 pts (24%)
+##### ❌✅🟠 Menú inicio <explicacion\>
+##### ❌✅🟠 Menú principal <explicacion\>
+##### ❌✅🟠 Simular Hora <explicacion\>
+##### ❌✅🟠 Robustez <explicacion\>
+#### Manejo de archivos: 15 pts (11%)
+##### ❌✅🟠 Archivos CSV  <explicacion\>
+##### ❌✅🟠 parametros.py <explicacion\>
+#### Bonus: 3 décimas máximo
+##### ❌✅🟠 Guardar Partida <explicacion\>
 ## Ejecución :computer:
 El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
 1. ```archivo.ext``` en ```ubicación```
@@ -95,4 +111,4 @@ Para realizar mi tarea saqué código de:
 
 
 ## Descuentos
-La guía de descuentos se encuentra [link](https://github.com/IIC2233/syllabus/blob/master/Tareas/Descuentos.md).
+La guía de descuentos se encuentra [link](https://github.com/IIC2233/syllabus/blob/main/Tareas/Descuentos.md).
