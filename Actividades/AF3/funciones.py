@@ -14,8 +14,7 @@ def filtrar_prohibidos(iterar_peliculas, actor_prohibido):
     :param iterar_peliculas: iterador sobre lista de Videos
     :return: filter
     """
-    # Debes completar esta función
-
+    return filter(lambda x: actor_prohibido not in x.actores, iterar_peliculas)
 
 def calcular_afinidades(catalogo_peliculas, usuario: Usuario):
     """
@@ -26,8 +25,7 @@ def calcular_afinidades(catalogo_peliculas, usuario: Usuario):
     :param catalogo_peliculas: zip que retorna peliculas
     :return: mapeo que retorna tuplas.
     """
-    # Debes completar esta función
-
+    return map(lambda x: (x, usuario.calcular_afinidad(x)), catalogo_peliculas)
 
 def encontrar_peliculas_comunes(usuarios_watch_party):
     """
@@ -36,8 +34,10 @@ def encontrar_peliculas_comunes(usuarios_watch_party):
     :param usuarios_watch_party: lista de usuarios que conforman la watch party
     :return: interseccion de las peliculas favoritas de cada usuario
     """
-    # Debes completar esta función
-
+    print("encontrar()")
+    print(usuarios_watch_party)
+    favorite_movies = map(lambda x: x.peliculas_favoritas, usuarios_watch_party)
+    return reduce(lambda x, y: x & y, favorite_movies)
 
 def encontrar_usuario_mas_afin(usuario, otros_usuarios):
     """
@@ -48,4 +48,5 @@ def encontrar_usuario_mas_afin(usuario, otros_usuarios):
     :param otros_usuarios: el resto de los usuarios de DCCabritas
     :return: Usuario más compatible
     """
-    # Debes completar esta función
+    filtered_users = filter(lambda x: usuario.actor_prohibido == x.actor_prohibido, otros_usuarios)
+    return max(map(lambda x: (x + usuario, usuario), filtered_users), key=lambda x: x[0])[1]
