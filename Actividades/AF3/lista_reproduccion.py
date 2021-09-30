@@ -12,8 +12,7 @@ class ListaReproduccion:
         self.nombre = nombre
 
     def __iter__(self):
-        # Debes completar este método
-        pass
+        return IterarList(self.conjunto_videos.copy())
 
     def __str__(self):
         return f"Lista de Reproducción de {self.usuario}: {self.nombre}"
@@ -25,9 +24,13 @@ class IterarLista:
         self.conjunto_videos = conjunto_videos
 
     def __iter__(self):
-        # Debes completar este método
-        pass
+        return self
 
     def __next__(self):
-        # Debes completar este método
-        pass
+        if self.conjunto_videos:
+            next_movie = max(self.conjunto_videos, key=lambda x: x[1])
+            self.conjunto_videos.remove(next_movie)
+            return next_movie[0]
+            
+        else:
+            raise StopIteration
