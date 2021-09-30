@@ -21,8 +21,12 @@ class Usuario:
         return set(self.afinidades)
 
     def ver_videos(self, nombre_lista):
-        # Debes completar esta función
-        pass
+        lista = self.listas_reproduccion[nombre_lista]
+        for movie in lista:
+            movie.reproducir()
+            yield (self.calificar_pelicula(movie), movie.rankings)
+
+        print("Ha llegado al final de la lista de reproducción")
 
     def calcular_afinidad(self, pelicula):
         afinidad = 0

@@ -12,7 +12,7 @@ class ListaReproduccion:
         self.nombre = nombre
 
     def __iter__(self):
-        return IterarList(self.conjunto_videos.copy())
+        return IterarLista(self.conjunto_videos.copy())
 
     def __str__(self):
         return f"Lista de Reproducción de {self.usuario}: {self.nombre}"

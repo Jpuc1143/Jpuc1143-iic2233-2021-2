@@ -34,8 +34,6 @@ def encontrar_peliculas_comunes(usuarios_watch_party):
     :param usuarios_watch_party: lista de usuarios que conforman la watch party
     :return: interseccion de las peliculas favoritas de cada usuario
     """
-    print("encontrar()")
-    print(usuarios_watch_party)
     favorite_movies = map(lambda x: x.peliculas_favoritas, usuarios_watch_party)
     return reduce(lambda x, y: x & y, favorite_movies)
 
@@ -49,4 +47,4 @@ def encontrar_usuario_mas_afin(usuario, otros_usuarios):
     :return: Usuario más compatible
     """
     filtered_users = filter(lambda x: usuario.actor_prohibido == x.actor_prohibido, otros_usuarios)
-    return max(map(lambda x: (x + usuario, usuario), filtered_users), key=lambda x: x[0])[1]
+    return max(map(lambda x: (x + usuario, x), filtered_users), key=lambda x: x[0])[1]
