@@ -62,7 +62,7 @@ class Tribute:
         if self.energy >= p.ENERGIA_ATACAR or forced:
             numerator = 60*self.strength+40*self.agility+40*self.intelligence-30*self.weight
             damage = min(90, max(5, (numerator/self.age)))
-            print(f"{self.name} atacó a {target.name} por {damage} de daño")
+            print(f"{self.name} atacó a {target.name} por {damage:0.2f} de daño")
             if target.health <= damage:
                 print(f"{self.name} asesina a sangre fría a {target.name}")
                 self.popularity += p.POPULARIDAD_ATACAR
@@ -128,8 +128,8 @@ class Tribute:
         else:
             output += f"{self.name}, tributo del distrito {self.district} participando en {self.arena.name}\n"
         output += f"Edad: {self.age}\n"
-        output += f"Vida: {self.health} Energia: {self.energy} Popularidad: {self.popularity}\n"  # TODO: hacer espaciado fijo
-        output += f"Fuerza: {self.strength} Agilidad: {self.agility} Inteligencia: {self.intelligence}\n"
+        output += f"Vida: {self.health:.2f} Energia: {self.energy} Popularidad: {self.popularity}\n"
+        output += f"Fuerza: {self.strength:.2f} Agilidad: {self.agility} Inteligencia: {self.intelligence}\n"
 
         inventory_data = []
         for item in self.inventory.values():

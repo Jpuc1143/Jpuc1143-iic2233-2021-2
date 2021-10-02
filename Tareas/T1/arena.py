@@ -54,7 +54,11 @@ class Arena:
             tribute.health -= damage
 
     def choose_tributes(self):
-        # TODO: explicar
+        # La arena escoje a los demás tributos de acuerdo a sus distritos.
+        # Primero encuentra todos los distritos que tengan los tributos, incluyendo distritos
+        # que no fueron especificados. Luego elije un tributo de cada distrito hasta que hayan 
+        # sido seleccionado la cantidad necesaria de tributos para los juegos.
+        
         districts = {}
         for tribute in self.parent.available_tributes.values():
             if tribute.name != self.player_tribute.name and tribute.district != self.player_tribute.district:
@@ -100,8 +104,11 @@ class Arena:
             else:
                 print("Has sido derrotado..")
                 winner = choice(list(self.tributes_alive.values()))
-                # TODO: anadir al death list los que quedan vivos
-
+                others = list(filter(lambda x: x != winner, list(self.tributes_alive.values())))
+                for time, tribute in enumerate(sample(others, len(others))):
+                    self.death_list.append((tribute, time + self.time + 1))
+                self.time = self.death_list[-1][1]
+            print(f"Después de {self.time + 1} horas de combate...")
             print(f"El ganador del DCCapitolio es {winner.name}!\n")
 
         print("In Memoriam (Hora de Muerte):")
@@ -110,11 +117,10 @@ class Arena:
 
     def __str__(self):
         output = f'Arena "{self.name}"\n'\
-                 f"Riesgo: {self.risk}\n"\
-                 f"Dificultad: {self.difficulty}\n"\
-                 f"Ambiente Actual: {self.current_environment.name}\n"\
+                 f"Riesgo: {self.risk} Dificultad: {self.difficulty}\n"\
+                 f"Ambiente Actual: {self.current_environment.name} "\
                  f"Próximo ambiente: {self.next_environment.name}\n"\
-                 f"Horas transcurridas: {self.time}\n"\
+                 f"Horas transcurridas: {self.time}\n\n"\
                  f"Tributos Vivos:\n"
 
         for tribute in self.tributes_alive.values():

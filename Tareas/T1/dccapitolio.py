@@ -21,7 +21,8 @@ class DCCapitolio:
         user_input = None
         while True:
             if self.menu_state == Menu.START:
-                print("Menu de Inicio")  # TODO: expandir bienvenida
+                print("Bienvenidos Tributo a los Juegos de DCCapitolio!")
+                print("Menu de Inicio")
 
                 self.menu_options = {
                     "a": ("Entrar a DCCapitolio", Menu.CHOOSE_TRIBUTE),
@@ -140,7 +141,7 @@ class DCCapitolio:
                     self.menu_state = Menu.MAIN
                     continue
                 else:
-                    self.menu_state = Menu.EXIT
+                    self.menu_state = Menu.START
                     continue
 
             elif self.menu_state == Menu.STATUS:
