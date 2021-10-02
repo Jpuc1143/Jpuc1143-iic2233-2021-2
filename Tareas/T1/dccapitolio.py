@@ -235,7 +235,6 @@ class DCCapitolio:
         for number, save in enumerate(self.saved_games):
             if number == arena.save_id:
                 file.write(save[0] + "\n" + data + "\n")
-                print("exitoso)")
             else:
                 file.write(save[0] + "\n" + save[1] + "\n")
         file.close()
