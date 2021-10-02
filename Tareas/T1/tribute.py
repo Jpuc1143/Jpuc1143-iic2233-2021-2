@@ -31,7 +31,7 @@ class Tribute:
     def health(self, value):
         if value > 100:
             self._health = 100
-        elif value < 0:
+        elif value <= 0:
             self._health = 0
             print(f"{self.name} ha sido eliminad@!")
             self.arena.death_list.append((self, self.arena.time))
@@ -64,11 +64,14 @@ class Tribute:
             damage = min(90, max(5, (numerator/self.age)))
             print(f"{self.name} atacó a {target.name} por {damage:0.2f} de daño")
             if target.health <= damage:
-                print(f"{self.name} asesina a sangre fría a {target.name}")
+                print(f"{self.name} asesina a sangre fría a {target.name} "
+                      f"y gana {p.POPULARIDAD_ATACAR} popularidad")
                 self.popularity += p.POPULARIDAD_ATACAR
 
             target.health -= damage
-            self.energy -= p.ENERGIA_ATACAR
+            if not forced:
+                self.energy -= p.ENERGIA_ATACAR
+                print(f"Se gasto {p.ENERGIA_ATACAR} de energia, quedandose con {self.energy}")
         else:
             print(f"{self.name} no tiene suficiente energia para atacar...")
 
@@ -84,7 +87,8 @@ class Tribute:
                 raise ValueError
 
         except (KeyError, ValueError):
-            # Fuente: https://stackoverflow.com/questions/6470428/catch-multiple-exceptions-in-one-line-except-block
+            # Fuente:
+            # https://stackoverflow.com/questions/6470428/catch-multiple-exceptions-in-one-line-except-block
             # Utilizado para capturar más de un tipo de excepción.
             print("ERROR: f{self.name} no tiene {item.name} en su inventario")
             # La estructura del programa no deberia dejar pasar esto, pero por si acaso...
@@ -93,25 +97,31 @@ class Tribute:
         if self.popularity >= p.POPULARIDAD_PEDIR:
             self.popularity -= p.POPULARIDAD_PEDIR
             item = copy(choice(list(self.arena.parent.available_items.values())))
-            
+
             if item.name in self.inventory:
                 qty = self.inventory[item.name][1] + 1
                 self.inventory[item.name] = (item, qty)
             else:
                 self.inventory[item.name] = (item, 1)
 
-            print(f"La popularidad de {self.name} causo que los patrocinadores le entregaran un {item.name}!")
+            print(f"La popularidad de {self.name} causo que los patrocinadores "
+                  f"le entregaran un {item.name}!")
+            print(f"Sin embargo, perdiste {p.POPULARIDAD_PEDIR} popularidad "
+                  f"y te quedan {self.popularity}")
             return True
 
         else:
-            print(f"Como {self.name} no es lo suficientemente popular, nadie le patrocino un objeto...")
+            print(f"Como {self.name} no es lo suficientemente popular, "
+                  f"nadie le patrocino un objeto...")
             return False
 
     def heroic_action(self):
         if self.energy >= p.ENERGIA_ACCION_HEROICA:
             self.energy -= p.ENERGIA_ACCION_HEROICA
             self.popularity += p.POPULARIDAD_ACCION_HEROICA
-            print(f"{self.name} gana {p.POPULARIDAD_ACCION_HEROICA} popularidad debido a su heroismo")
+            print(f"{self.name} gana {p.POPULARIDAD_ACCION_HEROICA} "
+                  f"popularidad debido a su heroismo")
+            print(f"gastando {p.ENERGIA_ACCION_HEROICA} de energia y quedando con {self.energy}")
             return True
         else:
             print(f"{self.name} no tiene suficiente energia para ser un heroe...")
@@ -120,16 +130,20 @@ class Tribute:
     def bakugan_mode(self):
         self.energy += p.ENERGIA_BOLITA
         print(f"{self.name} se sienta en una esquina y hace su mejor imitación de un Bakugan")
+        print(f"Se recupera {p.ENERGIA_BOLITA} y ahora tienes {self.energy}")
 
     def __str__(self):
         output = ""
         if self.arena is None:
             output += f"{self.name}, tributo del distrito {self.district}\n"
         else:
-            output += f"{self.name}, tributo del distrito {self.district} participando en {self.arena.name}\n"
+            output += f"{self.name}, tributo del distrito {self.district} "
+            output += f"participando en {self.arena.name}\n"
         output += f"Edad: {self.age}\n"
-        output += f"Vida: {self.health:.2f} Energia: {self.energy} Popularidad: {self.popularity}\n"
-        output += f"Fuerza: {self.strength:.2f} Agilidad: {self.agility} Inteligencia: {self.intelligence}\n"
+        output += f"Vida: {self.health:.2f} Energia: {self.energy} "
+        output += f"Popularidad: {self.popularity}\n"
+        output += f"Fuerza: {self.strength:.2f} Agilidad: {self.agility} "
+        output += f"Inteligencia: {self.intelligence}\n"
 
         inventory_data = []
         for item in self.inventory.values():

@@ -1,7 +1,6 @@
-from copy import copy
 from random import choice, sample, random
 
-import parametros as p 
+import parametros as p
 
 
 class Arena:
@@ -14,7 +13,8 @@ class Arena:
         self.parent = parent
 
         self.time = 0
-        self.environment_cycle = [environment for environment in self.parent.available_environments.values()]
+        self.environment_cycle = \
+            [environment for environment in self.parent.available_environments.values()]
 
         self.tributes = dict()
         self.death_list = []
@@ -36,7 +36,7 @@ class Arena:
         return len(self.tributes_alive)
 
     def let_them_fight(self):
-        encounter_number = int(self.risk * self.tributes_remaining // 2)
+        encounter_number = max(1, int(self.risk * self.tributes_remaining // 2))
 
         print("Los tributos comienzan a pelear!")
         for encounter in range(encounter_number):
@@ -45,7 +45,7 @@ class Arena:
             attacker = choice(attacker_gen)
             defender = choice(list(filter(lambda x: x != attacker, self.tributes_alive.values())))
 
-            attacker.attack(defender)
+            attacker.attack(defender, forced=True)
 
     def do_random_event(self):
         damage = self.current_environment.damageDealt()
@@ -56,14 +56,18 @@ class Arena:
     def choose_tributes(self):
         # La arena escoje a los demás tributos de acuerdo a sus distritos.
         # Primero encuentra todos los distritos que tengan los tributos, incluyendo distritos
-        # que no fueron especificados. Luego elije un tributo de cada distrito hasta que hayan 
+        # que no fueron especificados. Luego elije un tributo de cada distrito hasta que hayan
         # sido seleccionado la cantidad necesaria de tributos para los juegos.
-        
+
+        # Fuente:
+        # https://stackoverflow.com/questions/181530/styling-multi-line-conditions-in-if-statements
+        # Utilizado para hacer if-statements de multilinea.
         districts = {}
         for tribute in self.parent.available_tributes.values():
-            if tribute.name != self.player_tribute.name and tribute.district != self.player_tribute.district:
+            if (tribute.name != self.player_tribute.name and
+                    tribute.district != self.player_tribute.district):
                 if tribute.district in districts:
-                    districts[tribute.district].append(tribue)
+                    districts[tribute.district].append(tribute)
                 else:
                     districts[tribute.district] = [tribute]
 
@@ -80,10 +84,14 @@ class Arena:
         self.let_them_fight()
         if random() <= p.PROBABILIDAD_EVENTO:
             self.do_random_event()
-  
+
         if self.tributes_remaining < 2 or not self.player_tribute.is_alive:
             self.closing_ceremony()
             return False
+
+        print("\nLos tributos sobrevivientes de esta hora son:")
+        for tribute in self.tributes_alive.values():
+            print(tribute.name)
 
         self.time += 1
 
@@ -114,10 +122,11 @@ class Arena:
         print("In Memoriam (Hora de Muerte):")
         for number, tribute in enumerate(reversed(self.death_list), start=start):
             print(f"{number}. {tribute[0].name} ({tribute[1]})")
+        print("")
 
     def __str__(self):
         output = f'Arena "{self.name}"\n'\
-                 f"Riesgo: {self.risk} Dificultad: {self.difficulty}\n"\
+                 f"Dificultad: {self.difficulty}\n"\
                  f"Ambiente Actual: {self.current_environment.name} "\
                  f"Próximo ambiente: {self.next_environment.name}\n"\
                  f"Horas transcurridas: {self.time}\n\n"\
@@ -125,8 +134,8 @@ class Arena:
 
         for tribute in self.tributes_alive.values():
             if tribute == self.player_tribute:
-                output += f"{tribute.name} (tú): {tribute.health}\n"
+                output += f"{tribute.name} (tú): {tribute.health:.2f}\n"
             else:
-                output += f"{tribute.name}: {tribute.health}\n"
+                output += f"{tribute.name}: {tribute.health:.2f}\n"
 
         return output

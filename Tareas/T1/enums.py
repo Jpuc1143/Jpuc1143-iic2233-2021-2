@@ -1,4 +1,6 @@
 from enum import Enum, auto
+
+
 class Menu(Enum):
     START = auto()
     MAIN = auto()
@@ -15,6 +17,7 @@ class Menu(Enum):
     ATTACK = auto()
     BEG = auto()
     BALL_MODE = auto()
+    FORFEIT = auto()
 
     STATUS = auto()
     SIMULATE = auto()

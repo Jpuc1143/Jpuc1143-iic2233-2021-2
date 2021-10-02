@@ -15,16 +15,18 @@ def load_tributes(path):
     file.close()
     return tributes
 
+
 def load_arenas(path, parent):
-    arenas = []
+    arenas = {}
     file = open(path, "r")
     file.readline()
     for line in file:
         data = line.strip("\n").split(",")
-        arenas.append(Arena(data[0], data[1], float(data[2]), parent))
+        arenas[data[0]] = Arena(data[0], data[1], float(data[2]), parent)
 
     file.close()
     return arenas
+
 
 def load_items(path):
     items = {}
@@ -42,6 +44,7 @@ def load_items(path):
     file.close()
     return items
 
+
 def load_environments(path):
     environments = {}
     file = open(path, "r")
@@ -52,7 +55,7 @@ def load_environments(path):
         for event in data[1:]:
             split_event = event.split(";")
             events[split_event[0]] = int(split_event[1])
-        
+
         if data[0] == "playa":
             environment = Beach(events)
         if data[0] == "montaña":

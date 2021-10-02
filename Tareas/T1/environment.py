@@ -4,7 +4,7 @@ from random import choice
 import parametros as p
 
 
-class Environment:
+class Environment(ABC):
     @abstractmethod
     def __init__(self, events):
         self.events = events
@@ -17,9 +17,11 @@ class Environment:
     def damageDealt(self):
         event = choice(list(self.events.items()))
         print(f"La arena esta siendo afectada por un/una {event[0]}!")
-        damage =  max(5, (0.4*self.humidity+0.2*self.wind+0.1*self.rain+0.3*self.clouds + event[1])/5)
+        numerator = 0.4*self.humidity+0.2*self.wind+0.1*self.rain+0.3*self.clouds + event[1]
+        damage = max(5, numerator/5)
         print(f"Todos los tributos sufren {damage} puntos de daño")
         return damage
+
 
 class Beach(Environment):
     def __init__(self, events):
