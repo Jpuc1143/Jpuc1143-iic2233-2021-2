@@ -4,15 +4,15 @@ PROBABILIDAD_EVENTO = 0.2
 
 
 # Constantes de las acciones de los tributos
-ENERGIA_ACCION_HEROICA = 1
+ENERGIA_ACCION_HEROICA = 10
 POPULARIDAD_ACCION_HEROICA = 1
 
-ENERGIA_ATACAR = 1
-POPULARIDAD_ATACAR = 20
+ENERGIA_ATACAR = 20
+POPULARIDAD_ATACAR = 3
 
-POPULARIDAD_PEDIR = 1
+POPULARIDAD_PEDIR = 3
 
-ENERGIA_BOLITA = 1
+ENERGIA_BOLITA = 50
 
 
 # Constantes de las características de los objetos
@@ -38,3 +38,4 @@ PATH_TRIBUTES = "tributos.csv"
 PATH_ARENAS = "arenas.csv"
 PATH_ENVIRONMENTS = "ambientes.csv"
 PATH_ITEMS = "objetos.csv"
+PATH_SAVES = "partida.txt"

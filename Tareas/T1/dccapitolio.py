@@ -1,6 +1,8 @@
 from copy import copy
+from datetime import datetime
 from enums import Menu
 
+from arena import Arena
 import parametros as p
 import archives
 
@@ -17,6 +19,8 @@ class DCCapitolio:
         self.menu_state = Menu.START
         self.menu_options = {}
 
+        self.saved_games = []
+
     def main_loop(self):
         user_input = None
         while True:
@@ -26,6 +30,7 @@ class DCCapitolio:
 
                 self.menu_options = {
                     "a": ("Entrar a DCCapitolio", Menu.CHOOSE_TRIBUTE),
+                    "s": ("Cargar partida existente", Menu.LOAD_MENU),
                     "q": ("Salir", Menu.EXIT)
                         }
 
@@ -75,7 +80,30 @@ class DCCapitolio:
 
                 self.arena.choose_tributes()
 
+                self.arena.save_id = len(self.saved_games)
+                self.save(self.arena, p.PATH_SAVES)
                 print(self.arena)
+                self.menu_state = Menu.MAIN
+                continue
+
+            elif self.menu_state == Menu.LOAD_MENU:
+                print("Elija su partida:")
+                self.load_list(p.PATH_SAVES)
+                self.menu_options = {}
+                for number, save in enumerate(self.saved_games, start=1):
+                    name = self.saved_games[number-1][1].split(",")[3]
+                    time = self.saved_games[number-1][1].split(";")[0].split(",")[4]
+                    date = self.saved_games[number-1][0]
+                    self.menu_options[str(number)] = (f"{name}, sobrevivido {time} horas ({date})",
+                                                      Menu.LOAD)
+                self.menu_options["w"] = ("Volver", Menu.START)
+                self.menu_options["q"] = ("Salir de DCCapitolio", Menu.EXIT)
+
+            elif self.menu_state == Menu.LOAD:
+                self.arena = Arena("a", "a", 1, self)
+                save_id = int(user_input) - 1
+                self.arena.deserialize(self.saved_games[save_id][1], save_id, self)
+                print("Partida cargada exitosamente")
                 self.menu_state = Menu.MAIN
                 continue
 
@@ -149,6 +177,7 @@ class DCCapitolio:
                 print("")
                 if self.arena.simulate():
                     print(f"\nHoras transcurridas: {self.arena.time}")
+                    self.save(self.arena, p.PATH_SAVES)
                     self.menu_state = Menu.MAIN
                     continue
                 else:
@@ -196,3 +225,35 @@ class DCCapitolio:
             else:
                 print(f"ERROR: {user_input} no es una opción valida")
             print("")
+
+    def save(self, arena, path):
+        data = arena.serialize()
+        if arena.save_id >= len(self.saved_games):
+            self.saved_games.append([datetime.now().strftime("%Y/%m/%d %H:%M:%S"), data])
+
+        file = open(path, "w")
+        for number, save in enumerate(self.saved_games):
+            if number == arena.save_id:
+                file.write(save[0] + "\n" + data + "\n")
+                print("exitoso)")
+            else:
+                file.write(save[0] + "\n" + save[1] + "\n")
+        file.close()
+
+    def load_list(self, path):
+        saves = []
+        save = []
+        try:
+            file = open(path, "r+")
+            for number, line in enumerate(file):
+                if number % 2 == 0:
+                    save.append(line.strip("\n"))
+                else:
+                    save.append(line.strip("\n"))
+                    saves.append(save)
+                    save = []
+            file.close()
+            self.saved_games = saves
+        except FileNotFoundError:
+            print("No hay partidas guardadas")
+            self.saved_games = []

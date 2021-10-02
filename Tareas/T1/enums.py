@@ -10,6 +10,8 @@ class Menu(Enum):
     CONFIRM_TRIBUTE = auto()
     CHOOSE_ARENA = auto()
     NEW_ARENA = auto()
+    LOAD_MENU = auto()
+    LOAD = auto()
 
     ACTIONS = auto()
     HEROIC = auto()

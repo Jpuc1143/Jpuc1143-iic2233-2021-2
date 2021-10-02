@@ -9,8 +9,8 @@ class Tribute:
         self.name = stats[0]
         self.district = stats[1]
         self.age = int(stats[2])
-        self.health = int(stats[3])
-        self.energy = int(stats[4])
+        self._health = float(stats[3])
+        self._energy = float(stats[4])
         self.agility = int(stats[5])
         self.strength = int(stats[6])
         self.intelligence = int(stats[7])
@@ -88,7 +88,8 @@ class Tribute:
 
         except (KeyError, ValueError):
             # Fuente:
-            # https://stackoverflow.com/questions/6470428/catch-multiple-exceptions-in-one-line-except-block
+            # https://stackoverflow.com/questions/6470428/
+            # catch-multiple-exceptions-in-one-line-except-block
             # Utilizado para capturar más de un tipo de excepción.
             print("ERROR: f{self.name} no tiene {item.name} en su inventario")
             # La estructura del programa no deberia dejar pasar esto, pero por si acaso...
@@ -131,6 +132,15 @@ class Tribute:
         self.energy += p.ENERGIA_BOLITA
         print(f"{self.name} se sienta en una esquina y hace su mejor imitación de un Bakugan")
         print(f"Se recupera {p.ENERGIA_BOLITA} y ahora tienes {self.energy}")
+
+    def serialize(self):
+        self_data = ",".join([self.name, self.district, str(self.age), str(self.health),
+                             str(self.energy), str(self.agility), str(self.strength),
+                             str(self.intelligence), str(self.popularity)])
+        inventory_data = ",".join(map(lambda x: x[0].name + "," + str(x[1]),
+                                      self.inventory.values()))
+
+        return self_data + "," + inventory_data
 
     def __str__(self):
         output = ""
