@@ -1,5 +1,6 @@
 from random import choice, sample, random
 
+from tribute import Tribute
 import parametros as p
 
 
@@ -17,6 +18,8 @@ class Arena:
 
         self.tributes = dict()
         self.death_list = []
+
+        self.save_id = None
 
     @property
     def tributes_alive(self):
@@ -122,6 +125,47 @@ class Arena:
         for number, tribute in enumerate(reversed(self.death_list), start=start):
             print(f"{number}. {tribute[0].name} ({tribute[1]})")
         print("")
+
+    def serialize(self):
+        self_data = ",".join([self.name, str(self.risk), self.difficulty,
+                              self.player_tribute.name, str(self.time)])
+        environments = ",".join(map(lambda x: x.name, self.environment_cycle))
+        tributes = ",".join(self.tributes.keys())
+        tributes_dead = ",".join(map(lambda x: f"{x[0].name},{x[1]}", self.death_list))
+        tributes_data = ";".join(map(lambda x: x.serialize(), self.tributes.values()))
+
+        output = ";".join([self_data, environments, tributes, tributes_dead, tributes_data])
+        return output
+
+    def deserialize(self, data, save_id, parent):
+        split_data = data.split(";")
+
+        self_data = split_data[0].split(",")
+        self.name = self_data[0]
+        self.risk = float(self_data[1])
+        self.difficulty = self_data[2]
+        player_tribute_name = self_data[3]
+        self.time = int(self_data[4])
+        self.parent = parent
+        self.save_id = save_id
+
+        self.environment_cycle = list(map(lambda x: self.parent.available_environments[x],
+                                          split_data[1].split(",")))
+
+        for tribute_data in split_data[4:]:
+            tribute_split = tribute_data.split(",")
+            tribute = Tribute(tribute_split[:9])
+            tribute.arena = self
+            self.tributes[tribute_split[0]] = tribute
+            for number, item_data in enumerate(tribute_split[9:]):
+                if number % 2 == 0:
+                    name = item_data
+                else:
+                    tribute.inventory[name] = (self.parent.available_items[name], int(item_data))
+
+        self.player_tribute = self.tributes[player_tribute_name]
+
+        # TODO implementar deathlist
 
     def __str__(self):
         output = f'Arena "{self.name}"\n'\
