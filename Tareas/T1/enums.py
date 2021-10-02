@@ -1,0 +1,23 @@
+from enum import Enum, auto
+class Menu(Enum):
+    START = auto()
+    MAIN = auto()
+    EXIT = auto()
+    CHOOSE_TRIBUTE = auto()
+    SHOW_CANDIDATE_TRIBUTE = auto()
+    CONFIRM_TRIBUTE = auto()
+    CHOOSE_ARENA = auto()
+    NEW_ARENA = auto()
+
+    ACTIONS = auto()
+    HEROIC = auto()
+    CHOOSE_TARGET = auto()
+    ATTACK = auto()
+    BEG = auto()
+    BALL_MODE = auto()
+
+    STATUS = auto()
+    SIMULATE = auto()
+    INVENTORY = auto()
+    USE_ITEM = auto()
+    SUMMARY = auto()
