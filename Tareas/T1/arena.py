@@ -9,7 +9,6 @@ class Arena:
         self.risk = risk
         self.difficulty = difficulty
         self.player_tribute = None
-        self.game_over = False
         self.parent = parent
 
         self.time = 0
