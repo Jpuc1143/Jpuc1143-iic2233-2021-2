@@ -63,11 +63,13 @@ Los supuestos que realicé durante la tarea son los siguientes:
 1. Para el número de encuentros en cada hora, se hiso que el número minimo de encuentros fuera 1 porque si se usaba solo la formula del enunciado causaba que el jugador tuviera una victoria asegurada una vez que un par de tributos murieran en las arenas más faciles.
 2. Todos los archivos siguen el formato del enunciado correctamente.
     - Además, no se pueden usar ```,``` ni ```;``` en los archivos.
-    - También se espera que los archivos _csv_ no cambien entren ejecuciones del programa ya que corrompen los datos de las partidas guardadas. En teoria aun podria usarse la partida guarda siempre y cuando ```environment.csv``` y ```objetos.csv``` tuvieran al menos las instancias utilizadas durante la partida.
+    - También se espera que los archivos _csv_ no cambien entren ejecuciones del programa ya que corrompen los datos de las partidas guardadas. En teoria aun podria usarse la partida guardada siempre y cuando ```environment.csv``` y ```objetos.csv``` tuvieran al menos las instancias utilizadas durante la partida.
 3. Un máximo de un tributo por distrito se elije para los tributos utilizados como oponentes para seguir el _lore_ del programa más fielmente.
     - Aunque esto no se puede ver en el archivo ```tributos.csv``` de referencia ya que tiene un tributo por distrito.
     - Se pueden utilizar más distritos de los que estan en el archivo de referencia.
 4. La cantidad total de partipantes en DCCapitolio se puede modificar usando la constante ```PARTICIPANT_NUMBER```, aunque se asume que debe que haber al menos esa cantidad de tributos con un distrito diferente cada uno (ver punto 3) en el archivo ```tributos.csv```.
+5. Es posible que no hayan ganadores en DCCapitolio, esto puede pasar si un evento aleatorio elimina a todos los tributos vivos. Un mensaje correspondiente sale en la consola.
+    - Naturalmente, el programa igual le anuncia al jugador que perdió.
 
 -------
 
