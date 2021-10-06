@@ -6,7 +6,7 @@ from environment import Beach, Mountain, Forest
 
 def load_tributes(path):
     tributes = {}
-    file = open(path, "r")
+    file = open(path, "r", encoding="utf-8")
     file.readline()
     for line in file:
         data = line.strip("\n").split(",")
@@ -18,7 +18,7 @@ def load_tributes(path):
 
 def load_arenas(path, parent):
     arenas = {}
-    file = open(path, "r")
+    file = open(path, "r", encoding="utf-8")
     file.readline()
     for line in file:
         data = line.strip("\n").split(",")
@@ -30,7 +30,7 @@ def load_arenas(path, parent):
 
 def load_items(path):
     items = {}
-    file = open(path, "r")
+    file = open(path, "r", encoding="utf-8")
     file.readline()
     for line in file:
         data = line.strip("\n").split(",")
@@ -47,7 +47,7 @@ def load_items(path):
 
 def load_environments(path):
     environments = {}
-    file = open(path, "r")
+    file = open(path, "r", encoding="utf-8")
     file.readline()
     for line in file:
         data = line.strip("\n").split(",")

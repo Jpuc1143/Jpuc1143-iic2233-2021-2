@@ -12,6 +12,8 @@ class Menu(Enum):
     NEW_ARENA = auto()
     LOAD_MENU = auto()
     LOAD = auto()
+    DELETE_MENU = auto()
+    DELETE = auto()
 
     ACTIONS = auto()
     HEROIC = auto()

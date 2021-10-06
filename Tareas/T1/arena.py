@@ -165,7 +165,14 @@ class Arena:
 
         self.player_tribute = self.tributes[player_tribute_name]
 
-        # TODO implementar deathlist
+        if split_data[3] != "":
+            for number, data in enumerate(split_data[3].split(",")):
+                    if number % 2 == 0:
+                        death = [self.tributes[data]]
+                    else:
+                        death.append(int(data))
+                        self.death_list.append(death)
+                        death = []
 
     def __str__(self):
         output = f'Arena "{self.name}"\n'\

@@ -25,6 +25,7 @@ class DCCapitolio:
         user_input = None
         while True:
             if self.menu_state == Menu.START:
+                self.load_list(p.PATH_SAVES)
                 print("Bienvenidos Tributos a los Juegos de DCCapitolio!")
                 print("Menu de Inicio")
 
@@ -88,7 +89,6 @@ class DCCapitolio:
 
             elif self.menu_state == Menu.LOAD_MENU:
                 print("Elija su partida:")
-                self.load_list(p.PATH_SAVES)
                 self.menu_options = {}
                 for number, save in enumerate(self.saved_games, start=1):
                     name = self.saved_games[number-1][1].split(",")[3]
@@ -96,6 +96,7 @@ class DCCapitolio:
                     date = self.saved_games[number-1][0]
                     self.menu_options[str(number)] = (f"{name}, sobrevivido {time} horas ({date})",
                                                       Menu.LOAD)
+                self.menu_options["x"] = ("Borrar partida", Menu.DELETE_MENU)
                 self.menu_options["w"] = ("Volver", Menu.START)
                 self.menu_options["q"] = ("Salir de DCCapitolio", Menu.EXIT)
 
@@ -105,6 +106,25 @@ class DCCapitolio:
                 self.arena.deserialize(self.saved_games[save_id][1], save_id, self)
                 print("Partida cargada exitosamente")
                 self.menu_state = Menu.MAIN
+                continue
+
+            elif self.menu_state == Menu.DELETE_MENU:
+                print("Elija la partida para borrar:")
+                self.menu_options = {}
+                for number, save in enumerate(self.saved_games, start=1):
+                    name = self.saved_games[number-1][1].split(",")[3]
+                    time = self.saved_games[number-1][1].split(";")[0].split(",")[4]
+                    date = self.saved_games[number-1][0]
+                    self.menu_options[str(number)] = (f"{name}, sobrevivido {time} horas ({date})",
+                                                      Menu.DELETE)
+                self.menu_options["w"] = ("Volver", Menu.LOAD_MENU)
+                self.menu_options["q"] = ("Salir de DCCapitolio", Menu.EXIT)
+
+            elif self.menu_state == Menu.DELETE:
+                self.delete_save(int(user_input)-1, p.PATH_SAVES)
+                self.load_list(p.PATH_SAVES)
+                print("Partida borrada exitosamente")
+                self.menu_state = Menu.LOAD_MENU
                 continue
 
             elif self.menu_state == Menu.MAIN:
@@ -136,6 +156,7 @@ class DCCapitolio:
                 print(f"{self.arena.player_tribute.name} ha decidido rendirse")
                 self.arena.player_tribute.health = 0
                 self.arena.closing_ceremony()
+                self.delete_save(self.arena.save_id, p.PATH_SAVES)
                 self.menu_state = Menu.START
                 continue
 
@@ -178,9 +199,11 @@ class DCCapitolio:
                 if self.arena.simulate():
                     print(f"\nHoras transcurridas: {self.arena.time}")
                     self.save(self.arena, p.PATH_SAVES)
+                    print("La partida ha sido auto-guardada")
                     self.menu_state = Menu.MAIN
                     continue
                 else:
+                    self.delete_save(self.arena.save_id, p.PATH_SAVES)
                     self.menu_state = Menu.START
                     continue
 
@@ -231,19 +254,20 @@ class DCCapitolio:
         if arena.save_id >= len(self.saved_games):
             self.saved_games.append([datetime.now().strftime("%Y/%m/%d %H:%M:%S"), data])
 
-        file = open(path, "w")
+        file = open(path, "w", encoding="utf-8")
         for number, save in enumerate(self.saved_games):
-            if number == arena.save_id:
-                file.write(save[0] + "\n" + data + "\n")
-            else:
-                file.write(save[0] + "\n" + save[1] + "\n")
+            if not save is None:
+                if number == arena.save_id:
+                    file.write(datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "\n" + data + "\n")
+                else:
+                    file.write(save[0] + "\n" + save[1] + "\n")
         file.close()
 
     def load_list(self, path):
         saves = []
         save = []
         try:
-            file = open(path, "r+")
+            file = open(path, "r+", encoding="utf-8")
             for number, line in enumerate(file):
                 if number % 2 == 0:
                     save.append(line.strip("\n"))
@@ -252,7 +276,17 @@ class DCCapitolio:
                     saves.append(save)
                     save = []
             file.close()
+            saves.sort(key=lambda x: x[0], reverse=True)
             self.saved_games = saves
         except FileNotFoundError:
-            print("No hay partidas guardadas")
+            print("INFO: creando archivo para guardar partidas...")
             self.saved_games = []
+
+    def delete_save(self, save_id, path):
+        self.saved_games[save_id] = None
+        file = open(path, "w", encoding="utf8")
+        for number, save in enumerate(self.saved_games):
+            if not save is None:
+                file.write(save[0] + "\n" + save[1] + "\n")
+        file.close()
+
