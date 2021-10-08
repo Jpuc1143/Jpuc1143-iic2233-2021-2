@@ -70,7 +70,7 @@ Los supuestos que realicé durante la tarea son los siguientes:
 4. La cantidad total de partipantes en DCCapitolio se puede modificar usando la constante ```PARTICIPANT_NUMBER```, aunque se asume que debe que haber al menos esa cantidad de tributos con un distrito diferente cada uno (ver punto 3) en el archivo ```tributos.csv```.
 5. Es posible que no hayan ganadores en DCCapitolio, esto puede pasar si un evento aleatorio elimina a todos los tributos vivos. Un mensaje correspondiente sale en la consola.
     - Naturalmente, el programa igual le anuncia al jugador que perdió.
-6. Las funciones ```bakugan_mode``` y ```let_them_fight``` corresponden a las funciones para que un tributo se hiciera una _bolita_ y para simular los encuentros entre los tributos respectivamente.
+6. Los metodos ```bakugan_mode``` y ```let_them_fight``` corresponden a las funciones para que un tributo se hiciera una _bolita_ y para simular los encuentros entre los tributos respectivamente.
 
 -------
 
