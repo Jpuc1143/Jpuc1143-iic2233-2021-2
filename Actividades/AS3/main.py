@@ -35,7 +35,7 @@ if __name__ == '__main__':
     )
 
     logica_inicio.senal_abrir_juego.connect(
-        ventana_inicio.mostrar_ventana
+        ventana_juego.mostrar_ventana
     )
 
     ventana_inicio.senal_enviar_login.connect(
@@ -45,19 +45,19 @@ if __name__ == '__main__':
     # Ventana Juego
     # Atención: Descomenta las siguientes señales al comenzar la parte 2.
 
-    # ventana_juego.senal_iniciar_juego.connect(
-    #     logica_juego.iniciar_juego
-    # )
-    # ventana_juego.senal_tecla.connect(
-    #     cobra.cambiar_direccion
-    # )
-    # ventana_juego.senal_tecla.connect(cobra.cambiar_direccion)
-    # logica_juego.senal_actualizar.connect(
-    #     ventana_juego.actualizar
-    # )
-    # logica_juego.senal_perder.connect(
-    #     ventana_juego.fin_del_juego
-    # )
+    ventana_juego.senal_iniciar_juego.connect(
+        logica_juego.iniciar_juego
+    )
+    ventana_juego.senal_tecla.connect(
+        cobra.cambiar_direccion
+    )
+    ventana_juego.senal_tecla.connect(cobra.cambiar_direccion)
+    logica_juego.senal_actualizar.connect(
+        ventana_juego.actualizar
+    )
+    logica_juego.senal_perder.connect(
+        ventana_juego.fin_del_juego
+    )
 
     ventana_inicio.mostrar()
     app.exec()

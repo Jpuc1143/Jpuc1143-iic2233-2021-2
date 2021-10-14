@@ -19,12 +19,14 @@ class LogicaJuego(QObject):
         self.pos_item = QRect(*p.POS_INICIO_ITEM)
 
     def instanciar_timer(self):
-        # COMPLETAR
-        pass
+        self.timer = QTimer()
+        self.timer.setInterval(500)
+        self.timer.timeout.connect(self.timer_tick)
+
+        self.subtick = 0
 
     def iniciar_juego(self):
-        # COMPLETAR
-        pass
+        self.timer.start()
 
     def detener_juego(self):
         self.timer.stop()

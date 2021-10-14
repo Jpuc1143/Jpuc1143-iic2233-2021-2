@@ -9,25 +9,37 @@ import parametros as p
 
 
 # Recuerda que estamos usando QT Designer :eyes:
+window_name, base = uic.loadUiType(p.RUTA_UI_VENTANA_JUEGO)
 
-
-# COMPLETAR:
-class VentanaJuego:
+class VentanaJuego(window_name, base):
 
     senal_iniciar_juego = pyqtSignal()
     senal_tecla = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
-        # COMPLETAR
+        self.setupUi(self)
+        self.init_gui()
 
     def mostrar_ventana(self, usuario):
-        # COMPLETAR
-        pass
+        self.show()
+
+        self.casilla_nombre.setText(usuario)
+        self.casilla_nombre.repaint()
+        self.casilla_puntaje.setText("0")
+        self.casilla_puntaje.repaint()
+
+        self.senal_iniciar_juego.emit()
 
     def keyPressEvent(self, event):
-        # COMPLETAR
-        pass
+        if event.text() == p.TECLA_ARRIBA:
+            self.senal_tecla.emit("U")
+        elif event.text() == p.TECLA_IZQUIERDA:
+            self.senal_tecla.emit("L")
+        elif event.text() == p.TECLA_ABAJO:
+            self.senal_tecla.emit("D")
+        elif event.text() == p.TECLA_DERECHA:
+            self.senal_tecla.emit("R")
 
     def init_gui(self):
         self.setWindowIcon(QIcon(p.RUTA_ICONO))
