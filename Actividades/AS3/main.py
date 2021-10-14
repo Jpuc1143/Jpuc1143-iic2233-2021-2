@@ -30,7 +30,13 @@ if __name__ == '__main__':
     # ~~ Conexiones de señales ~~
 
     # Ventana Inicio
-    # COMPLETAR
+    logica_inicio.senal_respuesta_validacion.connect(
+        ventana_inicio.recibir_validacion
+    )
+
+    logica_inicio.senal_abrir_juego.connect(
+        ventana_inicio.mostrar_ventana
+    )
 
     ventana_inicio.senal_enviar_login.connect(
         logica_inicio.comprobar_contrasena

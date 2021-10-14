@@ -17,13 +17,43 @@ class VentanaInicio(QWidget):
 
     def init_gui(self, tamano_ventana):
         self.setWindowIcon(QIcon(p.RUTA_ICONO))
+        self.setGeometry(tamano_ventana)
 
-        # COMPLETAR
-        pass
+        self.logo = QLabel(self)
+        self.logo.setPixmap(QPixmap(p.RUTA_LOGO))
+        self.logo.setMaximumSize(400, 400)
+        self.logo.setScaledContents(True)
+
+        self.usuario_form = QLineEdit(self)
+        self.usuario_form_label = QLabel("Usuario:", self)
+
+        self.usuario_form_box = QHBoxLayout()
+        self.usuario_form_box.addWidget(self.usuario_form_label)
+        self.usuario_form_box.addWidget(self.usuario_form)
+
+        self.clave_form = QLineEdit(self)
+        self.clave_form.setEchoMode(QLineEdit.Password)
+        self.clave_form_label = QLabel("Contraseña:", self)
+
+        self.clave_form_box = QHBoxLayout()
+        self.clave_form_box.addWidget(self.clave_form_label)
+        self.clave_form_box.addWidget(self.clave_form)
+
+        self.ingresar_button = QPushButton("Log In", self)
+        self.ingresar_button.clicked.connect(self.enviar_login)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.logo)
+        vbox.addLayout(self.usuario_form_box)
+        vbox.addLayout(self.clave_form_box)
+        vbox.addWidget(self.ingresar_button)
+        self.setLayout(vbox)
+
+        self.agregar_estilo()
+        self.show()
 
     def enviar_login(self):
-        # COMPLETAR
-        pass
+        self.senal_enviar_login.emit((self.usuario_form.text(), self.clave_form.text()))
 
     def agregar_estilo(self):
         # Acciones y señales

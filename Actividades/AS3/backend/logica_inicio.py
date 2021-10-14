@@ -12,5 +12,9 @@ class LogicaInicio(QObject):
         super().__init__()
 
     def comprobar_contrasena(self, credenciales):
-        # COMPLETAR
-        pass
+        success = False
+        if credenciales[1].casefold() == p.CONTRASENA.casefold():
+            self.senal_abrir_juego.emit(credenciales[0])
+            success = True
+
+        self.senal_respuesta_validacion.emit((credenciales[1], success))
