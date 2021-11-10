@@ -12,7 +12,7 @@ class WindowStart(QWidget):
     def __init__(self):
         super().__init__()
         
-        self.setWindowTitle("DDCrossy Frog")
+        self.setWindowTitle("DCCrossy Frog")
         self.setGeometry(100, 100, 800, 600)  # TODO: cambiar a constantes
 
         self.logo = QLabel(self)
@@ -25,7 +25,7 @@ class WindowStart(QWidget):
         self.button_play.clicked.connect(self.submit_user)
 
         self.button_ranking = QPushButton("Ranking", self)
-        self.button_play.clicked.connect(self.show_ranking)
+        self.button_ranking.clicked.connect(self.show_ranking)
 
         vbox = QVBoxLayout()
         vbox.addWidget(self.logo)
@@ -35,10 +35,16 @@ class WindowStart(QWidget):
         vbox.addWidget(self.button_ranking)
         self.setLayout(vbox)
 
-        self.show()
-
     def submit_user(self):
         self.signal_submit_user.emit(self.user_entry.text())
 
+    def submit_user_reply(self, success):
+        if success:
+            self.hide()
+        else:
+            pass
+            # TODO
+
     def show_ranking(self):
+        self.hide()
         self.signal_show_ranking.emit()
