@@ -33,6 +33,7 @@ class Cliente:
         
         except ConnectionError:
             print("El cliente no se pudo conectar")
+            self.socket_cliente.close()
 
 
     def escuchar(self):
@@ -48,7 +49,12 @@ class Cliente:
                 msg.extend(chunk)
             print(f"msg {msg}")
             print(f"decoded {self.decodificar_mensaje(msg)}") #TODO
-            self.manejar_comando(self.decodificar_mensaje(msg))
+            if len(msg) == 0:
+                self.socket_cliente.close()
+                return
+            else:
+                self.manejar_comando(self.decodificar_mensaje(msg))
+        
 
     def enviar(self, msg):
         encoded_msg = self.codificar_mensaje(msg)

@@ -63,6 +63,7 @@ class Servidor:
                 if reply == dict():
                     raise ConnectionError
                 else:
+                    print("Enviando algo...")
                     self.enviar(reply, socket_cliente)
 
         except ConnectionError:
