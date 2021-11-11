@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication
 
 from window_game import WindowGame
-#from logic_game import LogicGame
+from logic_game import LogicGame
 from window_start import WindowStart
 from logic_start import LogicStart
 from window_ranking import WindowRanking
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     window_ranking = WindowRanking()
 
     window_game = WindowGame()
-    # logic_game = LogicGame()
+    logic_game = LogicGame()
 
     window_start.signal_submit_user.connect(
         logic_start.check_user
@@ -38,13 +38,21 @@ if __name__ == '__main__':
             window_start.submit_user_reply
         )
 
-    #logic_start.signal_start_game.connect(
-    # TODO       
-    #    )
+    logic_start.signal_start_game.connect(
+            logic_game.start_game
+        )
 
     window_ranking.signal_return_start.connect(
         window_start.show
         )
+
+    logic_game.signal_render_level.connect(
+            window_game.render_level
+        )
+
+    logic_game.signal_render.connect(
+            window_game.render
+            )
 
     window_start.show()
 
