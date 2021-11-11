@@ -27,20 +27,38 @@ class Cliente:
             self.salir()
 
     def conectar_al_servidor(self):
-        # Completar
-        pass
+        try:
+            self.socket_cliente.connect((self.host, self.port))
+            print("El cliente se ha conectado exitosamente al servidor")
+        
+        except ConnectionError:
+            print("El cliente no se pudo conectar")
+
 
     def escuchar(self):
-        # Completar
-        pass
+        thread = threading.Thread(target=self.thread_escuchar)
+        thread.start()
 
     def thread_escuchar(self):
-        # Completar
-        pass
+        while True:
+            msg = bytearray()
+            msg_length = int.from_bytes(self.socket_cliente.recv(4), byteorder="big")
+            while len(msg) < msg_length:
+                chunk = self.socket_cliente.recv(min(4096, msg_length-len(msg)))
+                msg.extend(chunk)
+            print(f"msg {msg}")
+            print(f"decoded {self.decodificar_mensaje(msg)}") #TODO
+            self.manejar_comando(self.decodificar_mensaje(msg))
 
     def enviar(self, msg):
-        # Completar
-        pass
+        encoded_msg = self.codificar_mensaje(msg)
+        length_header = len(encoded_msg).to_bytes(4, byteorder="big")
+
+        print(f"len {len(msg)}")
+        print(f"msg {msg} length_header {length_header}")
+        print(length_header+encoded_msg) # TODO
+        self.socket_cliente.sendall(length_header + encoded_msg)
+        self.evento_prints.clear()
 
     def recibir_input(self):
         # Inicia el thread que se encarga de manejar el input

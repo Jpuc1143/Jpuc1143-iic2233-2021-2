@@ -46,7 +46,7 @@ class Servidor:
                 thread = threading.Thread(target=self.thread_escuchar_cliente, args=(socket_client, Servidor._id_cliente))
                 thread.start()
 
-                Servido._id_cliente += 1
+                Servidor._id_cliente += 1
 
             except ConnectionError:
                 print("No se pudo establecer la conexión")
@@ -56,9 +56,10 @@ class Servidor:
         try:
             while True:
                 msg = self.recibir_mensaje(socket_cliente)
-                if msg == "":
+                print("Mensaje recivido:", msg) #TODO
+                if msg == dict():
                     raise ConnectionError
-                reply = self.manejar_comando(msg)
+                reply = self.manejar_comando(msg, socket_cliente)
                 if reply == dict():
                     raise ConnectionError
                 else:
@@ -75,11 +76,12 @@ class Servidor:
             chunk = socket_cliente.recv(min(4096, msg_length-len(msg)))
             msg.extend(chunk)
 
+        print("Mensaje", msg_length, msg) #TODO
         return self.decodificar_mensaje(msg)
 
     def enviar(self, mensaje, sock_cliente):
-        length_header = int.to_bytes(len(mensaje), byteorder="big")
         encoded_msg = self.codificar_mensaje(mensaje)
+        length_header = len(encoded_msg).to_bytes(4, byteorder="big")
 
         sock_cliente.sendall(length_header + encoded_msg)
 
