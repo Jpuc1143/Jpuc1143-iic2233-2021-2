@@ -27,28 +27,61 @@ class Servidor:
         self.unir_y_escuchar()
 
     def unir_y_escuchar(self):
-        # Completar
-        pass
+        self.socket_servidor.bind((self.host, self.port))
+        print(f"Escuchando en {self.host}:{self.port}")
+
+        self.socket_servidor.listen()
+        self.aceptar_conexiones()
 
     def aceptar_conexiones(self):
-        # Completar
-        pass
+        thread = threading.Thread(target=self.thread_aceptar_conexiones)
+        thread.start()
 
     def thread_aceptar_conexiones(self):
-        # Completar
-        pass
+        while True:
+            try:
+                socket_client, _ = self.socket_servidor.accept()
+                self.clientes_conectados[Servidor._id_cliente] = socket_client
+
+                thread = threading.Thread(target=self.thread_escuchar_cliente, args=(socket_client, Servidor._id_cliente))
+                thread.start()
+
+                Servido._id_cliente += 1
+
+            except ConnectionError:
+                print("No se pudo establecer la conexión")
+
 
     def thread_escuchar_cliente(self, socket_cliente, id_cliente):
-        # Completar
-        pass
+        try:
+            while True:
+                msg = self.recibir_mensaje(socket_cliente)
+                if msg == "":
+                    raise ConnectionError
+                reply = self.manejar_comando(msg)
+                if reply == dict():
+                    raise ConnectionError
+                else:
+                    self.enviar(reply, socket_cliente)
+
+        except ConnectionError:
+            socket_cliente.close()
+            print(f"Cliente {id_cliente} se ha desconectado")
 
     def recibir_mensaje(self, socket_cliente):
-        # Completar
-        pass
+        msg = bytearray()
+        msg_length = int.from_bytes(socket_cliente.recv(4), byteorder="big")
+        while len(msg) < msg_length:
+            chunk = socket_cliente.recv(min(4096, msg_length-len(msg)))
+            msg.extend(chunk)
+
+        return self.decodificar_mensaje(msg)
 
     def enviar(self, mensaje, sock_cliente):
-        # Completar
-        pass
+        length_header = int.to_bytes(len(mensaje), byteorder="big")
+        encoded_msg = self.codificar_mensaje(mensaje)
+
+        sock_cliente.sendall(length_header + encoded_msg)
 
     def manejar_comando(self, recibido, socket_cliente):
         comando = recibido["comando"]
