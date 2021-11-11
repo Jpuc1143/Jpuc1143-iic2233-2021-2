@@ -47,8 +47,6 @@ class Cliente:
             while len(msg) < msg_length:
                 chunk = self.socket_cliente.recv(min(4096, msg_length-len(msg)))
                 msg.extend(chunk)
-            print(f"msg {msg}")
-            print(f"decoded {self.decodificar_mensaje(msg)}") #TODO
             if len(msg) == 0:
                 self.socket_cliente.close()
                 return
@@ -60,9 +58,6 @@ class Cliente:
         encoded_msg = self.codificar_mensaje(msg)
         length_header = len(encoded_msg).to_bytes(4, byteorder="big")
 
-        print(f"len {len(msg)}")
-        print(f"msg {msg} length_header {length_header}")
-        print(length_header+encoded_msg) # TODO
         self.socket_cliente.sendall(length_header + encoded_msg)
         self.evento_prints.clear()
 

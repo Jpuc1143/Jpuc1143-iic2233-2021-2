@@ -56,7 +56,6 @@ class Servidor:
         try:
             while True:
                 msg = self.recibir_mensaje(socket_cliente)
-                print("Mensaje recivido:", msg) #TODO
                 if msg == dict():
                     raise ConnectionError
                 reply = self.manejar_comando(msg, socket_cliente)
@@ -77,7 +76,6 @@ class Servidor:
             chunk = socket_cliente.recv(min(4096, msg_length-len(msg)))
             msg.extend(chunk)
 
-        print("Mensaje", msg_length, msg) #TODO
         return self.decodificar_mensaje(msg)
 
     def enviar(self, mensaje, sock_cliente):
