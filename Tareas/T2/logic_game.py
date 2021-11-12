@@ -1,8 +1,10 @@
-from random import choice
+from random import choice, randint
 
-from PyQt5.QtCore import pyqtSignal, QObject, QTimer
+from PyQt5.QtCore import pyqtSignal, QObject, QPoint, QTimer, QRectF, QSizeF, Qt
 
 import parametros as p
+from entity import Car, Log
+from keyboard_status import Keyboard
 
 
 class LogicGame(QObject):
@@ -13,13 +15,26 @@ class LogicGame(QObject):
     def __init__(self):
         super().__init__()
 
+        self.keyboard = Keyboard()
+
         self.frame_timer = QTimer()
-        self.frame_timer.setInterval(int(1 / p.FRAME_RATE))
+        self.frame_timer.setInterval(int(1000 / p.FRAME_RATE))
         self.frame_timer.timeout.connect(self.update_game)
 
         self.level_timer = QTimer()
         self.level_timer.setInterval(1000)
         self.level_timer.timeout.connect(self.level_timer_tick)
+
+        self.car_spawn_timer = QTimer()
+        self.car_spawn_timer.setInterval(p.TIEMPOS_AUTOS * 1000)
+        self.car_spawn_timer.timeout.connect(self.spawn_car)
+
+        self.log_spawn_timer = QTimer()
+        self.log_spawn_timer.setInterval(p.TIEMPOS_TRONCOS * 1000)
+        self.log_spawn_timer.timeout.connect(self.spawn_log)
+
+        self.game_area = QRectF()
+        self.game_area.setSize(QSizeF(p.GAME_AREA_SIZE))
 
     def start_game(self):
         self.time_remaining = p.DURACION_RONDA_INICIAL
@@ -29,9 +44,12 @@ class LogicGame(QObject):
 
         self.player_lives = p.VIDAS_INICIO
 
+        self.entities = list()  # No optimo. ¿Por qué Python no tiene linked lists en stdlib?
+
         self.generate_level()
         self.update_game()
-
+        self.resume_game()
+        
     def generate_level(self):
         level = []
         level.append(choice(["H", "R"]))
@@ -45,15 +63,78 @@ class LogicGame(QObject):
 
         self.signal_render_level.emit(level)
 
+        current_lane = 1
+        self.area_layout = list(map(lambda x: [x, None, []], level))
+        for index, area in enumerate(self.area_layout):
+            if index != 0 and area[0] != self.area_layout[index-1][0]:
+                current_lane += 1
+
+            area[1] = current_lane
+            if area[0] == "H":
+                for index in range(3):
+                    area[2].append(choice([p.DIR_LEFT, p.DIR_RIGHT]))
+            else:
+                if self.area_layout[index-1][0] == area[0]:
+                    area[2].append(self.area_layout[index-1][2][1])
+                else:
+                    area[2].append(choice([p.DIR_LEFT, p.DIR_RIGHT]))
+                if area[2][0] == p.DIR_LEFT:
+                    area[2].append(p.DIR_RIGHT)
+                    area[2].append(p.DIR_LEFT)
+                else:
+                    area[2].append(p.DIR_LEFT)
+                    area[2].append(p.DIR_RIGHT)
+
+            current_lane += 3
+
     def next_level(self):
         pass
 
+    def resume_game(self):
+        self.frame_timer.start()
+        self.level_timer.start()
+        self.car_spawn_timer.start()
+        self.log_spawn_timer.start()
+
+    def pause_game(self):
+        pass
+
     def update_game(self):
+
         # logic updates TODO
 
-        self.signal_render.emit((1,))  # TODO: poner todo lo necesario en el emit
+        for entity in self.entities:
+            entity.update()
+
+        self.signal_render.emit([self.entities])  # TODO: poner todo lo necesario en el emit
 
     def level_timer_tick(self):
         self.time_remaining -= 1
         if self.time_remaining <= 0:
             self.level_timer.stop()
+
+    def spawn_car(self):
+        for highway in filter(lambda x: x[0] == "H", self.area_layout):
+            lane = randint(0, 2)
+            direction = highway[2][lane]
+            car = Car(QPoint(p.GAME_AREA_SIZE.width(), self.lane_to_pos(highway[1] + lane)), direction, self)
+            if direction == p.DIR_RIGHT:
+                car.moveRight(0)
+
+    def spawn_log(self):
+        print(self.area_layout)
+        for river in filter(lambda x: x[0] == "R", self.area_layout):
+            lane = randint(0, 2)
+            direction = river[2][lane]
+            log = Log(QPoint(p.GAME_AREA_SIZE.width(), self.lane_to_pos(river[1] + lane)), direction, self)
+            if direction == p.DIR_RIGHT:
+                log.moveRight(0)
+
+    def lane_to_pos(self, lane):
+        return p.GAME_AREA_SIZE.height() - (1 + lane) * p.LANE_WIDTH
+
+    def key_down(self, key):
+        self.keyboard[key] = True
+
+    def key_up(self, key):
+        self.keyboard[key] = False

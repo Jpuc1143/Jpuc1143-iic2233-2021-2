@@ -46,6 +46,14 @@ if __name__ == '__main__':
         window_start.show
         )
 
+    window_game.signal_game_key_down.connect(
+            logic_game.key_down
+            )
+
+    window_game.signal_game_key_up.connect(
+            logic_game.key_up
+            )
+
     logic_game.signal_render_level.connect(
             window_game.render_level
         )
