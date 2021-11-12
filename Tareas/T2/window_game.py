@@ -2,6 +2,8 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QLabel, QWidget
 from PyQt5.QtGui import QPixmap
 
+from queue import PriorityQueue
+
 import parametros as p
 
 class WindowGame(QWidget):
@@ -80,13 +82,19 @@ class WindowGame(QWidget):
         self.sprites = []
 
         self.entities = data[0]
+        layered_entities = []
         for entity in self.entities:
             sprite = QLabel("car",self.game_area)
             sprite.setPixmap(QPixmap(entity.current_sprite))
             sprite.setScaledContents(True)
             sprite.setGeometry(entity.toRect())
             sprite.show()
+
             self.sprites.append(sprite)
+            layered_entities.append((entity.layer, sprite))
+
+        list(map(lambda x: x[1].raise_(), sorted(layered_entities, key=lambda x: x[0])))
+        # El uso de raise_() en vez de raise() se debe al leer QtWidgets.pyi en /usr/lib/
 
     def keyPressEvent(self, event):
         self.signal_game_key_down.emit(event.key())

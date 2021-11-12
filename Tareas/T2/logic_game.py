@@ -3,7 +3,7 @@ from random import choice, randint
 from PyQt5.QtCore import pyqtSignal, QObject, QPoint, QTimer, QRectF, QSizeF, Qt
 
 import parametros as p
-from entity import Car, Log
+from entity import Car, Log, Frog
 from keyboard_status import Keyboard
 
 
@@ -47,6 +47,11 @@ class LogicGame(QObject):
         self.entities = list()  # No optimo. ¿Por qué Python no tiene linked lists en stdlib?
 
         self.generate_level()
+        
+        self.spawn_car()
+        self.spawn_log()
+        Frog(QPoint(400, 0), p.DIR_UP, p.FROG_SKIN_0, self)
+
         self.update_game()
         self.resume_game()
         
@@ -74,7 +79,7 @@ class LogicGame(QObject):
                 for index in range(3):
                     area[2].append(choice([p.DIR_LEFT, p.DIR_RIGHT]))
             else:
-                if self.area_layout[index-1][0] == area[0]:
+                if index != 0 and self.area_layout[index-1][0] == area[0]:
                     area[2].append(self.area_layout[index-1][2][1])
                 else:
                     area[2].append(choice([p.DIR_LEFT, p.DIR_RIGHT]))
@@ -86,6 +91,14 @@ class LogicGame(QObject):
                     area[2].append(p.DIR_RIGHT)
 
             current_lane += 3
+            
+        self.river_rects = []
+        for area in self.area_layout:
+            if area[0] == "R":
+                self.river_rects.append(QRectF(
+                    0, self.lane_to_pos(area[1] + 2),
+                    p.LANE_LENGTH, 3 * p.LANE_WIDTH
+                        ))
 
     def next_level(self):
         pass
@@ -122,7 +135,6 @@ class LogicGame(QObject):
                 car.moveRight(0)
 
     def spawn_log(self):
-        print(self.area_layout)
         for river in filter(lambda x: x[0] == "R", self.area_layout):
             lane = randint(0, 2)
             direction = river[2][lane]

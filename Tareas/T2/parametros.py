@@ -28,6 +28,9 @@ TIEMPOS_TRONCOS = 5
 CAR_SIZE = QSizeF(50, 50)
 LOG_SIZE = QSizeF(100, 50)
 
+FROG_SIZE = QSizeF(40, 40)
+FROG_SKIN_0 = "Naranjo"
+
 PATH_LOGO = os.path.join("sprites", "Logo.png")
 PATH_GRASS = os.path.join("sprites", "Mapa", "areas", "pasto.png")
 PATH_HIGHWAY = os.path.join("sprites", "Mapa", "areas", "carretera.png")
@@ -35,3 +38,5 @@ PATH_RIVER = os.path.join("sprites", "Mapa", "areas", "rio.png")
 PATH_CAR_RIGHT = os.path.join("sprites", "Mapa", "autos", "rojo_right.png")
 PATH_CAR_LEFT = os.path.join("sprites", "Mapa", "autos", "rojo_left.png")
 PATH_LOG = os.path.join("sprites", "Mapa", "elementos", "tronco.png")
+
+PREFIX_FROG = os.path.join("sprites", "Personajes")
