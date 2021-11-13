@@ -18,8 +18,6 @@ class WindowGame(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setGeometry(100, 100, 800, 600) # TODO: cambiar a c/onstantesa
-
         self.game_area = QWidget(self)
         self.game_area.setMinimumSize(p.GAME_AREA_SIZE)
         self.game_area.resize(p.GAME_AREA_SIZE)
@@ -30,16 +28,19 @@ class WindowGame(QWidget):
 
         life_image = QLabel()
         life_image.setScaledContents(True)
+        life_image.setMaximumSize(p.ICON_SIZE)
         life_image.setPixmap(QPixmap(p.PATH_LIFE))
         self.life_counter = QLabel("num")
 
         time_image = QLabel()
         time_image.setScaledContents(True)
+        time_image.setMaximumSize(p.ICON_SIZE)
         time_image.setPixmap(QPixmap(p.PATH_CLOCK))
         self.time_counter = QLabel("num")
 
         coin_image = QLabel()
         coin_image.setScaledContents(True)
+        coin_image.setMaximumSize(p.ICON_SIZE)
         coin_image.setPixmap(QPixmap(p.PATH_COIN))
         self.coin_counter = QLabel("num")
 
@@ -52,26 +53,34 @@ class WindowGame(QWidget):
         self.pause_button = QPushButton("Pausa")
         self.pause_button.clicked.connect(self.toggle_pause)
 
-        data = [
-                [
-                    life_image, self.life_counter, time_image,
-                    self.time_counter, coin_image, self.coin_counter
-                ],
-                [QLabel("Score:"), self.score_counter],
-                [QLabel("Level:"), self.level_counter, self.quit_button, None, self.pause_button, None]
-                ]
 
         status_bar = QGroupBox(self)
         status_bar_layout = QHBoxLayout(status_bar)
-        for frame_data in data:
-            frame = QFrame(status_bar)
-            layout = QGridLayout(frame)
-            for index, widget in enumerate(frame_data):
-                if widget is None:
-                    continue
-                layout.addWidget(widget, index * len(frame_data)/ 2, index % 2)
-            status_bar_layout.addWidget(frame)
 
+        frame = QGroupBox()
+        layout = QGridLayout(frame)
+        layout.addWidget(life_image, 0, 0)
+        layout.addWidget(self.life_counter, 1, 1)
+        layout.addWidget(time_image, 2, 0)
+        layout.addWidget(self.time_counter, 3, 1)
+        layout.addWidget(coin_image, 4, 0)
+        layout.addWidget(self.coin_counter, 5, 1)
+        status_bar_layout.addWidget(frame)
+
+        frame = QGroupBox()
+        layout = QGridLayout(frame)
+        layout.addWidget(QLabel("Score:"), 0, 0)
+        layout.addWidget(self.score_counter, 0, 1)
+        status_bar_layout.addWidget(frame)
+
+        frame = QGroupBox()
+        layout = QGridLayout(frame)
+        layout.addWidget(QLabel("Level:"), 0, 0)
+        layout.addWidget(self.level_counter, 0, 1)
+        layout.addWidget(self.quit_button, 1, 0, 1, 2)
+        layout.addWidget(self.pause_button, 2, 0, 1, 2)
+        status_bar_layout.addWidget(frame)
+    
         vbox = QVBoxLayout(self)
         vbox.addWidget(status_bar)
         vbox.addWidget(self.game_area)
