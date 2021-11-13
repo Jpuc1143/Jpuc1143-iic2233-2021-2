@@ -15,8 +15,6 @@ class WindowRanking(QWidget):
         self.setWindowTitle("DCCrossy Frog — Ranking")
         self.move(p.WINDOW_OFFSET)
 
-        # TODO: implementar mostrar ranking
-
         self.button_return = QPushButton("Volver", self)
         self.button_return.clicked.connect(self.return_start)
 
