@@ -13,7 +13,7 @@ class WindowGame(QWidget):
 
     signal_pause_game = pyqtSignal()
     signal_resume_game = pyqtSignal()
-    signal_quit_game = pyqtSignal() #TODO pensar si esto es necesario o no 
+    signal_quit_game = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -48,6 +48,7 @@ class WindowGame(QWidget):
         self.level_counter = QLabel("lv1")
 
         self.quit_button = QPushButton("Salir")
+        self.quit_button.clicked.connect(self.quit_game)
         self.pause_button = QPushButton("Pausa")
         self.pause_button.clicked.connect(self.toggle_pause)
 
@@ -176,3 +177,6 @@ class WindowGame(QWidget):
         else:
             self.pause_button.setText("Pausa")
             self.signal_resume_game.emit()
+
+    def quit_game(self):
+        self.signal_quit_game.emit()

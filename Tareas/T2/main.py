@@ -6,6 +6,7 @@ from logic_game import LogicGame
 from window_start import WindowStart
 from logic_start import LogicStart
 from window_ranking import WindowRanking
+from window_post_game import WindowPostGame
 
 
 # Código de contenidos Semana 7.1
@@ -25,6 +26,8 @@ if __name__ == '__main__':
 
     window_game = WindowGame()
     logic_game = LogicGame()
+
+    window_post_game = WindowPostGame()
 
     window_start.signal_submit_user.connect(
         logic_start.check_user
@@ -62,12 +65,28 @@ if __name__ == '__main__':
             logic_game.resume_game
             )
 
+    window_game.signal_quit_game.connect(
+            logic_game.lose_game
+            )
+
     logic_game.signal_render_level.connect(
             window_game.render_level
         )
 
     logic_game.signal_render.connect(
             window_game.render
+            )
+
+    logic_game.signal_go_post_game.connect(
+            window_post_game.show_results
+            )
+
+    logic_game.signal_go_post_game.connect(
+            window_game.hide
+            )
+
+    window_post_game.signal_next_level.connect(
+            logic_game.next_level
             )
 
     window_start.show()

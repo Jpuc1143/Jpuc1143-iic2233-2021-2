@@ -1,5 +1,5 @@
 import os
-from PyQt5.QtCore import QSize, QSizeF
+from PyQt5.QtCore import QSize, QSizeF, Qt
 
 MIN_CARACTERES = 1
 MAX_CARACTERES = 12
@@ -19,6 +19,7 @@ LANE_WIDTH = GAME_AREA_SIZE.height() / LANE_NUM
 DURACION_RONDA_INICIAL = 100
 VIDAS_INICIO = 5
 PONDERADOR_DIFICULTAD = 0.9
+CANTIDAD_MONEDAS = 1
 
 VELOCIDAD_AUTOS = 200
 VELOCIDAD_TRONCOS = 50
@@ -26,7 +27,7 @@ VELOCIDAD_CAMINAR = 100
 SKULL_BONUS = 1.05
 
 TIEMPO_AUTOS = 2
-TIEMPO_TRONCOS = 5
+TIEMPO_TRONCOS = 2
 TIEMPO_OBJETO = 5
 
 CAR_SIZE = QSizeF(50, 50)
@@ -51,3 +52,7 @@ PATH_CLOCK = os.path.join("sprites", "Objetos", "Reloj.png")
 
 PREFIX_FROG = os.path.join("sprites", "Personajes")
 PREFIX_ITEM = os.path.join("sprites", "Objetos")
+
+VIDAS_TRAMPA = 1
+CHEAT_LIFE = [Qt.Key_V, Qt.Key_I, Qt.Key_D]
+CHEAT_LEVEL = [Qt.Key_N, Qt.Key_I, Qt.Key_V]

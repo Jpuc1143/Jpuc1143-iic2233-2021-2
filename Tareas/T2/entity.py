@@ -143,7 +143,7 @@ class Frog(Entity):
             elif item.type == "Corazon":
                 self.parent.player_lives += 1
             elif item.type == "Moneda":
-                self.parent.player_coins += 1
+                self.parent.player_coins += p.CANTIDAD_MONEDAS
             elif item.type == "Reloj":
                 level_time = p.DURACION_RONDA_INICIAL * (
                         p.PONDERADOR_DIFICULTAD ** (self.parent.current_level - 1

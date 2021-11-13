@@ -1,4 +1,5 @@
 from random import choice, randint
+from functools import reduce
 
 from PyQt5.QtCore import pyqtSignal, QObject, QPoint, QTimer, QRectF, QSizeF, Qt
 
@@ -10,12 +11,12 @@ from keyboard_status import Keyboard
 class LogicGame(QObject):
 
     signal_render = pyqtSignal(list)
-    signal_render_level= pyqtSignal(list)
+    signal_render_level = pyqtSignal(list)
+
+    signal_go_post_game = pyqtSignal(bool, int, int, int, int)
 
     def __init__(self):
         super().__init__()
-
-        self.keyboard = Keyboard()
 
         self.frame_timer = QTimer()
         self.frame_timer.setInterval(int(1000 / p.FRAME_RATE))
@@ -41,8 +42,10 @@ class LogicGame(QObject):
         self.game_area.setSize(QSizeF(p.GAME_AREA_SIZE))
 
     def start_game(self):
+        self.keyboard = Keyboard()
         self.time_remaining = p.DURACION_RONDA_INICIAL
 
+        self.keyboard = Keyboard()
         self.player_lives = p.VIDAS_INICIO
         self.score = 0
         self.current_level = 1
@@ -107,7 +110,23 @@ class LogicGame(QObject):
                         ))
 
     def next_level(self):
-        pass
+        self.keyboard = Keyboard()
+        self.current_level += 1
+        self.time_remaining = p.DURACION_RONDA_INICIAL * (p.PONDERADOR_DIFICULTAD ** (self.current_level - 1))
+
+        self.spawned_item = None
+        self.skull_bonus = 1
+
+        self.entities = list()
+
+        self.generate_level()
+        
+        self.spawn_car()
+        self.spawn_log()
+        self.player = Frog(QPoint(p.LANE_LENGTH/2, self.lane_to_pos(0)), p.DIR_UP, p.FROG_SKIN_0, self)
+
+        self.update_game()
+        self.resume_game()
 
     def resume_game(self):
         self.frame_timer.start()
@@ -131,7 +150,15 @@ class LogicGame(QObject):
             self.lose_game()
             return
 
-        if self.player.top() == self.game_area.top():
+        if self.player.top() <= self.game_area.top():
+            self.win_game()
+            return
+        
+        # Identificar cheatcodes
+        if reduce(lambda x,y: x and y, map(lambda x: self.keyboard[x], p.CHEAT_LIFE)):
+            self.player_lives += p.VIDAS_TRAMPA
+
+        if reduce(lambda x,y: x and y, map(lambda x: self.keyboard[x], p.CHEAT_LEVEL)):
             self.win_game()
             return
 
@@ -183,12 +210,19 @@ class LogicGame(QObject):
 
     def key_up(self, key):
         self.keyboard[key] = False
-
+    
     def win_game(self):
         self.pause_game()
+        self.score += self.calculate_level_score()
+        self.signal_go_post_game.emit(
+                True, self.current_level, self.player_lives, self.score, self.player_coins
+                )
 
     def lose_game(self):
         self.pause_game()
+        self.signal_go_post_game.emit(
+                False, self.current_level, self.player_lives, self.score, self.player_coins
+                )
 
-    def calculate_level_score():
+    def calculate_level_score(self):
         return self.current_level * (self.player_lives * 100 + self.time_remaining * 50)
