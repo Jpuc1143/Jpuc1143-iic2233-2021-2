@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QLabel, QWidget, QFrame, QVBoxLayout, QHBoxLayout, QGridLayout, QGroupBox, QPushButton
 from PyQt5.QtGui import QPixmap
 
@@ -166,6 +166,8 @@ class WindowGame(QWidget):
 
     def keyPressEvent(self, event):
         self.signal_game_key_down.emit(event.key())
+        if event.key() == Qt.Key_P:
+            self.toggle_pause()
 
     def keyReleaseEvent(self, event):
         self.signal_game_key_up.emit(event.key())
