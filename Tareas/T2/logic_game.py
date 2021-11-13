@@ -13,7 +13,7 @@ class LogicGame(QObject):
     signal_render = pyqtSignal(list)
     signal_render_level = pyqtSignal(list)
 
-    signal_go_post_game = pyqtSignal(bool, int, int, int, int)
+    signal_go_post_game = pyqtSignal(bool, str, int, int, int, int)
 
     def __init__(self):
         super().__init__()
@@ -41,11 +41,11 @@ class LogicGame(QObject):
         self.game_area = QRectF()
         self.game_area.setSize(QSizeF(p.GAME_AREA_SIZE))
 
-    def start_game(self):
+    def start_game(self, name):
         self.keyboard = Keyboard()
         self.time_remaining = p.DURACION_RONDA_INICIAL
 
-        self.keyboard = Keyboard()
+        self.player_name = name
         self.player_lives = p.VIDAS_INICIO
         self.score = 0
         self.current_level = 1
@@ -215,13 +215,15 @@ class LogicGame(QObject):
         self.pause_game()
         self.score += self.calculate_level_score()
         self.signal_go_post_game.emit(
-                True, self.current_level, self.player_lives, self.score, self.player_coins
+                True, self.player_name, self.current_level,
+                self.player_lives, self.score, self.player_coins
                 )
 
     def lose_game(self):
         self.pause_game()
         self.signal_go_post_game.emit(
-                False, self.current_level, self.player_lives, self.score, self.player_coins
+                False, self.player_name, self.current_level,
+                self.player_lives, self.score, self.player_coins
                 )
 
     def calculate_level_score(self):

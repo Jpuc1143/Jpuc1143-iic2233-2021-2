@@ -50,6 +50,8 @@ PATH_SKULL = os.path.join("sprites", "Objetos", "Calavera.png")
 PATH_COIN = os.path.join("sprites", "Objetos", "Moneda.png")
 PATH_CLOCK = os.path.join("sprites", "Objetos", "Reloj.png")
 
+PATH_SCORES = "puntajes.txt"
+
 PREFIX_FROG = os.path.join("sprites", "Personajes")
 PREFIX_ITEM = os.path.join("sprites", "Objetos")
 
