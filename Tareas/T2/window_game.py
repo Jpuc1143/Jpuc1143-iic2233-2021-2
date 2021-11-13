@@ -131,6 +131,8 @@ class WindowGame(QWidget):
         self.show()
 
     def render(self, data):
+        self.setFocus()
+
         # Barra de Estado
         self.life_counter.setText(str(data[1]))
         self.life_counter.repaint()

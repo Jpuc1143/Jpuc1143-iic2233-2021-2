@@ -1,6 +1,6 @@
 import os
 from random import choice
-from PyQt5.QtCore import QRectF, Qt
+from PyQt5.QtCore import QRectF, QPointF, Qt
 
 import parametros as p
 
@@ -100,6 +100,7 @@ class Frog(Entity):
         self.layer = 10
 
         self.following_log = None
+        self.jump_destination = None
 
         self.sprite_status = "idle"
 
@@ -113,14 +114,17 @@ class Frog(Entity):
                         ))
 
     def update(self):
-        self.update_movement()
+        if self.parent.keyboard[Qt.Key_Space] or not self.jump_destination is None:
+            self.jumping()
+        else:
+            self.update_movement()
 
         self.following_log = None
         for log in filter(lambda x: isinstance(x, Log), self.parent.entities):
             if log.contains(self.center()):
                 self.following_log = log
 
-        if not self.following_log is None:
+        if not self.following_log is None and self.jump_destination is None:
             if self.following_log.direction == p.DIR_RIGHT:
                 self.move(self.following_log.speed / p.FRAME_RATE, 0)
             else:
@@ -131,10 +135,11 @@ class Frog(Entity):
                 self.die()
                 return
 
-        for river in self.parent.river_rects:
-            if river.contains(self.center()) and self.following_log == None:
-                self.die()
-                return
+        if self.jump_destination is None:
+            for river in self.parent.river_rects:
+                if river.contains(self.center()) and self.following_log == None:
+                    self.die()
+                    return
 
         item = self.parent.spawned_item
         if not item is None and self.intersects(item):
@@ -153,6 +158,7 @@ class Frog(Entity):
             item.delete_self()
 
     def die(self):
+        self.end_jump()
         self.moveTo(400,600) # TODO : poner numeros adecuados
         self.parent.player_lives -= 1
 
@@ -161,22 +167,53 @@ class Frog(Entity):
 
         if self.right() > p.GAME_AREA_SIZE.width():
             self.translate(p.GAME_AREA_SIZE.width() - self.right(), 0)
+            self.end_jump()
         if self.left() < 0:
             self.translate(-self.left(), 0)
+            self.end_jump()
         if self.bottom() > p.GAME_AREA_SIZE.height():
             self.translate(0, p.GAME_AREA_SIZE.height() - self.bottom())
-        if self.top() < 0:
-            pass # TODO win
+            self.end_jump()
 
-        next_log = None
-        for log in filter(lambda x: isinstance(x, Log), self.parent.entities):
-            if log.contains(self.center()):
-                next_log = log
+        if self.jump_destination is None:
+            next_log = None
+            for log in filter(lambda x: isinstance(x, Log), self.parent.entities):
+                if log.contains(self.center()):
+                    next_log = log
 
-        for river in self.parent.river_rects:
-            if river.contains(self.center()):
-                if next_log == None:
-                    self.translate(-x, -y)
+            for river in self.parent.river_rects:
+                if river.contains(self.center()):
+                    if next_log == None:
+                        self.translate(-x, -y)
+
+
+    def jumping(self):
+        if self.jump_destination is None:
+            if self.direction == p.DIR_UP:
+                self.jump_destination = QPointF(self.x(), self.y() - p.PIXELES_SALTO)
+            elif self.direction == p.DIR_DOWN:
+                self.jump_destination = QPointF(self.x(), self.y() + p.PIXELES_SALTO)
+            elif self.direction == p.DIR_LEFT:
+                self.jump_destination = QPointF(self.x() - p.PIXELES_SALTO, self.y())
+            if self.direction == p.DIR_RIGHT:
+                self.jump_destination = QPointF(self.x() + p.PIXELES_SALTO, self.y())
+        
+        if self.direction == p.DIR_UP:
+            self.move(0, -1*self.speed * p.JUMP_SPEED_BONUS / p.FRAME_RATE)
+        elif self.direction == p.DIR_DOWN:
+            self.move(0, self.speed * p.JUMP_SPEED_BONUS / p.FRAME_RATE)
+        elif self.direction == p.DIR_LEFT:
+            self.move(-1*self.speed * p.JUMP_SPEED_BONUS / p.FRAME_RATE, 0)
+        elif self.direction == p.DIR_RIGHT:
+            self.move(self.speed * p.JUMP_SPEED_BONUS / p.FRAME_RATE, 0)
+
+        if not self.jump_destination is None and self.contains(self.jump_destination):
+            self.moveTo(self.jump_destination)
+            self.end_jump()
+
+    def end_jump(self):
+        self.jump_destination = None
+        # TODO animation
 
     def update_movement(self):
         keyboard = self.parent.keyboard
