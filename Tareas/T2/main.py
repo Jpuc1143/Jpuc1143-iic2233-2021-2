@@ -105,6 +105,10 @@ if __name__ == '__main__':
             logic_post_game.save_score
             )
 
+    window_post_game.signal_go_start.connect(
+            window_start.show
+            )
+
     window_start.show()
 
     app.exec()

@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSignal
 class WindowPostGame(QWidget):
     signal_next_level = pyqtSignal()
     signal_save_score = pyqtSignal(str, int)
+    signal_go_start = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -32,10 +33,14 @@ class WindowPostGame(QWidget):
         self.next_level_button.clicked.connect(self.next_level)
         hbox.addWidget(self.next_level_button)
         self.quit_button = QPushButton("Salir")
+        self.quit_button.clicked.connect(self.go_start)
         hbox.addWidget(self.quit_button)
         layout.addLayout(hbox, 5, 0, 1, 2)
 
     def show_results(self, victory, name, level, lives, score, coins):
+        self.victory = victory
+        self.name = name
+        self.score = score
         if victory:
             self.next_level_button.setDisabled(False)
             self.message.setText(f"Nivel Completado {name}!")
@@ -56,5 +61,10 @@ class WindowPostGame(QWidget):
         self.signal_next_level.emit()
 
     def save_score(self, name, score):
-        print("guardando puntacion", name, score)
         self.signal_save_score.emit(name, score)
+
+    def go_start(self):
+        if self.victory:
+            self.save_score(self.name, self.score)
+        self.signal_go_start.emit()
+        self.hide()

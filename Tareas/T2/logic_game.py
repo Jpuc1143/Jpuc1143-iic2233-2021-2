@@ -112,7 +112,9 @@ class LogicGame(QObject):
     def next_level(self):
         self.keyboard = Keyboard()
         self.current_level += 1
-        self.time_remaining = p.DURACION_RONDA_INICIAL * (p.PONDERADOR_DIFICULTAD ** (self.current_level - 1))
+        self.time_remaining = int(
+                p.DURACION_RONDA_INICIAL * (p.PONDERADOR_DIFICULTAD ** (self.current_level - 1))
+                )
 
         self.spawned_item = None
         self.skull_bonus = 1

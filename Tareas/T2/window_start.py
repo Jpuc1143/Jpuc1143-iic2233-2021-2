@@ -42,8 +42,10 @@ class WindowStart(QWidget):
         if success:
             self.hide()
         else:
-            pass
-            # TODO
+            text = f"Usuario no valido. Tiene que ser alfanumérico y tener entre "\
+                   f"{p.MIN_CARACTERES} y {p.MAX_CARACTERES} caracteres"
+            self.user_entry.clear()
+            self.user_entry.setPlaceholderText(text)
 
     def show_ranking(self):
         self.hide()
