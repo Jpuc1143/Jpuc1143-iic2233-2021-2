@@ -53,6 +53,8 @@ class LogicGame(QObject):
         self.spawned_item = None
         self.skull_bonus = 1
 
+        self.checkpoint = 0
+
         # No optimo. ¿Por qué Python no tiene linked lists en el stdlib?
         self.entities = list()
 
@@ -113,8 +115,14 @@ class LogicGame(QObject):
                     p.LANE_LENGTH, 3 * p.LANE_WIDTH
                         ))
 
+        self.checkpoints = []
+        for index, area in enumerate(self.area_layout):
+            if index != 0 and self.area_layout[index-1][0] != area[0]:
+                self.checkpoints.append(area[1] - 1)
+
     def next_level(self):
         self.keyboard = Keyboard()
+        self.checkpoint = 0
         self.current_level += 1
         self.time_remaining = int(
                 p.DURACION_RONDA_INICIAL * (p.PONDERADOR_DIFICULTAD ** (self.current_level - 1))
@@ -162,6 +170,12 @@ class LogicGame(QObject):
         if self.player.top() <= self.game_area.top():
             self.win_game()
             return
+
+        for checkpoint in self.checkpoints:
+            if checkpoint < self.checkpoint:
+                break
+            if self.player.top() <= self.lane_to_pos(checkpoint):
+                self.checkpoint = checkpoint
         
         # Identificar cheatcodes
         if reduce(lambda x, y: x and y, map(lambda x: self.keyboard[x], p.CHEAT_LIFE)):

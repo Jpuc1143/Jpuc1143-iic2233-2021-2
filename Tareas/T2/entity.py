@@ -165,7 +165,11 @@ class Frog(Entity):
 
     def die(self):
         self.end_jump()
-        self.moveTo(p.LANE_LENGTH / 2 - p.FROG_SIZE.width(), self.parent.lane_to_pos(0))
+ 
+        self.moveCenter(QPointF(
+            p.LANE_LENGTH / 2,
+            self.parent.lane_to_pos(self.parent.checkpoint) + p.LANE_WIDTH/2)
+            )
         self.parent.player_lives -= 1
 
     def move(self, x, y):
