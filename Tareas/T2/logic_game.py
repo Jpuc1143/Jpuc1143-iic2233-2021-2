@@ -178,7 +178,8 @@ class LogicGame(QObject):
         for highway in filter(lambda x: x[0] == "H", self.area_layout):
             lane = randint(0, 2)
             direction = highway[2][lane]
-            car = Car(QPoint(p.GAME_AREA_SIZE.width(), self.lane_to_pos(highway[1] + lane)), direction, self)
+            y_pos = self.lane_to_pos(highway[1] + lane) + p.LANE_WIDTH/2 - p.CAR_SIZE.height()/2
+            car = Car(QPoint(p.GAME_AREA_SIZE.width(), y_pos), direction, self)
             if direction == p.DIR_RIGHT:
                 car.moveRight(0)
 
@@ -186,7 +187,8 @@ class LogicGame(QObject):
         for river in filter(lambda x: x[0] == "R", self.area_layout):
             lane = randint(0, 2)
             direction = river[2][lane]
-            log = Log(QPoint(p.GAME_AREA_SIZE.width(), self.lane_to_pos(river[1] + lane)), direction, self)
+            y_pos = self.lane_to_pos(river[1] + lane) + p.LANE_WIDTH/2 - p.LOG_SIZE.height()/2
+            log = Log(QPoint(p.GAME_AREA_SIZE.width(), y_pos), direction, self)
             if direction == p.DIR_RIGHT:
                 log.moveRight(0)
 
