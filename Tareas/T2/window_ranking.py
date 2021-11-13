@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QLabel, QPushButton, QGridLayout, QWidget
 
 import parametros as p
 
+
 class WindowRanking(QWidget):
 
     signal_return_start = pyqtSignal()
@@ -12,7 +13,7 @@ class WindowRanking(QWidget):
         super().__init__()
 
         self.setWindowTitle("DCCrossy Frog — Ranking")
-        self.setGeometry(100, 100, 800, 600)  # TODO constantes
+        self.move(p.WINDOW_OFFSET)
 
         # TODO: implementar mostrar ranking
 
@@ -21,7 +22,7 @@ class WindowRanking(QWidget):
 
         layout = QGridLayout()
         layout.addWidget(QLabel("Rankings", self), 0, 0, 1, 2)
-        
+
         self.score_counter = []
         for index in range(1, 6):
             layout.addWidget(QLabel(str(index)), index, 0)
@@ -44,3 +45,6 @@ class WindowRanking(QWidget):
         for index, score in enumerate(scores):
             self.score_counter[index].setText(f"{score[1]} ({score[0]})")
         self.show()
+
+    def closeEvent(self, event):
+        self.return_start()

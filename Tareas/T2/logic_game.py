@@ -1,7 +1,7 @@
 from random import choice, randint
 from functools import reduce
 
-from PyQt5.QtCore import pyqtSignal, QObject, QPoint, QTimer, QRectF, QSizeF, Qt
+from PyQt5.QtCore import pyqtSignal, QObject, QPoint, QTimer, QRectF, QSizeF
 
 import parametros as p
 from entity import Car, Log, Item, Frog
@@ -53,13 +53,17 @@ class LogicGame(QObject):
         self.spawned_item = None
         self.skull_bonus = 1
 
-        self.entities = list()  # No optimo. ¿Por qué Python no tiene linked lists en stdlib?
+        # No optimo. ¿Por qué Python no tiene linked lists en el stdlib?
+        self.entities = list()
 
         self.generate_level()
-        
+
         self.spawn_car()
         self.spawn_log()
-        self.player = Frog(QPoint(p.LANE_LENGTH/2, self.lane_to_pos(0)), p.DIR_UP, p.FROG_SKIN_0, self)
+        self.player = Frog(
+                QPoint(p.LANE_LENGTH / 2 - p.FROG_SIZE.width(),
+                self.lane_to_pos(0)), p.DIR_UP, p.FROG_SKIN_0, self
+                )
 
         self.update_game()
         self.resume_game()
@@ -125,7 +129,10 @@ class LogicGame(QObject):
         
         self.spawn_car()
         self.spawn_log()
-        self.player = Frog(QPoint(p.LANE_LENGTH/2, self.lane_to_pos(0)), p.DIR_UP, p.FROG_SKIN_0, self)
+        self.player = Frog(
+                QPoint(p.LANE_LENGTH / 2 - p.FROG_SIZE.width(),
+                self.lane_to_pos(0)), p.DIR_UP, p.FROG_SKIN_0, self
+                )
 
         self.update_game()
         self.resume_game()
@@ -157,10 +164,10 @@ class LogicGame(QObject):
             return
         
         # Identificar cheatcodes
-        if reduce(lambda x,y: x and y, map(lambda x: self.keyboard[x], p.CHEAT_LIFE)):
+        if reduce(lambda x, y: x and y, map(lambda x: self.keyboard[x], p.CHEAT_LIFE)):
             self.player_lives += p.VIDAS_TRAMPA
 
-        if reduce(lambda x,y: x and y, map(lambda x: self.keyboard[x], p.CHEAT_LEVEL)):
+        if reduce(lambda x, y: x and y, map(lambda x: self.keyboard[x], p.CHEAT_LEVEL)):
             self.win_game()
             return
 
@@ -214,7 +221,7 @@ class LogicGame(QObject):
 
     def key_up(self, key):
         self.keyboard[key] = False
-    
+
     def win_game(self):
         self.pause_game()
         self.score += self.calculate_level_score()

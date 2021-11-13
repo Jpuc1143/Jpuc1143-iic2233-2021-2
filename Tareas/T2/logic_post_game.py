@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QObject
 import parametros as p
 
+
 class LogicPostGame(QObject):
     def __init__(self):
         super().__init__()

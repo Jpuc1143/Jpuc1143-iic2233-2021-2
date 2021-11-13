@@ -40,7 +40,7 @@ if __name__ == '__main__':
     window_start.signal_show_ranking.connect(
         window_ranking.show_scores
         )
-    
+
     logic_start.signal_user_submit_reply.connect(
             window_start.submit_user_reply
         )

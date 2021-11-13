@@ -1,10 +1,12 @@
 import os
-from PyQt5.QtCore import QSize, QSizeF, Qt
+from PyQt5.QtCore import QSize, QSizeF, QPoint, Qt
 
 MIN_CARACTERES = 1
 MAX_CARACTERES = 12
 
-GAME_AREA_SIZE = QSize(800, 1040)
+WINDOW_OFFSET = QPoint(50, 50)
+
+GAME_AREA_SIZE = QSize(800, 910)
 FRAME_RATE = 20
 ICON_SIZE = QSize(40, 40)
 

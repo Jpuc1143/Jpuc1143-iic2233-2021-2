@@ -4,6 +4,7 @@ from PyQt5.QtCore import QRectF, QPointF, Qt
 
 import parametros as p
 
+
 class Entity(QRectF):
 
     def __init__(self, position, direction, parent):
@@ -17,7 +18,7 @@ class Entity(QRectF):
         self.sprite_book = dict()
         self.sprite_status = None
         self.sprite_cycle = 0
-        
+
         self.layer = 0
 
     def update(self):
@@ -34,15 +35,17 @@ class Entity(QRectF):
     def speed(self):
         return 0
 
+
 class MovingObstacle(Entity):
     def update(self):
         if self.direction == p.DIR_LEFT:
             self.translate(-1 * self.speed / p.FRAME_RATE, 0)
         elif self.direction == p.DIR_RIGHT:
             self.translate(self.speed / p.FRAME_RATE, 0)
-        
+
         if not self.intersects(self.parent.game_area):
             self.delete_self()
+
 
 class Car(MovingObstacle):
     def __init__(self, position, direction, parent):
@@ -59,6 +62,7 @@ class Car(MovingObstacle):
         factor = 2/(1+p.PONDERADOR_DIFICULTAD)
         return p.VELOCIDAD_AUTOS * (factor ** (self.parent.current_level - 1))
 
+
 class Log(MovingObstacle):
     def __init__(self, position, direction, parent):
         super().__init__(position, direction, parent)
@@ -72,7 +76,8 @@ class Log(MovingObstacle):
         factor = 2/(1+p.PONDERADOR_DIFICULTAD)
         return p.VELOCIDAD_TRONCOS * self.parent.skull_bonus * (
                 factor ** (self.parent.current_level - 1
-                    )) 
+                    ))
+
 
 class Item(Entity):
     def __init__(self, position, parent):
@@ -91,6 +96,7 @@ class Item(Entity):
         self.parent.spawned_item = None
         self.parent.item_spawn_timer.start()
         super().delete_self()
+
 
 class Frog(Entity):
     def __init__(self, position, direction, color, parent):
@@ -114,7 +120,7 @@ class Frog(Entity):
                         ))
 
     def update(self):
-        if self.parent.keyboard[Qt.Key_Space] or not self.jump_destination is None:
+        if self.parent.keyboard[Qt.Key_J] or self.jump_destination is not None:
             self.jumping()
         else:
             self.update_movement()
@@ -124,7 +130,7 @@ class Frog(Entity):
             if log.contains(self.center()):
                 self.following_log = log
 
-        if not self.following_log is None and self.jump_destination is None:
+        if self.following_log is not None and self.jump_destination is None:
             if self.following_log.direction == p.DIR_RIGHT:
                 self.move(self.following_log.speed / p.FRAME_RATE, 0)
             else:
@@ -137,12 +143,12 @@ class Frog(Entity):
 
         if self.jump_destination is None:
             for river in self.parent.river_rects:
-                if river.contains(self.center()) and self.following_log == None:
+                if river.contains(self.center()) and self.following_log is None:
                     self.die()
                     return
 
         item = self.parent.spawned_item
-        if not item is None and self.intersects(item):
+        if item is not None and self.intersects(item):
             if item.type == "Calavera":
                 self.parent.skull_bonus *= p.SKULL_BONUS
             elif item.type == "Corazon":
@@ -159,7 +165,7 @@ class Frog(Entity):
 
     def die(self):
         self.end_jump()
-        self.moveTo(400,600) # TODO : poner numeros adecuados
+        self.moveTo(p.LANE_LENGTH / 2 - p.FROG_SIZE.width(), self.parent.lane_to_pos(0))
         self.parent.player_lives -= 1
 
     def move(self, x, y):
@@ -183,9 +189,8 @@ class Frog(Entity):
 
             for river in self.parent.river_rects:
                 if river.contains(self.center()):
-                    if next_log == None:
+                    if next_log is None:
                         self.translate(-x, -y)
-
 
     def jumping(self):
         if self.jump_destination is None:
@@ -197,7 +202,7 @@ class Frog(Entity):
                 self.jump_destination = QPointF(self.x() - p.PIXELES_SALTO, self.y())
             if self.direction == p.DIR_RIGHT:
                 self.jump_destination = QPointF(self.x() + p.PIXELES_SALTO, self.y())
-        
+
         if self.direction == p.DIR_UP:
             self.move(0, -1*self.speed * p.JUMP_SPEED_BONUS / p.FRAME_RATE)
         elif self.direction == p.DIR_DOWN:
@@ -207,7 +212,7 @@ class Frog(Entity):
         elif self.direction == p.DIR_RIGHT:
             self.move(self.speed * p.JUMP_SPEED_BONUS / p.FRAME_RATE, 0)
 
-        if not self.jump_destination is None and self.contains(self.jump_destination):
+        if self.jump_destination is not None and self.contains(self.jump_destination):
             self.moveTo(self.jump_destination)
             self.end_jump()
 

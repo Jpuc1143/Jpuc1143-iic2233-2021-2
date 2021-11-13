@@ -4,16 +4,17 @@ from PyQt5.QtGui import QPixmap
 
 import parametros as p
 
+
 class WindowStart(QWidget):
-    
+
     signal_submit_user = pyqtSignal(str)
     signal_show_ranking = pyqtSignal()
 
     def __init__(self):
         super().__init__()
-        
+ 
+        self.move(p.WINDOW_OFFSET)
         self.setWindowTitle("DCCrossy Frog")
-        self.setGeometry(100, 100, 800, 600)  # TODO: cambiar a constantes
 
         self.logo = QLabel(self)
         self.logo.setPixmap(QPixmap(p.PATH_LOGO))

@@ -1,6 +1,9 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QPushButton, QHBoxLayout
 from PyQt5.QtCore import pyqtSignal
 
+import parametros as p
+
+
 class WindowPostGame(QWidget):
     signal_next_level = pyqtSignal()
     signal_save_score = pyqtSignal(str, int)
@@ -8,7 +11,7 @@ class WindowPostGame(QWidget):
 
     def __init__(self):
         super().__init__()
-    
+        self.move(p.WINDOW_OFFSET)
         self.setWindowTitle("DCCrossy Frog — Resultados")
 
         self.message = QLabel("TITLE")
@@ -27,7 +30,7 @@ class WindowPostGame(QWidget):
         layout.addWidget(self.score_counter, 2, 1)
         layout.addWidget(QLabel("Monedas:"), 4, 0)
         layout.addWidget(self.coin_counter, 4, 1)
-        
+
         hbox = QHBoxLayout()
         self.next_level_button = QPushButton("Siguiente")
         self.next_level_button.clicked.connect(self.next_level)

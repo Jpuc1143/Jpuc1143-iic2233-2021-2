@@ -1,10 +1,12 @@
 from PyQt5.QtCore import pyqtSignal, Qt
-from PyQt5.QtWidgets import QLabel, QWidget, QFrame, QVBoxLayout, QHBoxLayout, QGridLayout, QGroupBox, QPushButton
+from PyQt5.QtWidgets import (
+        QLabel, QWidget, QVBoxLayout, QHBoxLayout,
+        QGridLayout, QGroupBox, QPushButton
+        )
 from PyQt5.QtGui import QPixmap
 
-from queue import PriorityQueue
-
 import parametros as p
+
 
 class WindowGame(QWidget):
 
@@ -17,6 +19,8 @@ class WindowGame(QWidget):
 
     def __init__(self):
         super().__init__()
+        self.move(p.WINDOW_OFFSET)
+        self.setWindowTitle("DCCrossy Frog — Juego")
 
         self.game_area = QWidget(self)
         self.game_area.setMinimumSize(p.GAME_AREA_SIZE)
@@ -53,7 +57,6 @@ class WindowGame(QWidget):
         self.pause_button = QPushButton("Pausa")
         self.pause_button.clicked.connect(self.toggle_pause)
 
-
         status_bar = QGroupBox(self)
         status_bar_layout = QHBoxLayout(status_bar)
 
@@ -75,12 +78,12 @@ class WindowGame(QWidget):
 
         frame = QGroupBox()
         layout = QGridLayout(frame)
-        layout.addWidget(QLabel("Level:"), 0, 0)
+        layout.addWidget(QLabel("Nivel:"), 0, 0)
         layout.addWidget(self.level_counter, 0, 1)
         layout.addWidget(self.quit_button, 1, 0, 1, 2)
         layout.addWidget(self.pause_button, 2, 0, 1, 2)
         status_bar_layout.addWidget(frame)
-    
+
         vbox = QVBoxLayout(self)
         vbox.addWidget(status_bar)
         vbox.addWidget(self.game_area)
@@ -140,7 +143,7 @@ class WindowGame(QWidget):
         self.show()
 
     def render(self, data):
-        self.setFocus()
+        # self.setFocus()  #  Tiene problemas. Elaborado en README.md
 
         # Barra de Estado
         self.life_counter.setText(str(data[1]))
@@ -154,14 +157,14 @@ class WindowGame(QWidget):
         self.level_counter.setText(str(data[5]))
         self.level_counter.repaint()
 
-       # TIL: la funcion de map no se hace cuando se llama, sino solo cuando se itera
+        # TIL: la funcion de map no se hace cuando se llama, sino solo cuando se itera
         list(map(lambda x: x.deleteLater(), self.sprites))  
         self.sprites = []
 
         self.entities = data[0]
         layered_entities = []
         for entity in self.entities:
-            sprite = QLabel("car",self.game_area)
+            sprite = QLabel("car", self.game_area)
             sprite.setPixmap(QPixmap(entity.current_sprite))
             sprite.setScaledContents(True)
             sprite.setGeometry(entity.toRect())
@@ -170,10 +173,8 @@ class WindowGame(QWidget):
             self.sprites.append(sprite)
             layered_entities.append((entity.layer, sprite))
 
-        list(map(lambda x: x[1].raise_(), sorted(layered_entities, key=lambda x: x[0])))
         # El uso de raise_() en vez de raise() se debe al leer QtWidgets.pyi en /usr/lib/
-
- 
+        list(map(lambda x: x[1].raise_(), sorted(layered_entities, key=lambda x: x[0])))
 
     def keyPressEvent(self, event):
         self.signal_game_key_down.emit(event.key())
