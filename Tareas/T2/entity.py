@@ -1,4 +1,5 @@
 import os
+from random import choice
 from PyQt5.QtCore import QRectF, Qt
 
 import parametros as p
@@ -22,14 +23,16 @@ class Entity(QRectF):
     def update(self):
         pass
 
+    def delete_self(self):
+        self.parent.entities.remove(self)
+
     @property
     def current_sprite(self):
         return self.sprite_book[self.sprite_status][self.sprite_cycle]
 
     @property
     def speed(self):
-        return 50  # TODO: velocidad dinamica
-
+        return 0
 
 class MovingObstacle(Entity):
     def update(self):
@@ -41,10 +44,6 @@ class MovingObstacle(Entity):
         if not self.intersects(self.parent.game_area):
             self.delete_self()
 
-    def delete_self(self):
-        self.parent.entities.remove(self)
-
-
 class Car(MovingObstacle):
     def __init__(self, position, direction, parent):
         super().__init__(position, direction, parent)
@@ -55,6 +54,11 @@ class Car(MovingObstacle):
 
         self.sprite_status = self.direction
 
+    @property
+    def speed(self):
+        factor = 2/(1+p.PONDERADOR_DIFICULTAD)
+        return p.VELOCIDAD_AUTOS * (factor ** (self.parent.current_level - 1))
+
 class Log(MovingObstacle):
     def __init__(self, position, direction, parent):
         super().__init__(position, direction, parent)
@@ -62,6 +66,31 @@ class Log(MovingObstacle):
         self.setSize(p.LOG_SIZE)
         self.sprite_book["idle"] = [p.PATH_LOG]
         self.sprite_status = "idle"
+
+    @property
+    def speed(self):
+        factor = 2/(1+p.PONDERADOR_DIFICULTAD)
+        return p.VELOCIDAD_TRONCOS * self.parent.skull_bonus * (
+                factor ** (self.parent.current_level - 1
+                    )) 
+
+class Item(Entity):
+    def __init__(self, position, parent):
+        super().__init__(position, None, parent)
+        self.type = choice(["Calavera", "Corazon", "Moneda", "Reloj"])
+        self.layer = 5
+        self.setSize(p.ITEM_SIZE)
+
+        self.parent.spawned_item = self
+        self.parent.item_spawn_timer.stop()
+
+        self.sprite_book["idle"] = [os.path.join(p.PREFIX_ITEM, self.type + ".png")]
+        self.sprite_status = "idle"
+
+    def delete_self(self):
+        self.parent.spawned_item = None
+        self.parent.item_spawn_timer.start()
+        super().delete_self()
 
 class Frog(Entity):
     def __init__(self, position, direction, color, parent):
@@ -100,10 +129,32 @@ class Frog(Entity):
         for car in filter(lambda x: isinstance(x, Car), self.parent.entities):
             if car.intersects(self):
                 self.die()
+                return
+
+        for river in self.parent.river_rects:
+            if river.contains(self.center()) and self.following_log == None:
+                self.die()
+                return
+
+        item = self.parent.spawned_item
+        if not item is None and self.intersects(item):
+            if item.type == "Calavera":
+                self.parent.skull_bonus *= p.SKULL_BONUS
+            elif item.type == "Corazon":
+                self.parent.player_lives += 1
+            elif item.type == "Moneda":
+                self.parent.player_coins += 1
+            elif item.type == "Reloj":
+                level_time = p.DURACION_RONDA_INICIAL * (
+                        p.PONDERADOR_DIFICULTAD ** (self.parent.current_level - 1
+                            ))
+                self.parent.time_remaining += int(10 * self.parent.time_remaining / level_time)
+                # Me tinca que en esta formula deberia haber un +1...
+            item.delete_self()
 
     def die(self):
-        self.moveTo(400,0)
-        # TODO
+        self.moveTo(400,600) # TODO : poner numeros adecuados
+        self.parent.player_lives -= 1
 
     def move(self, x, y):
         self.translate(x, y)
@@ -178,4 +229,6 @@ class Frog(Entity):
             self.direction = p.DIR_RIGHT
             self.sprite_status = "right"
 
-
+    @property
+    def speed(self):
+        return p.VELOCIDAD_CAMINAR

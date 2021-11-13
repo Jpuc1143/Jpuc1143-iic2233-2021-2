@@ -54,6 +54,14 @@ if __name__ == '__main__':
             logic_game.key_up
             )
 
+    window_game.signal_pause_game.connect(
+            logic_game.pause_game
+            )
+
+    window_game.signal_resume_game.connect(
+            logic_game.resume_game
+            )
+
     logic_game.signal_render_level.connect(
             window_game.render_level
         )

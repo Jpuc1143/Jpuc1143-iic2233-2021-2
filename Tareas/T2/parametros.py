@@ -18,15 +18,20 @@ LANE_WIDTH = GAME_AREA_SIZE.height() / LANE_NUM
 
 DURACION_RONDA_INICIAL = 100
 VIDAS_INICIO = 5
+PONDERADOR_DIFICULTAD = 0.9
 
 VELOCIDAD_AUTOS = 200
 VELOCIDAD_TRONCOS = 50
+VELOCIDAD_CAMINAR = 100
+SKULL_BONUS = 1.05
 
-TIEMPOS_AUTOS = 5
-TIEMPOS_TRONCOS = 5
+TIEMPO_AUTOS = 2
+TIEMPO_TRONCOS = 5
+TIEMPO_OBJETO = 5
 
 CAR_SIZE = QSizeF(50, 50)
 LOG_SIZE = QSizeF(100, 50)
+ITEM_SIZE = QSizeF(50, 50)
 
 FROG_SIZE = QSizeF(40, 40)
 FROG_SKIN_0 = "Naranjo"
@@ -39,4 +44,10 @@ PATH_CAR_RIGHT = os.path.join("sprites", "Mapa", "autos", "rojo_right.png")
 PATH_CAR_LEFT = os.path.join("sprites", "Mapa", "autos", "rojo_left.png")
 PATH_LOG = os.path.join("sprites", "Mapa", "elementos", "tronco.png")
 
+PATH_LIFE = os.path.join("sprites", "Objetos", "Corazon.png")
+PATH_SKULL = os.path.join("sprites", "Objetos", "Calavera.png")
+PATH_COIN = os.path.join("sprites", "Objetos", "Moneda.png")
+PATH_CLOCK = os.path.join("sprites", "Objetos", "Reloj.png")
+
 PREFIX_FROG = os.path.join("sprites", "Personajes")
+PREFIX_ITEM = os.path.join("sprites", "Objetos")
