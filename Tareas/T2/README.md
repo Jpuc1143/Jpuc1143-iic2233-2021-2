@@ -1,13 +1,4 @@
-# Tarea X: Nombre de la tarea :school_satchel:
-
-
-Un buen ```README.md``` puede marcar una gran diferencia en la facilidad con la que corregimos una tarea, y consecuentemente cómo funciona su programa, por lo en general, entre más ordenado y limpio sea éste, mejor será 
-
-Para nuestra suerte, GitHub soporta el formato [MarkDown](https://es.wikipedia.org/wiki/Markdown), el cual permite utilizar una amplia variedad de estilos de texto, tanto para resaltar cosas importantes como para separar ideas o poner código de manera ordenada ([pueden ver casi todas las funcionalidades que incluye aquí](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet))
-
-Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **concisos** (a menos que lo consideren necesario) pero **tampoco pueden** faltar cosas. Lo importante es que sea claro y limpio 
-
-**Dejar claro lo que NO pudieron implementar y lo que no funciona a la perfección. Esto puede sonar innecesario pero permite que el ayudante se enfoque en lo que sí podría subir su puntaje.**
+# Tarea 2: DCCrossy Frog :school_satchel:
 
 ## Consideraciones generales :octocat:
 
@@ -17,104 +8,79 @@ en cierta línea del código o comentar una función>
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
-Explicación: mantén el emoji correspondiente, de manera honesta, para cada item. Si quieres, también puedes agregarlos a los títulos:
-- ❌ si **NO** completaste lo pedido
-- ✅ si completaste **correctamente** lo pedido
-- 🟠 si el item está **incompleto** o tiene algunos errores
 #### Ventana de Inicio: 4 pts (3%)
-##### ❌✅🟠 Ventana de Inicio <explicacion\>
+##### ✅ Ventana de Inicio
 #### Ventana de Ranking: 5 pts (4%)
-##### ❌✅🟠 Ventana de Ranking <explicacion\>
+##### ✅ Ventana de Ranking
 #### Ventana de juego: 13 pts (11%)
-##### ❌✅🟠 Ventana de juego <explicacion\>
+##### ✅ Ventana de juego
 #### Ventana de post-nivel: 5 pts (4%)
-##### ❌✅🟠 Ventana post-nivel <explicacion\>
+##### ✅ Ventana post-nivel
 #### Mecánicas de juego: 69 pts (58%)
-##### ❌✅🟠 Personaje <explicacion\>
-##### ❌✅🟠 Mapa y Áreas de juego <explicacion\>
-##### ❌✅🟠 Objetos <explicacion\>
-##### ❌✅🟠 Fin de Nivel <explicacion\>
-##### ❌✅🟠 Fin del juego <explicacion\>
+##### ✅ Personaje
+##### ✅ Mapa y Áreas de juego
+##### ✅ Objetos
+##### ✅ Fin de Nivel
+##### ✅ Fin del juego
 #### Cheatcodes: 8 pts (7%)
-##### ❌✅🟠 Pausa <explicacion\>
-##### ❌✅🟠 V + I + D <explicacion\>
-##### ❌✅🟠 N + I + V <explicacion\>
+##### ✅ Pausa <explicacion\>
+##### ✅ V + I + D
+##### ✅ N + I + V
 #### General: 14 pts (12%)
-##### ❌✅🟠 Modularización <explicacion\>
-##### ❌✅🟠 Modelación <explicacion\>
-##### ❌✅🟠 Archivos  <explicacion\>
-##### ❌✅🟠 Parametros.py <explicacion\>
+##### ✅ Modularización
+##### ✅ Modelación
+##### ✅ Archivos
+##### ✅ Parametros.py
 #### Bonus: 10 décimas máximo
-##### ❌✅🟠 Ventana de Tienda <explicacion\>
-##### ❌✅🟠 Música <explicacion\>
-##### ❌✅🟠 Checkpoint <explicacion\>
+##### ❌ Ventana de Tienda
+##### ❌ Música 
++ Lo tenia casi listo, pero tuve problemas de audio y no pude probarlo para hacerle commit 😭
+##### ✅ Checkpoint 
 ## Ejecución :computer:
-El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
-1. ```archivo.ext``` en ```ubicación```
-2. ```directorio``` en ```ubicación```
-3. ...
-
+El módulo principal de la tarea a ejecutar es  ```main.py```. Además se debe crear los siguientes archivos y directorios adicionales:
+1. ```puntaje.txt``` en ```./```. Sin embargo, el programa automaticamente lo crea si no existiera.
+2. ```sprites``` en ```./```
+3. ```Objetos``` en ```sprites```
+4. ```Mapa``` en ```sprites```
+5. ```Personajes``` en ```sprites```
+6. ```Logo.png``` en ```sprites```
+7. ```Verde``` en ```sprites/Personajes```. En esta carpeta estan las _sprites_ de la rana controlada por el jugador.
+En las carpetas anteriores deben estar presentes las _sprites_ que van a ser utilizadas por las ```Entities``` del programa.
 
 ## Librerías :books:
 ### Librerías externas utilizadas
 La lista de librerías externas que utilicé fue la siguiente:
-
-1. ```librería_1```: ```función() / módulo```
-2. ```librería_2```: ```función() / módulo``` (debe instalarse)
-3. ...
+1. ```PyQt5```: Para la creación de los aspectos visuales del programa.
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
+1. ```parametros.py```: Contiene las constantes del enunciado, los _paths_ de las imagenes usadas y cualquier otra constante utilizada como el tamaño y velocidad de los autos.
+2. ```entity```: La clase ```entity``` es la base para todas las clases que representen un objeto en el juego. Todas las clases que hereden de ella, como ```Frog``` y ```Item```, tambien están presentes.
+3. ```keyboard_status```: La clase de utilidad ```KeyboardStatus``` se utiliza para determinar si una tecla esta siendo presionada o no ya que _QT_ solo dice cuando las teclas son presionadas y soltadas.
 
-1. ```librería_1```: Contiene a ```ClaseA```, ```ClaseB```, (ser general, tampoco es necesario especificar cada una)...
-2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
-3. ...
+Adicionalmente, los siguientes archivos son para el renderizado y la lógica de las ventanas utilizadas; donde __X__ representa ```window``` o ```logic``` para el código de _frontend_ y _backend_ respectivamente:
+1. ```X_start```: La ventana de inicio.
+2. ```X_ranking```: La ventana de puntuaciones. También se ordenan las puntuaciones en el _backend_
+3. ```X_game```: La ventana que contiene el juego y la barra de estadisticas del jugador. El _backend_ simula todas las acciones del juego.
+4. ```X_post_game```: La ventana que muestra los resultados del juego. También se puede usar para ir al siguiente nivel si no se ha perdido aun. Las puntuaciones son guardas al archivo de ```puntaje.txt``` en el _backend_
+
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
 
-1. <Descripción/consideración 1 y justificación del por qué es válido/a> 
-2. <Descripción/consideración 2 y justificación del por qué es válido/a>
-3. ...
-
-PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
+1. La tecla de salto fue cambiada a "J". Esto es necesario porque la barra de espacio apreta un ```QPushButton``` al usarse. Utilizar ```setFocus()``` en el _widget_ del juego no funciona ya que causa que no se puedan apretar los botones.
+2. Se determina si la rana esta o no tocando el agua o un tronco usando solo su punto central. Por ello es que la rana puede estar tocando el agua parcialmente.
+3. Las teclas para los _cheatcodes_ se tienen que apretar al mismo tiempo para funcionar.
 
 
 -------
 
-
-
-**EXTRA:** si van a explicar qué hace específicamente un método, no lo coloquen en el README mismo. Pueden hacerlo directamente comentando el método en su archivo. Por ejemplo:
-
-```python
-class Corrector:
-
-    def __init__(self):
-          pass
-
-    # Este método coloca un 6 en las tareas que recibe
-    def corregir(self, tarea):
-        tarea.nota  = 6
-        return tarea
-```
-
-Si quieren ser más formales, pueden usar alguna convención de documentación. Google tiene la suya, Python tiene otra y hay muchas más. La de Python es la [PEP287, conocida como reST](https://www.python.org/dev/peps/pep-0287/). Lo más básico es documentar así:
-
-```python
-def funcion(argumento):
-    """
-    Mi función hace X con el argumento
-    """
-    return argumento_modificado
-```
-Lo importante es que expliquen qué hace la función y que si saben que alguna parte puede quedar complicada de entender o tienen alguna función mágica usen los comentarios/documentación para que el ayudante entienda sus intenciones.
-
 ## Referencias de código externo :book:
 
 Para realizar mi tarea saqué código de:
-1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
+1. \<https://github.com/IIC2233/contenidos/blob/main/semana-07/1-interfaces-gr%C3%A1ficas.ipynb>: esto hace un print del _traceback_ cuando hay un error y está implementado en el archivo ```main.py``` en las líneas 17 a la 20.
 
 
 
 ## Descuentos
-La guía de descuentos se encuentra [link](https://github.com/IIC2233/syllabus/blob/main/Tareas/Descuentos.md).
+Por favor referirse al ```README.md``` de la _T1_.
