@@ -8,12 +8,17 @@ class NodoGrafo:
         self.amistades = None
 
     def formar_amistad(self, nueva_amistad):
-        # Completar
-        pass
+        # amistades no es un set :( x2
+        if nueva_amistad not in self.amistades:
+            self.amistades.append(nueva_amistad)
+        if self not in nueva_amistad.amistades:
+            nueva_amistad.amistades.append(self)
 
     def eliminar_amistad(self, ex_amistad):
-        # Completar
-        pass
+        if ex_amistad in self.amistades:
+            self.amistades.remove(ex_amistad)
+        if self in ex_amistad.amistades:
+            ex_amistad.amistades.remove(self)
 
 
 def recomendar_amistades(nodo_inicial, profundidad):
@@ -21,7 +26,20 @@ def recomendar_amistades(nodo_inicial, profundidad):
     Recibe un NodoGrafo inicial y una profundidad de busqueda, retorna una
     lista de nodos NodoGrafo recomendados como amistad a esa profundidad.
     """
-    # Debes modificarlo
+
+    def explore_friends(current_node, depth):
+        if depth <= 1:
+            return set(current_node.amistades)
+        else:
+            friends = set()
+            for node in current_node.amistades:
+                friends.update(explore_friends(node, depth - 1))
+            return friends
+
+    print(f"iniciando busqueda, {nodo_inicial} {profundidad}")
+    possible_friends = explore_friends(nodo_inicial, profundidad + 1)
+    possible_friends -= set(nodo_inicial.amistades)
+    return possible_friends
 
 
 def busqueda_famosos(nodo_inicial, visitados=None, distancia_min=80):
