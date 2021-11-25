@@ -10,7 +10,7 @@ class NodoAmigoSecreto:
         self.siguiente = siguiente or self
         self.regalo_entregado = False
 
-    def insertar_amigo_secreto(self, nuevo_nodo, posicion,
+    def insertar_amigo_secreto(self, usuario, posicion,
                                posicion_actual=0):
         """
         Insertar un nuevo NodoAmigoSecreto en la posicion.
@@ -21,8 +21,11 @@ class NodoAmigoSecreto:
         dando vueltas hasta alcanzar el índice pedido.
         :param posicion_actual: Posición en la lista actual.
         """
-        # Completar
-        pass
+        if posicion == posicion_actual:
+            nuevo_nodo = NodoAmigoSecreto(usuario, siguiente=self.siguiente)
+            self.siguiente = nuevo_nodo
+        else:
+            self.siguiente.insertar_amigo_secreto(usuario, posicion, posicion_actual+1)
 
     def entregar_regalos(self):
         # No modificar
