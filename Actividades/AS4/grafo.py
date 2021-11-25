@@ -42,11 +42,32 @@ def recomendar_amistades(nodo_inicial, profundidad):
     return possible_friends
 
 
-def busqueda_famosos(nodo_inicial, visitados=None, distancia_min=80):
+def busqueda_famosos(nodo_inicial, visitados=None, distancia_max=80):
     """
     [BONUS]
     Recibe un NodoGrafo y busca en la red social al famoso mas
     cercano, retorna la distancia y el nodo del grafo que contiene
     a el usuario famoso cercano al que se encuentra.
     """
-    # Completar para el bonus
+    visited = set()
+    processing = deque()
+    processing.append((0, nodo_inicial))
+    visited.add(nodo_inicial)
+
+    while True:
+        try:
+            data = processing.popleft()
+        except IndexError:
+            return (distancia_max, None)
+
+        node = data[1]
+        depth = data[0]
+        if node.usuario.es_famoso:
+            return data
+        elif depth >= distancia_max:
+            return (distancia_max, None)
+        else:
+            for subnode in node.amistades:
+                if subnode not in visited:
+                    processing.append((depth+1, subnode))
+                    visited.add(subnode)
