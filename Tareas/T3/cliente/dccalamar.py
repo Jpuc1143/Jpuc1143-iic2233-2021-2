@@ -20,11 +20,11 @@ class DCCalamar(Thread, ABC):
                 reply = self.do_command(msg)
                 if reply is not None:
                     print("sending reply", reply)
-                    self.send_command("reply", value=reply)
+                    self.send_command("reply", False, value=reply)
 
     def send_command(self, cmd, reply=True, **kwargs):
+        print("Enviando comando", cmd, kwargs)
         kwargs["command"] = cmd
-        print(f"sending {kwargs}")
         msg = json.dumps(kwargs)
         # TODO: encryptar
         self.sock.sendall(len(msg).to_bytes(4, byteorder="little"))
@@ -37,6 +37,7 @@ class DCCalamar(Thread, ABC):
             pass
         reply = self.last_reply
         self.last_reply = None
+        print("Respuesta", reply)
         return reply
 
     def recieve_msg(self):
@@ -46,7 +47,6 @@ class DCCalamar(Thread, ABC):
         while msg_size > len(msg):
             buf = self.sock.recv(min(4096, msg_size-len(msg)))
             msg += buf
-            print(f"buffer {buf} msg {msg}")
         return json.loads(msg)
 
     @abstractmethod
