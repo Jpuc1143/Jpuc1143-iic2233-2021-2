@@ -1,4 +1,8 @@
 .*.swp
 
 *.pdf
-Sprites/*
+# Ignorar contenidos de carpeta manteniendo las carpetas:
+# https://stackoverflow.com/questions/46301811/gitignore-all-files-in-folders-but-keep-folder-structure
+Sprites/**
+!Sprites/**/
+!Sprites/**/.gitkeep
