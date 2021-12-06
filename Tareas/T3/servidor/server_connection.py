@@ -1,7 +1,7 @@
-from dccalamar import DCCalamar
+from dcconnection import DCConnection
 
 
-class Server(DCCalamar):
+class ServerConnection(DCConnection):
     def do_command(self, msg):
         cmd = msg["command"]
         if cmd == "ping":
