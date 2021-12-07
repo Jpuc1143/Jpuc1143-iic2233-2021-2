@@ -16,18 +16,15 @@ class DCConnection(Thread, ABC):
         while True:
             msg = self.recieve_msg()
             if msg["command"] == "reply":
-                print("Received reply")
                 with self.last_reply_condition:
                     self.last_reply = msg["value"]
                     self.last_reply_condition.notify()
             else:
                 reply = self.do_command(msg)
                 if reply is not None:
-                    print("sending reply", reply)
                     self.send_command("reply", block=False, value=reply)
 
     def send_command(self, cmd, block=True, **kwargs):
-        print("Enviando comando", cmd, kwargs)
         kwargs["command"] = cmd
         msg = json.dumps(kwargs)
         # TODO: encryptar
@@ -38,11 +35,9 @@ class DCConnection(Thread, ABC):
             return
 
         with self.last_reply_condition as cv:
-            print("waiting for reply...")
             self.last_reply_condition.wait_for(lambda: self.last_reply is not None)
             reply = self.last_reply
             self.last_reply = None
-            print("Respuesta", reply)
 
         return reply
 

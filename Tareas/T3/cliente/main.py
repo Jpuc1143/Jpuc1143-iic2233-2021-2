@@ -8,6 +8,7 @@ from client_connection import ClientConnection
 from start_window import StartWindow
 from start_logic import StartLogic
 from main_window import MainWindow
+from main_logic import MainLogic
 
 # Código de contenidos Semana 7.1
 # https://github.com/IIC2233/contenidos/blob/main/semana-07/1-interfaces-gr%C3%A1ficas.ipynb
@@ -34,6 +35,7 @@ if __name__ == '__main__':
     start_logic = StartLogic(client)
 
     main_window = MainWindow()
+    main_logic = MainLogic(client)
 
     start_window.signal_verify_user.connect(
             start_logic.verify_user
@@ -46,6 +48,14 @@ if __name__ == '__main__':
     start_logic.signal_login.connect(
             main_window.show
             )
-    
+
+    start_logic.signal_login.connect(
+            main_logic.join_lobby
+            )
+
+    main_logic.signal_update_lobby.connect(
+            main_window.update_lobby
+            )
+   
     start_window.show()
     app.exec()
