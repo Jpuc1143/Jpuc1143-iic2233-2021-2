@@ -53,8 +53,16 @@ if __name__ == '__main__':
             main_logic.join_lobby
             )
 
+    main_window.signal_invite_player.connect(
+            main_logic.invite_player
+            )
+
     main_logic.signal_update_lobby.connect(
             main_window.update_lobby
+            )
+
+    main_logic.signal_invite_player_reply.connect(
+            main_window.invite_player_reply
             )
    
     start_window.show()

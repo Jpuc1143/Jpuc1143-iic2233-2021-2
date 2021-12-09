@@ -1,11 +1,14 @@
 from dcconnection import DCConnection
+from PyQt5.QtCore import QThread
 
+from time import sleep # TODO ELIMINAR
 
 class ServerConnection(DCConnection):
     def __init__(self, sock, server):
         super().__init__(sock)
         self.server = server
 
+        self.user = None
         self.name = None
         self.birthday = None
 
@@ -24,10 +27,19 @@ class ServerConnection(DCConnection):
             self.birthday = msg["birthday"]
 
             self.server.login(self.name, self.birthday, self.sock)
-
+            self.user = self.server.users[self.name]
             return True # Para simplificar debuggeo TODO
             #return (user.isalnum() and len(user) >= 1 and len(birthday) == 10 and birthday[2] == "/" and birthday[5] == "/")
 
         elif cmd == "query-lobby":
-            print(f"Entregando a {self.name} lista de usuarios disponibles")
+            #print(f"Entregando a {self.name} lista de usuarios disponibles")
+            #print(self.server.lobby.values())
             return tuple(map(lambda x: (x.name, x.available),self.server.lobby.values()))
+
+        elif cmd == "invite":
+            invited = msg["invited"]
+            print("Iniciando delay artificial")
+            sleep(5)
+            print("Fin delay artificial")
+
+            return self.user.invite(invited)

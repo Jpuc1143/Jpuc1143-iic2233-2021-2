@@ -1,20 +1,71 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QTableWidget, QPushButton
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QTableWidget, QPushButton, QScrollArea, QVBoxLayout, QButtonGroup, QMessageBox, QProgressDialog, QDialog
 
 
 class MainWindow(QWidget):
+    signal_invite_player = pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
         self.resize(200,200)
 
-        self.lobby_widget = QTableWidget(self)
-        self.lobby_widget.setCellWidget(0, 0, QLabel("Loading..."))
+        self.lobby_data = []
+        self.lobby_scroll = QScrollArea(self)
+        self.lobby_scroll.setWidget(QLabel("Loading..."))
+        self.lobby_buttons = QButtonGroup(self)
+        self.lobby_buttons.buttonClicked.connect(self.lobby_button_clicked)
+
+        self.invite_dialog = QMessageBox(self)
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.lobby_scroll)
+
         #self.lobby.addWidget(QLabel("Esta es la ventana principal", self), 0, 0, 2, 1)
 
     def update_lobby(self, lobby_data):
-        print("rendering", lobby_data)
+        self.lobby_data = lobby_data
+        for button in self.lobby_buttons.buttons():
+            self.lobby_buttons.removeButton(button)
 
-        self.lobby_widget.setRowCount(len(lobby_data))
-        self.lobby_widget.setColumnCount(2)
+        scroll_widget = QWidget(self)
+        #scroll_widget.resize(self.lobby_scroll.size().width(), scroll_widget.size().height())
+        lobby_layout = QGridLayout(scroll_widget)
         for index, data in enumerate(lobby_data):
-            self.lobby_widget.setCellWidget(index, 0, QLabel(data[0]))
-            self.lobby_widget.setCellWidget(index, 1, QPushButton(str(data[1])))
+            lobby_layout.addWidget(QLabel(data[0]), index, 0)
+            button = QPushButton("Invitar")
+            button.setEnabled(data[1])
+            lobby_layout.addWidget(button, index, 1)
+            self.lobby_buttons.addButton(button, index)
+
+        self.lobby_scroll.setWidget(scroll_widget)
+
+    def lobby_button_clicked(self, button):
+        # TODO thread safety???
+        button_id = self.lobby_buttons.id(button)
+        invited_player = self.lobby_data[button_id][0]
+
+        print("abriendo modal")
+        self.invite_dialog.setText(f"Esperando a que {invited_player} acepte.")
+        self.invite_dialog.open()
+        self.signal_invite_player.emit(invited_player)
+
+    def invite_player_reply(self, success):
+        print("ventana cerrandose?", success)
+        self.invite_dialog.close()
+
+
+class InviteDialog(QMessageBox):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs) 
+
+        #button = QPushButton("Cancelar", self)
+        #button.clicked.connect(self.reject)
+
+        #self.label = QLabel(self)
+
+        #layout = QVBoxLayout(self)
+        #layout.addWidget(self.label)
+        #layout.addWidget(button)
+
+    def exec(self):
+        return super().exec()

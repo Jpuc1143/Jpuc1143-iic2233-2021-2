@@ -1,9 +1,11 @@
-from abc import ABC, abstractmethod
+from PyQt5.QtCore import pyqtSignal, QObject
+
+from abc import abstractmethod
 from threading import Thread, Condition
 import json
 
 
-class DCConnection(Thread, ABC):
+class DCConnection(Thread):
     def __init__(self, sock):
         super().__init__()
         self.sock = sock
@@ -15,18 +17,24 @@ class DCConnection(Thread, ABC):
     def run(self):
         while True:
             msg = self.recieve_msg()
+            print("msg received", msg)
             if msg["command"] == "reply":
                 with self.last_reply_condition:
                     self.last_reply = msg["value"]
                     self.last_reply_condition.notify()
             else:
-                reply = self.do_command(msg)
-                if reply is not None:
-                    self.send_command("reply", block=False, value=reply)
+                thread = Thread(target=self.process_reply, args=(msg,))
+                thread.start()
+
+    def process_reply(self, msg):
+        reply = self.do_command(msg)
+        if reply is not None:
+            self.send_command("reply", block=False, value=reply)
 
     def send_command(self, cmd, block=True, **kwargs):
         kwargs["command"] = cmd
         msg = json.dumps(kwargs)
+        print("msg sent", msg)
         # TODO: encryptar
         self.sock.sendall(len(msg).to_bytes(4, byteorder="little"))
         self.sock.sendall(msg.encode("utf-8"))

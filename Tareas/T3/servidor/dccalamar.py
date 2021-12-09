@@ -30,6 +30,8 @@ class User:
 
     def join_lobby(self):
         self.available = True
+        print(self.parent)
+        print(self.parent.lobby)
         self.parent.lobby[self.name] = self
         print(f"Usuario {self.name} se ha unido a la sala de espera")
 
@@ -37,6 +39,10 @@ class User:
         self.available = False
         del self.parent.lobby[self.name]
         print(f"Usuario {self.name} ha salido de la sala de espera")
+
+    def invite(self, invited):
+        # TODO
+        return False
 
     @property
     def is_loggedin(self):
