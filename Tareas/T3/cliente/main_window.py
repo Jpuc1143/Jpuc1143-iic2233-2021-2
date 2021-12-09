@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QTableWidget, QPushBut
 
 class MainWindow(QWidget):
     signal_invite_player = pyqtSignal(str)
+    signal_prompt_invite_reply = pyqtSignal(bool)
 
     def __init__(self):
         super().__init__()
@@ -16,6 +17,7 @@ class MainWindow(QWidget):
         self.lobby_buttons.buttonClicked.connect(self.lobby_button_clicked)
 
         self.invite_dialog = QMessageBox(self)
+        self.invite_dialog.setStandardButtons(QMessageBox.Cancel)
 
         layout = QVBoxLayout(self)
         layout.addWidget(self.lobby_scroll)
@@ -53,19 +55,19 @@ class MainWindow(QWidget):
         print("ventana cerrandose?", success)
         self.invite_dialog.close()
 
+    def prompt_invite(self, inviter):
+        invited_prompt = QMessageBox(self)
+        invited_prompt.setText(f"{inviter} te ha invitado a una partida")
+        invited_prompt.setInformativeText("¿Aceptar invitación?")
 
-class InviteDialog(QMessageBox):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs) 
+        invited_prompt.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        invited_prompt.accepted.connect(self.prompt_invite_accept)
+        invited_prompt.rejected.connect(self.prompt_invite_reject)
 
-        #button = QPushButton("Cancelar", self)
-        #button.clicked.connect(self.reject)
+        invited_prompt.open()
 
-        #self.label = QLabel(self)
+    def prompt_invite_accept(self):
+        self.signal_prompt_invite_reply.emit(True)
 
-        #layout = QVBoxLayout(self)
-        #layout.addWidget(self.label)
-        #layout.addWidget(button)
-
-    def exec(self):
-        return super().exec()
+    def prompt_invite_reject(self):
+        self.signal_prompt_invite_reply.emit(False)

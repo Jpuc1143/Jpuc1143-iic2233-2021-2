@@ -17,7 +17,6 @@ class DCConnection(Thread):
     def run(self):
         while True:
             msg = self.recieve_msg()
-            print("msg received", msg)
             if msg["command"] == "reply":
                 with self.last_reply_condition:
                     self.last_reply[msg["replied_command"]] = msg["value"]
@@ -29,17 +28,16 @@ class DCConnection(Thread):
     def process_reply(self, msg):
         reply = self.do_command(msg)
         if reply is not None:
-            self.send_command("reply", block=False, value=reply, replied_command=msg["command"])
+            self.send_command("reply", blocking=False, value=reply, replied_command=msg["command"])
 
-    def send_command(self, cmd, block=True, **kwargs):
+    def send_command(self, cmd, blocking=True, **kwargs):
         kwargs["command"] = cmd
         msg = json.dumps(kwargs)
-        print("msg sent", msg)
         # TODO: encryptar
         self.sock.sendall(len(msg).to_bytes(4, byteorder="little"))
         self.sock.sendall(msg.encode("utf-8"))
 
-        if not block:
+        if not blocking:
             return
 
         with self.last_reply_condition:

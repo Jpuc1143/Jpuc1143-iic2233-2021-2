@@ -22,7 +22,7 @@ if __name__ == '__main__':
     sock = socket()
     sock.connect(("localhost", 8080))
     client = ClientConnection(sock)
-    client.send_command("ping", block=False)
+    client.send_command("ping", blocking=False)
     print(client.send_command("echo", value="test"))
     print(client.send_command("echo", value="test2"))
     print(client.send_command("echo", value="test3"))
@@ -57,6 +57,10 @@ if __name__ == '__main__':
             main_logic.invite_player
             )
 
+    main_window.signal_prompt_invite_reply.connect(
+            main_logic.prompt_invite_reply
+            )
+
     main_logic.signal_update_lobby.connect(
             main_window.update_lobby
             )
@@ -65,5 +69,9 @@ if __name__ == '__main__':
             main_window.invite_player_reply
             )
    
+    client.signal_prompt_invite.connect(
+            main_window.prompt_invite
+            )
+
     start_window.show()
     app.exec()

@@ -4,11 +4,11 @@ class DCCalamar:
         self.users = dict()
         self.lobby = dict()
 
-    def login(self, name, birthday, sock):
+    def login(self, name, birthday, connection):
         if name not in self.users:
             print(f"Creando nuevo usuario {name}")
             self.users[name] = User(name, birthday, self)
-        self.users[name].current_connection = sock
+        self.users[name].current_connection = connection
         # TODO revisar que el usuario no este loggeado primero
         print(f"Usuario {name} ha ingresado con cumpleaños {birthday}")
 
@@ -41,8 +41,9 @@ class User:
         print(f"Usuario {self.name} ha salido de la sala de espera")
 
     def invite(self, invited):
-        # TODO
-        return False
+        print(f"Usuario {self.name} invita a {invited} a una partida")
+        connection = self.parent.users[invited].current_connection
+        return connection.send_command("prompt_invite", inviter=self.name)
 
     @property
     def is_loggedin(self):

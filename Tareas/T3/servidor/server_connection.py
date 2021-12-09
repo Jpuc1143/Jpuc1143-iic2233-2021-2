@@ -26,7 +26,7 @@ class ServerConnection(DCConnection):
             self.name = msg["user"]
             self.birthday = msg["birthday"]
 
-            self.server.login(self.name, self.birthday, self.sock)
+            self.server.login(self.name, self.birthday, self)
             self.user = self.server.users[self.name]
             return True # Para simplificar debuggeo TODO
             #return (user.isalnum() and len(user) >= 1 and len(birthday) == 10 and birthday[2] == "/" and birthday[5] == "/")
@@ -38,8 +38,8 @@ class ServerConnection(DCConnection):
 
         elif cmd == "invite":
             invited = msg["invited"]
-            print("Iniciando delay artificial")
-            sleep(5)
-            print("Fin delay artificial")
 
-            return self.user.invite(invited)
+            accepted = self.user.invite(invited)
+            print("respuesta invite recivida", accepted)
+            # TODO implementar cancelacion de invitacion
+            return accepted

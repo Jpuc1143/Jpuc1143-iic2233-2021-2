@@ -5,6 +5,7 @@ from dcconnection import DCConnection
 
 class ClientConnection(DCConnection, QObject):
     signal_reply_received = pyqtSignal(object)
+    signal_prompt_invite = pyqtSignal(str)
 
     def __init__(self, sock):
         DCConnection.__init__(self, sock)
@@ -23,6 +24,7 @@ class ClientConnection(DCConnection, QObject):
 
     def do_command(self, msg):
         cmd = msg["command"]
-        if cmd == "ask-invited":
+        if cmd == "prompt_invite":
             inviter = msg["inviter"]
-            #self.logic.prompt_invite("inviter")
+            self.signal_prompt_invite.emit(inviter)
+            return

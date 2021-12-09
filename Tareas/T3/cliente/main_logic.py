@@ -35,3 +35,6 @@ class MainLogic(QObject):
         if success:
             # Ir al juego TODO
             pass
+
+    def prompt_invite_reply(self, accepted):
+        self.client.send_command("reply", blocking=False, value=accepted, replied_command="prompt_invite")
