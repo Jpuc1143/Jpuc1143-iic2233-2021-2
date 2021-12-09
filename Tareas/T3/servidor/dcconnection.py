@@ -11,7 +11,7 @@ class DCConnection(Thread):
         self.sock = sock
         self.start()
 
-        self.last_reply = None
+        self.last_reply = dict()
         self.last_reply_condition = Condition()
     
     def run(self):
@@ -20,8 +20,8 @@ class DCConnection(Thread):
             print("msg received", msg)
             if msg["command"] == "reply":
                 with self.last_reply_condition:
-                    self.last_reply = msg["value"]
-                    self.last_reply_condition.notify()
+                    self.last_reply[msg["replied_command"]] = msg["value"]
+                    self.last_reply_condition.notify_all()
             else:
                 thread = Thread(target=self.process_reply, args=(msg,))
                 thread.start()
@@ -29,7 +29,7 @@ class DCConnection(Thread):
     def process_reply(self, msg):
         reply = self.do_command(msg)
         if reply is not None:
-            self.send_command("reply", block=False, value=reply)
+            self.send_command("reply", block=False, value=reply, replied_command=msg["command"])
 
     def send_command(self, cmd, block=True, **kwargs):
         kwargs["command"] = cmd
@@ -42,10 +42,10 @@ class DCConnection(Thread):
         if not block:
             return
 
-        with self.last_reply_condition as cv:
-            self.last_reply_condition.wait_for(lambda: self.last_reply is not None)
-            reply = self.last_reply
-            self.last_reply = None
+        with self.last_reply_condition:
+            self.last_reply_condition.wait_for(lambda: cmd in self.last_reply)
+            reply = self.last_reply[cmd]
+            del self.last_reply[cmd]
 
         return reply
 
