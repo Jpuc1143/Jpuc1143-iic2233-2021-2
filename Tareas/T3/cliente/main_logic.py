@@ -29,12 +29,10 @@ class MainLogic(QObject):
         self.client.send_command_signal(self.invite_player_finished, "invite", invited=invited_user)
 
     def invite_player_finished(self, success):
+        print(self.sender())
         print("estado de invitacion", success)
         self.signal_invite_player_reply.emit(success)
 
-        if success:
-            # Ir al juego TODO
-            pass
-
     def prompt_invite_reply(self, accepted):
         self.client.send_command("reply", blocking=False, value=accepted, replied_command="prompt_invite")
+

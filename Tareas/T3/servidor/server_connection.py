@@ -1,7 +1,8 @@
 from dcconnection import DCConnection
 from PyQt5.QtCore import QThread
 
-from time import sleep # TODO ELIMINAR
+from dccalamar import MarbleGame
+
 
 class ServerConnection(DCConnection):
     def __init__(self, sock, server):
@@ -42,4 +43,18 @@ class ServerConnection(DCConnection):
             accepted = self.user.invite(invited)
             print("respuesta invite recivida", accepted)
             # TODO implementar cancelacion de invitacion
+            
+            if accepted:
+                self.user.exit_lobby()
+                self.server.users[invited].exit_lobby()
+                self.game = MarbleGame(self.server, self.name, invited)
+
             return accepted
+
+        elif cmd == "next_turn":
+            if self.user.current_game is not None:
+                self.user.current_game.player_bet(msg["turn"], self.name, msg["bet_amount"], msg["bet_is_odd"])
+                return
+            else:
+                print("Turno de {self.name} llego cuando el juego ya termino. Ignorando")
+                return None

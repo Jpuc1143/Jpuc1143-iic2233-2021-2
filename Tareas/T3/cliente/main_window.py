@@ -46,13 +46,11 @@ class MainWindow(QWidget):
         button_id = self.lobby_buttons.id(button)
         invited_player = self.lobby_data[button_id][0]
 
-        print("abriendo modal")
         self.invite_dialog.setText(f"Esperando a que {invited_player} acepte.")
         self.invite_dialog.open()
         self.signal_invite_player.emit(invited_player)
 
     def invite_player_reply(self, success):
-        print("ventana cerrandose?", success)
         self.invite_dialog.close()
 
     def prompt_invite(self, inviter):
