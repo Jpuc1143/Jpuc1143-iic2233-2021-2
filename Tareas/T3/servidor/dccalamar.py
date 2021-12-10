@@ -1,4 +1,5 @@
 from threading import Thread, Condition
+from random import shuffle
 from parameters import Parameters as p
 
 
@@ -55,14 +56,14 @@ class User:
         return self.current_connecton is not None
 
 class MarbleGame(Thread):
-    def __init__(self, server, player0, player1):
+    def __init__(self, server, playera, playerb):
         super().__init__()
 
         self.server = server
         self.players = []
-        self.players.append(server.users[player0])
-        self.players.append(server.users[player1])
-        # TODO hacer random el que empieze
+        self.players.append(server.users[playera])
+        self.players.append(server.users[playerb])
+        shuffle(self.players)
 
         self.marbles = []
         self.marbles.append(p.STARTING_MARBLES)
