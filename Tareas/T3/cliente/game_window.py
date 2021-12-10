@@ -1,6 +1,8 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QSpinBox, QPushButton, QRadioButton
 
+from parameters import Parameters as p
+
 
 class GameWindow(QWidget):
     signal_next_turn = pyqtSignal(int, int, bool)
@@ -8,10 +10,9 @@ class GameWindow(QWidget):
     def __init__(self):
         super().__init__()
        
-        # TODO parametros
-        self.player_marbles = 10
+        self.player_marbles = p.STARTING_MARBLES
         self.player_marbles_label = QLabel(str(self.player_marbles))
-        self.opponent_marbles = 10
+        self.opponent_marbles = p.STARTING_MARBLES
         self.opponent_marbles_label = QLabel(str(self.opponent_marbles))
 
         self.bet_amount_input = QSpinBox()
@@ -40,8 +41,8 @@ class GameWindow(QWidget):
     def start(self, player, opponent, starter):
         self.starter = starter
         self.turn = 0
-        self.player_marbles = 10
-        self.opponent_marbles = 10 #Parametros TODO
+        self.player_marbles = p.STARTING_MARBLES
+        self.opponent_marbles = p.STARTING_MARBLES
 
         self.turn_label.setText(str(self.turn))
         self.turn_label.repaint()

@@ -4,6 +4,7 @@ from socket import socket
 from PyQt5.QtWidgets import QApplication
 
 from client_connection import ClientConnection
+from parameters import Parameters as p
 
 from start_window import StartWindow
 from start_logic import StartLogic
@@ -22,7 +23,7 @@ if __name__ == '__main__':
     
     # TODO hacer esto correctamente y eliminar prueba
     sock = socket()
-    sock.connect(("localhost", 8080))
+    sock.connect((p.host, p.port))
     client = ClientConnection(sock)
     client.send_command("ping", blocking=False)
     print(client.send_command("echo", value="test"))

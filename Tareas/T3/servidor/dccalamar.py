@@ -1,4 +1,5 @@
 from threading import Thread, Condition
+from parameters import Parameters as p
 
 
 class DCCalamar:
@@ -64,8 +65,8 @@ class MarbleGame(Thread):
         # TODO hacer random el que empieze
 
         self.marbles = []
-        self.marbles.append(10)
-        self.marbles.append(10) # TODO parametros
+        self.marbles.append(p.STARTING_MARBLES)
+        self.marbles.append(p.STARTING_MARBLES)
 
         self.turn = 0
         
