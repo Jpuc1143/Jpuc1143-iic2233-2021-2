@@ -36,14 +36,13 @@ class ServerConnection(DCConnection):
             return msg["value"]
 
         elif cmd == "login":
-            # TODO hacer esto mejor
-            self.name = msg["user"]
-            self.birthday = msg["birthday"]
+            success = self.server.login(msg["user"], msg["birthday"], self)
+            if success:
+                self.name = msg["user"]
+                self.user = self.server.users[self.name]
+                self.birthday = msg["birthday"]
 
-            self.server.login(self.name, self.birthday, self)
-            self.user = self.server.users[self.name]
-            return True # Para simplificar debuggeo TODO
-            #return (user.isalnum() and len(user) >= 1 and len(birthday) == 10 and birthday[2] == "/" and birthday[5] == "/")
+            return success
 
         elif cmd == "logout":
             self.server.logout(self.name)

@@ -1,5 +1,7 @@
 from threading import Thread, Condition
 from random import shuffle
+from re import fullmatch
+
 from parameters import Parameters as p
 
 
@@ -13,14 +15,19 @@ class DCCalamar:
         if name not in self.users:
             print(f"Creando nuevo usuario {name}")
             self.users[name] = User(name, birthday, self)
-        self.users[name].current_connection = connection
-        # TODO revisar que el usuario no este loggeado primero
-        print(f"Usuario {name} ha ingresado con cumpleaños {birthday}")
+        user = self.users[name]
 
-        self.users[name].join_lobby()
+        if (not user.is_loggedin and len(name) >= p.USERNAME_MINIMUM_LENGTH 
+                and name.isalnum() and fullmatch("([0-9]{2}/){2}[0-9]{4}", birthday) is not None):
+            self.users[name].current_connection = connection
+            print(f"Usuario {name} ha ingresado con cumpleaños {birthday}")
+            user.join_lobby()
+            return True
+        else:
+            print("Usuario invalido o ya ingresado")
+            return False
 
     def logout(self, name):
-        print('haciendo logout') # TODO
         if name in self.users and self.users[name].current_connection is not None:
             user = self.users[name]
             user.current_game = None
