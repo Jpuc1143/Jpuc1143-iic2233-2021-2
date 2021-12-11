@@ -1,6 +1,9 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QLabel, QPushButton
 
+from endpoint_error import EndpointError, FatalEndpointError
+
+
 class StartWindow(QWidget):
     signal_verify_user = pyqtSignal(str, str)
 
@@ -22,6 +25,7 @@ class StartWindow(QWidget):
         form.addRow(self.button_enter)
 
     def verify_user(self):
+        raise FatalEndpointError
         self.edit_user.setEnabled(False)
         self.edit_birthday.setEnabled(False)
         self.button_enter.setEnabled(False)

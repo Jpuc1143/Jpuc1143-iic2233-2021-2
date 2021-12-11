@@ -7,7 +7,7 @@ import json
 
 class DCConnection(Thread):
     def __init__(self, sock):
-        super().__init__()
+        super().__init__(daemon=True)
         self.sock = sock
         self.start()
 

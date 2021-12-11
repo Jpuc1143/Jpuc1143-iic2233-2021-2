@@ -42,9 +42,10 @@ class User:
         print(f"Usuario {self.name} se ha unido a la sala de espera")
 
     def exit_lobby(self):
-        self.available = False
-        del self.parent.lobby[self.name]
-        print(f"Usuario {self.name} ha salido de la sala de espera")
+        if self.name in self.parent.lobby:
+            self.available = False
+            del self.parent.lobby[self.name]
+            print(f"Usuario {self.name} ha salido de la sala de espera")
 
     def invite(self, invited):
         print(f"Usuario {self.name} invita a {invited} a una partida")
@@ -52,8 +53,12 @@ class User:
         return connection.send_command("prompt_invite", inviter=self.name)
 
     @property
+    def is_playing(self):
+        return self.current_game is not None
+
+    @property
     def is_loggedin(self):
-        return self.current_connecton is not None
+        return self.current_connection is not None
 
 class MarbleGame(Thread):
     def __init__(self, server, playera, playerb):

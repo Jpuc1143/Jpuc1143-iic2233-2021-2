@@ -1,9 +1,11 @@
 import sys
 from socket import socket
 
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QApplication
 
 from client_connection import ClientConnection
+from endpoint_error import EndpointError, FatalEndpointError
 from parameters import Parameters as p
 
 from start_window import StartWindow
@@ -17,9 +19,14 @@ from game_logic import GameLogic
 # https://github.com/IIC2233/contenidos/blob/main/semana-07/1-interfaces-gr%C3%A1ficas.ipynb
 if __name__ == '__main__':
     def hook(type, value, traceback):
-        print(type)
-        print(traceback)
-    sys.__excepthook__ = hook
+        if isinstance(value, EndpointError):
+            value.show_error()
+            if type == FatalEndpointError:
+                QApplication.exit(1)
+        else:
+            sys.__excepthook__(type, value, traceback)
+    
+    sys.excepthook = hook 
     
     # TODO hacer esto correctamente y eliminar prueba
     sock = socket()
