@@ -47,12 +47,13 @@ class ServerConnection(DCConnection):
 
         elif cmd == "logout":
             self.server.logout(self.name)
+            self.user = None
+            self.name = None
+            self.birthday = None
             return
 
         elif cmd == "query-lobby":
-            #print(f"Entregando a {self.name} lista de usuarios disponibles")
-            #print(self.server.lobby.values())
-            return tuple(map(lambda x: (x.name, x.available),self.server.lobby.values()))
+            return self.server.query_lobby(self.name)
 
         elif cmd == "invite":
             invited = msg["invited"]

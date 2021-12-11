@@ -23,10 +23,16 @@ class DCCalamar:
         print('haciendo logout') # TODO
         if name in self.users and self.users[name].current_connection is not None:
             user = self.users[name]
-            user.current_connection = None
             user.current_game = None
             user.exit_lobby()
             print(f"Usuario {name} se ha desconectado")
+
+    def query_lobby(self, name):
+        result = []
+        for user in self.lobby.values():
+            if user.name != name:
+                result.append([user.name, user.available])
+        return result
 
 class User:
     def __init__(self, name, birthday, parent):
