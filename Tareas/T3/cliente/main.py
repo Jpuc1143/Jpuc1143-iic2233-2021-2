@@ -41,7 +41,7 @@ if __name__ == '__main__':
     sock = socket()
     sock.connect((p.host, p.port))
     client = ClientConnection(sock)
-    client.send_command("ping", blocking=False)
+    #client.send_command("ping", blocking=False)
     print(client.send_command("echo", value="test"))
     print(client.send_command("echo", value="test2"))
     print(client.send_command("echo", value="test3"))
