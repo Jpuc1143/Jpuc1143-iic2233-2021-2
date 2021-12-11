@@ -11,7 +11,7 @@ class StartWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("DCCalamar — Log-in"
+        self.setWindowTitle("DCCalamar — Log-in")
 
         layout = QVBoxLayout(self)
 
@@ -42,3 +42,5 @@ class StartWindow(QWidget):
 
         if success:
             self.hide()
+        else:
+            raise EndpointError("Datos invalidos, usuario ya ingresado o servidor lleno.")

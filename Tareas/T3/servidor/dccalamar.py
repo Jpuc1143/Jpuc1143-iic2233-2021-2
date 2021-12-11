@@ -1,6 +1,7 @@
 from threading import Thread, Condition
 from random import shuffle
 from re import fullmatch
+from functools import reduce
 
 from parameters import Parameters as p
 
@@ -19,10 +20,17 @@ class DCCalamar:
 
         if (not user.is_loggedin and len(name) >= p.USERNAME_MINIMUM_LENGTH 
                 and name.isalnum() and fullmatch("([0-9]{2}/){2}[0-9]{4}", birthday) is not None):
-            self.users[name].current_connection = connection
-            print(f"Usuario {name} ha ingresado con cumpleaños {birthday}")
-            user.join_lobby()
-            return True
+            if reduce(
+                    lambda x, y: x+y,
+                    map(lambda x: 1 if x.is_loggedin else 0, self.users.values())
+                    ) < p.MAX_USERS:
+                self.users[name].current_connection = connection
+                print(f"Usuario {name} ha ingresado con cumpleaños {birthday}")
+                user.join_lobby()
+                return True
+            else:
+                print("Muchos usuarios ingresados actualmente")
+                return False
         else:
             print("Usuario invalido o ya ingresado")
             return False
@@ -31,6 +39,7 @@ class DCCalamar:
         if name in self.users and self.users[name].current_connection is not None:
             user = self.users[name]
             user.current_game = None
+            user.current_connection = None
             user.exit_lobby()
             print(f"Usuario {name} se ha desconectado")
 
