@@ -19,6 +19,6 @@ class EndpointError(Exception):
 
 class FatalEndpointError(EndpointError):
     def __init__(self):
-        super().__init__("Se ha perdido la conexión al servidor. Cerrando programa.")
+        super().__init__("Se ha perdido la conexión al servidor. Cerrando el programa.")
 
         self.dialog.setIcon(QMessageBox.Critical)

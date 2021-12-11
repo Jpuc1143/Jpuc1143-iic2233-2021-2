@@ -20,8 +20,12 @@ class DCCalamar:
         self.users[name].join_lobby()
 
     def logout(self, name):
-        if name in self.users:
-            self.users[name].current_connection = None
+        print('haciendo logout') # TODO
+        if name in self.users and self.users[name].current_connection is not None:
+            user = self.users[name]
+            user.current_connection = None
+            user.current_game = None
+            user.exit_lobby()
             print(f"Usuario {name} se ha desconectado")
 
 class User:
@@ -62,7 +66,7 @@ class User:
 
 class MarbleGame(Thread):
     def __init__(self, server, playera, playerb):
-        super().__init__()
+        super().__init__(daemon=True)
 
         self.server = server
         self.players = []

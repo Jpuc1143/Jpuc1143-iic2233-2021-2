@@ -1,6 +1,7 @@
 from threading import Thread
 from PyQt5.QtCore import pyqtSignal, QObject
 from dcconnection import DCConnection
+from endpoint_error import FatalEndpointError
 
 
 class ClientConnection(DCConnection, QObject):
@@ -26,7 +27,7 @@ class ClientConnection(DCConnection, QObject):
 
         self.signal_reply_received.connect(return_signal)
         thread = Thread(
-                target=thread_func,
+                target=thread_func, daemon=True,
                 args=(self, cmd), kwargs=kwargs
                 )
         thread.start()
@@ -47,3 +48,17 @@ class ClientConnection(DCConnection, QObject):
         elif cmd == "end_game":
             self.signal_end_game.emit(msg["won"])
             return
+
+    def send_command(self, cmd, blocking=True, **kwargs):
+        try:
+            print("wrapped send")
+            return super().send_command(cmd, blocking, **kwargs)
+        except ConnectionError:
+            raise FatalEndpointError
+
+    def receive_msg(self):
+        try:
+            print("wrapped receive")
+            return super().receive_msg()
+        except ConnectionError:
+            raise FatalEndpointError

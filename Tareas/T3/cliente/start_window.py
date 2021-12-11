@@ -25,7 +25,6 @@ class StartWindow(QWidget):
         form.addRow(self.button_enter)
 
     def verify_user(self):
-        raise FatalEndpointError
         self.edit_user.setEnabled(False)
         self.edit_birthday.setEnabled(False)
         self.button_enter.setEnabled(False)

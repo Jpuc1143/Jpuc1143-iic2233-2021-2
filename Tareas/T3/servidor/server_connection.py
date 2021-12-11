@@ -1,6 +1,4 @@
 from dcconnection import DCConnection
-from PyQt5.QtCore import QThread
-
 from dccalamar import MarbleGame
 
 
@@ -12,6 +10,21 @@ class ServerConnection(DCConnection):
         self.user = None
         self.name = None
         self.birthday = None
+
+    def run(self):
+        try:
+            super().run()
+        except ConnectionError:
+            if self.user is not None:
+                print(f"Se ha cerrado la conexión de {self.name}")
+                self.server.logout(self.user.name)
+
+    def send_command(self, cmd, blocking=True, **kwargs):
+        try:
+            return super().send_command(cmd, blocking, **kwargs)
+        except ConnectionError:
+             if self.user is not None:
+                self.server.logout(self.user.name)
 
     def do_command(self, msg):
         cmd = msg["command"]

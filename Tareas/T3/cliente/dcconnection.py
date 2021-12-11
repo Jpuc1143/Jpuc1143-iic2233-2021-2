@@ -23,7 +23,7 @@ class DCConnection(Thread):
                     self.last_reply[msg["replied_command"]] = msg["value"]
                     self.last_reply_condition.notify_all()
             else:
-                thread = Thread(target=self.process_reply, args=(msg,))
+                thread = Thread(target=self.process_reply, args=(msg,), daemon=True)
                 thread.start()
 
     def process_reply(self, msg):
@@ -38,7 +38,7 @@ class DCConnection(Thread):
         # TODO: encryptar
         self.sock.sendall(len(msg).to_bytes(4, byteorder="little"))
         self.sock.sendall(msg.encode("utf-8"))
-
+        
         if not blocking:
             return
 
@@ -56,6 +56,9 @@ class DCConnection(Thread):
         while msg_size > len(msg):
             buf = self.sock.recv(min(4096, msg_size-len(msg)))
             msg += buf
+        if msg == b"":
+            raise ConnectionError
+        print("msg", msg)
         return json.loads(msg)
 
     @abstractmethod

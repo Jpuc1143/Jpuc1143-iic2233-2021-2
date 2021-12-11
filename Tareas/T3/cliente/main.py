@@ -1,4 +1,5 @@
 import sys
+import threading
 from socket import socket
 
 from PyQt5.QtCore import QCoreApplication
@@ -23,10 +24,18 @@ if __name__ == '__main__':
             value.show_error()
             if type == FatalEndpointError:
                 QApplication.exit(1)
+        elif isinstance(value, ConnectionError):
+            FatalEndpointError().show_error()
+            QApplication.exit(1)
         else:
             sys.__excepthook__(type, value, traceback)
     
-    sys.excepthook = hook 
+    def thread_hook(args):
+        print(args)
+        hook(args.exc_type, args.exc_value, args.exc_traceback)
+
+    sys.excepthook = hook
+    threading.excepthook = thread_hook
     
     # TODO hacer esto correctamente y eliminar prueba
     sock = socket()
