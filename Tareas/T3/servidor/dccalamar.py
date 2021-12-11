@@ -139,8 +139,16 @@ class MarbleGame(Thread):
                         self.bets[1] is not None and 
                         self.is_odd_bet is not None)
                         or not self.players[0].is_playing
-                        or not self.players[1].is_playing
+                        or not self.players[1].is_playing,
+                        timeout=p.TIEMPO_TURNO
                         )
+
+                if self.bets[0] is None:
+                    self.end_game(1)
+                    break
+                elif self.bets[1] is None:
+                    self.end_game(0)
+                    break
 
                 if not self.players[0].is_playing:
                     self.end_game(1)

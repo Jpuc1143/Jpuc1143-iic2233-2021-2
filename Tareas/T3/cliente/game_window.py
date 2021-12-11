@@ -94,6 +94,8 @@ class GameWindow(QWidget):
         self.bet_even_button.setEnabled(self.starter)
         self.bet_odd_button.setEnabled(self.starter)
 
+        self.next_turn_button.setEnabled(True)
+    
         self.show()
 
     def next_turn(self):
