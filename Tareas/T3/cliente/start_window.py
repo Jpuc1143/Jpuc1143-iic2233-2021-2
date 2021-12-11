@@ -1,14 +1,17 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QFormLayout, QLineEdit, QLabel, QPushButton
+from PyQt5.QtGui import QPixmap
 
 from endpoint_error import EndpointError, FatalEndpointError
-
+from parameters import Parameters as p
 
 class StartWindow(QWidget):
     signal_verify_user = pyqtSignal(str, str)
 
     def __init__(self):
         super().__init__()
+
+        self.setWindowTitle("DCCalamar — Log-in"
 
         layout = QVBoxLayout(self)
 
@@ -17,7 +20,9 @@ class StartWindow(QWidget):
         self.button_enter = QPushButton("Firmar")
         self.button_enter.clicked.connect(self.verify_user)
 
-        layout.addWidget(QLabel("LOGO"))
+        logo = QLabel()
+        logo.setPixmap(QPixmap(p.PATH_LOGO))
+        layout.addWidget(logo)
         form = QFormLayout()
         layout.addLayout(form)
         form.addRow(QLabel("Usuario:"), self.edit_user)

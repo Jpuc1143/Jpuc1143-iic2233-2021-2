@@ -9,6 +9,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.resize(200,200)
+        self.setWindowTitle("DCCalamar — Sala de Espera")
 
         self.lobby_data = []
         self.lobby_scroll = QScrollArea(self)
@@ -20,9 +21,8 @@ class MainWindow(QWidget):
         self.invite_dialog.setStandardButtons(QMessageBox.Cancel)
 
         layout = QVBoxLayout(self)
+        layout.addWidget(QLabel("Bienvenidos a DCCalamar"))
         layout.addWidget(self.lobby_scroll)
-
-        #self.lobby.addWidget(QLabel("Esta es la ventana principal", self), 0, 0, 2, 1)
 
     def update_lobby(self, lobby_data):
         self.lobby_data = lobby_data

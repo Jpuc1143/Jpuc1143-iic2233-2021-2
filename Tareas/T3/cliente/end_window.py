@@ -11,6 +11,8 @@ class EndWindow(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.setWindowTitle("Fin")
+
     def end_game(self, won, player, opponent):
         layout = QGridLayout(self)
         layout.addWidget(QLabel("Victoria!" if won else "Derrota..."), 0, 0)

@@ -12,6 +12,8 @@ class GameWindow(QWidget):
     def __init__(self):
         super().__init__()
        
+        self.setWindowTitle("DCCalamar — Juego")
+
         self.player_label = QLabel()
         self.player_avatar = QLabel()
         self.player_avatar.setMaximumSize(p.SIZE_AVATAR)

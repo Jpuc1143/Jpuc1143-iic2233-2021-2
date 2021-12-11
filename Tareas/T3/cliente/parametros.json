@@ -10,6 +10,7 @@
 	"PATH_MONEY": ["Sprites", "Decoraciones", "wones.png"],
 	"PATH_DEAD": ["Sprites", "Decoraciones", "calavera_negra.png"],
 	"PATH_AVATAR_0": ["Sprites", "Avatares", "Avatar-1.png"],
-	"PATH_AVATAR_1": ["Sprites", "Avatares", "Avatar-2.png"]
+	"PATH_AVATAR_1": ["Sprites", "Avatares", "Avatar-2.png"],
+	"PATH_LOGO": ["Sprites", "Logos", "logo_negro.png"]
 
 }
