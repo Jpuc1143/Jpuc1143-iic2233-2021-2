@@ -1,5 +1,7 @@
 from PyQt5.QtCore import pyqtSignal, QObject, QTimer
 
+from parameters import Parameters as p
+
 
 class MainLogic(QObject):
     signal_update_lobby = pyqtSignal(list)
