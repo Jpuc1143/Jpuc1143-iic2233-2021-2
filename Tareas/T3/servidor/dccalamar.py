@@ -41,7 +41,7 @@ class DCCalamar:
             user.current_game = None
             user.current_connection = None
             user.exit_lobby()
-            print(f"Usuario {name} se ha desconectado")
+            print(f"Usuario {name} ha hecho logout")
 
     def query_lobby(self, name):
         result = []
@@ -76,7 +76,10 @@ class User:
     def invite(self, invited):
         print(f"Usuario {self.name} invita a {invited} a una partida")
         connection = self.parent.users[invited].current_connection
-        return connection.send_command("prompt_invite", inviter=self.name)
+        success = connection.send_command("prompt_invite", inviter=self.name)
+        if success:
+            print(f"{invited} ha aceptado el desafio de {self.name}")
+        return success
 
     @property
     def is_playing(self):
@@ -113,6 +116,8 @@ class MarbleGame(Thread):
         self.start()
 
     def run(self):
+        print(f"Empieza la partida entre {self.players[0].name} y {self.players[1]}.name")
+
         self.players[0].current_game = self
         self.players[0].current_connection.send_command(
                 "start_game", blocking=False,
@@ -130,10 +135,19 @@ class MarbleGame(Thread):
             print("Esperando apuestas de jugadores")
             with self.bets_condition:
                 self.bets_condition.wait_for(
-                        lambda: self.bets[0] is not None and 
+                        lambda: (self.bets[0] is not None and 
                         self.bets[1] is not None and 
-                        self.is_odd_bet is not None
+                        self.is_odd_bet is not None)
+                        or not self.players[0].is_playing
+                        or not self.players[1].is_playing
                         )
+
+                if not self.players[0].is_playing:
+                    self.end_game(1)
+                    break
+                elif not self.players[1].is_playing:
+                    self.end_game(0)
+                    break
 
                 self.process_turn()
 
@@ -144,14 +158,14 @@ class MarbleGame(Thread):
 
         print(self.turn, betting_player, other_player, self.is_odd_bet)
 
-        if (self.marbles[other_player] % 2 == 1) == self.is_odd_bet:
+        if (self.bets[other_player] % 2 == 1) == self.is_odd_bet:
             winner = betting_player
             loser = other_player
             marbles_gained = self.bets[other_player]
             self.marbles[betting_player] += marbles_gained
             self.marbles[other_player] -= marbles_gained
 
-            print(f"{self.players[betting_player].name} gana la apuesta"
+            print(f"{self.players[betting_player].name} gana la apuesta "
                   f"y obtiene {marbles_gained} canicas de {self.players[other_player].name}")
         else:
             winner = other_player
@@ -160,7 +174,7 @@ class MarbleGame(Thread):
             self.marbles[betting_player] -= marbles_lost
             self.marbles[other_player] += marbles_lost
 
-            print(f"{self.players[betting_player].name} perdió la apuesta"
+            print(f"{self.players[betting_player].name} perdió la apuesta "
                   f"y le da {marbles_lost} canicas a {self.players[other_player].name}")
 
         self.bets = [None, None]
@@ -188,13 +202,15 @@ class MarbleGame(Thread):
                 print(f"Apuesta invalida de {player_name}. ¿Paquete llegó muy tarde?")
                 return
 
-            output = f"{player_name} apostó {bet_amount} canicas"
+            output = f"{player_name} apostó {bet_amount} canicas {self.turn}"
             if self.players[0].name == player_name:
+                print("apuesta jugador 0")
                 self.bets[0] = bet_amount
                 if turn % 2 == 0:
                     output += f" a que el oponente apostó {'impar' if bet_is_odd else 'par'}"
                     self.is_odd_bet = bet_is_odd
             else:
+                print("apuesta jugador 1")
                 self.bets[1] = bet_amount
                 if turn % 2 == 1:
                     output += f" a que el oponente apostó {'impar' if bet_is_odd else 'par'}"
@@ -209,6 +225,7 @@ class MarbleGame(Thread):
         loser = self.players[(winner_index + 1) % 2]
 
         print(f"{winner.name} ha derrotado a {loser.name} en {self.turn + 1} rondas!")
-
-        winner.current_connection.send_command("end_game", blocking=False, won=True)
-        loser.current_connection.send_command("end_game", blocking=False, won=False)
+        if winner.current_connection is not None:
+            winner.current_connection.send_command("end_game", blocking=False, won=True)
+        if loser.current_connection is not None:
+            loser.current_connection.send_command("end_game", blocking=False, won=False)

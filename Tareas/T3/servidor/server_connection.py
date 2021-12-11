@@ -3,9 +3,15 @@ from dccalamar import MarbleGame
 
 
 class ServerConnection(DCConnection):
+    id_count = 0
+
     def __init__(self, sock, server):
         super().__init__(sock)
         self.server = server
+        self.id = ServerConnection.id_count
+        ServerConnection.id_count += 1
+
+        print(f"{[self.id]} Conexión entrante de {self.sock.getpeername()}")
 
         self.user = None
         self.name = None
@@ -58,7 +64,6 @@ class ServerConnection(DCConnection):
             invited = msg["invited"]
 
             accepted = self.user.invite(invited)
-            print("respuesta invite recivida", accepted)
             # TODO implementar cancelacion de invitacion
             
             if accepted:
