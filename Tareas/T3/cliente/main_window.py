@@ -1,5 +1,8 @@
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QTableWidget, QPushButton, QScrollArea, QVBoxLayout, QButtonGroup, QMessageBox, QProgressDialog, QDialog
+from PyQt5.QtWidgets import (
+        QWidget, QLabel, QGridLayout, QPushButton,
+        QScrollArea, QVBoxLayout, QButtonGroup, QMessageBox
+        )
 
 
 class MainWindow(QWidget):
@@ -8,7 +11,7 @@ class MainWindow(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.resize(200,200)
+        self.resize(200, 200)
         self.setWindowTitle("DCCalamar — Sala de Espera")
 
         self.lobby_data = []

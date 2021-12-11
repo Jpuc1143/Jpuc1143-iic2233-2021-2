@@ -11,7 +11,7 @@ class MainLogic(QObject):
         self.client = client
 
         self.timer_update_lobby = QTimer()
-        self.timer_update_lobby.setInterval(2000) #TODO parametro
+        self.timer_update_lobby.setInterval(p.REFRESH_PERIOD)
         self.timer_update_lobby.timeout.connect(self.update_lobby)
 
     def join_lobby(self):
@@ -26,7 +26,9 @@ class MainLogic(QObject):
         self.signal_update_lobby.emit(lobby_data)
 
     def invite_player(self, invited_user):
-        self.client.send_command_signal(self.invite_player_finished, "invite", invited=invited_user)
+        self.client.send_command_signal(
+                self.invite_player_finished, "invite", invited=invited_user
+                )
 
     def invite_player_finished(self, success):
         print(self.sender())
@@ -34,5 +36,7 @@ class MainLogic(QObject):
         self.signal_invite_player_reply.emit(success)
 
     def prompt_invite_reply(self, accepted):
-        self.client.send_command("reply", blocking=False, value=accepted, replied_command="prompt_invite")
+        self.client.send_command(
+                "reply", blocking=False, value=accepted, replied_command="prompt_invite"
+                )
 
