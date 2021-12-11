@@ -101,13 +101,13 @@ class MarbleGame(Thread):
         self.players[0].current_connection.send_command(
                 "start_game", blocking=False,
                 player=self.players[0].name,
-                opponent=self.players[1].name, starter=True
+                opponent=self.players[1].name, starter=True, avatar=0
                 )
         self.players[1].current_game = self
         self.players[1].current_connection.send_command(
                 "start_game", blocking=False,
                 player=self.players[1].name,
-                opponent=self.players[0].name, starter=False
+                opponent=self.players[0].name, starter=False, avatar=1
                 )
 
         while self.running:

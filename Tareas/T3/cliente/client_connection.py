@@ -7,7 +7,7 @@ from endpoint_error import FatalEndpointError
 class ClientConnection(DCConnection, QObject):
     signal_reply_received = pyqtSignal(object)
     signal_prompt_invite = pyqtSignal(str)
-    signal_start_game = pyqtSignal(str, str, bool)
+    signal_start_game = pyqtSignal(str, str, bool, int)
     signal_end_game = pyqtSignal(bool)
 
     def __init__(self, sock):
@@ -42,7 +42,7 @@ class ClientConnection(DCConnection, QObject):
         elif cmd == "start_game":
             player = msg["player"]
             opponent = msg["opponent"]
-            self.signal_start_game.emit(player, opponent, msg["starter"])
+            self.signal_start_game.emit(player, opponent, msg["starter"], msg["avatar"])
             return
 
         elif cmd == "end_game":
