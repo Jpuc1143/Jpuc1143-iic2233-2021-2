@@ -45,6 +45,10 @@ class ServerConnection(DCConnection):
             return True # Para simplificar debuggeo TODO
             #return (user.isalnum() and len(user) >= 1 and len(birthday) == 10 and birthday[2] == "/" and birthday[5] == "/")
 
+        elif cmd == "logout":
+            self.server.logout(self.name)
+            return
+
         elif cmd == "query-lobby":
             #print(f"Entregando a {self.name} lista de usuarios disponibles")
             #print(self.server.lobby.values())

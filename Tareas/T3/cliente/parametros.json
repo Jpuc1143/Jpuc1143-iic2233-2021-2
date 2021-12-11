@@ -2,5 +2,10 @@
 	"host": "127.0.0.1",
 	"port": 8080,
 	"BLOCK_SIZE": 80,
-	"STARTING_MARBLES": 10
+	"STARTING_MARBLES": 10,
+	
+	"SIZE_ICON": [100, 100],
+
+	"PATH_MONEY": ["Sprites", "Decoraciones", "wones.png"],
+	"PATH_DEAD": ["Sprites", "Decoraciones", "calavera_negra.png"]
 }

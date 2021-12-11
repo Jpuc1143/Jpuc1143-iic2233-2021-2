@@ -18,3 +18,4 @@ class GameLogic(QObject):
     def display_next_turn(self, turn_results):
         print("results", turn_results)
         self.signal_display_next_turn.emit(*turn_results)
+

@@ -18,7 +18,6 @@ class DCConnection(Thread):
     def run(self):
         while True:
             msg = self.recieve_msg()
-            print("received", msg)
             if msg["command"] == "reply":
                 with self.last_reply_condition:
                     self.last_reply[msg["replied_command"]] = msg["value"]
@@ -35,7 +34,6 @@ class DCConnection(Thread):
     def send_command(self, cmd, blocking=True, **kwargs):
         kwargs["command"] = cmd
         plaintext = json.dumps(kwargs)
-        print("enviando", plaintext)
         
         cyphertext = bytearray(self.encrypt_msg(plaintext.encode("utf-8")))
         self.sock.sendall(len(cyphertext).to_bytes(4, byteorder="little"))
@@ -76,28 +74,21 @@ class DCConnection(Thread):
         
         if B[0] > C[0]:
             result = bytearray(A + B + C)
-            print("preswap", result)
             for index, byte in enumerate(result):
-                print("byte", byte)
                 if result[index:index+1] == b"\x05":
-                    print("5 to 3")
                     result[index:index+1] = b"\x03"
                 elif result[index:index+1] == b"\x03":
-                    print("3 to 5")
                     result[index:index+1] = b"\x05"
             result += b"\x00"
         else:
             result = bytearray(B + A + C)
             result += b"\x01"
 
-        print("cyphertext", result)
         return result
 
     def recieve_msg(self):
         buf = self.sock.recv(4)
-        print("len recivido", buf)
         if buf == b"":
-            print("error conexcion")
             raise ConnectionError
         cyphertext_size = int.from_bytes(buf, byteorder="little")
         blocks_num = (cyphertext_size//p.BLOCK_SIZE)+(0 if cyphertext_size%p.BLOCK_SIZE==0 else 1)
@@ -118,7 +109,6 @@ class DCConnection(Thread):
         
         plaintext = self.decrypt_msg(cyphertext[:cyphertext_size])
         
-        print("msg", plaintext)
         return json.loads(plaintext)
 
     def decrypt_msg(self, cyphertext):
@@ -147,9 +137,7 @@ class DCConnection(Thread):
             C = cyphertext[:-1]
 
         result = bytearray()
-        print(A, B, C)
         for index in range(len(cyphertext_copy[:-1])):
-            print("index", index, cyphertext_copy[index])
             if index % 3 == 0:
                 result.append(A[index//3])
             elif index % 3 == 1:
@@ -157,7 +145,6 @@ class DCConnection(Thread):
             elif index % 3 == 2:
                 result.append(C[index//3])
 
-        print("result", result)
         return result
 
     @abstractmethod

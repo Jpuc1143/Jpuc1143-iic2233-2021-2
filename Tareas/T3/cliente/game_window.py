@@ -6,6 +6,7 @@ from parameters import Parameters as p
 
 class GameWindow(QWidget):
     signal_next_turn = pyqtSignal(int, int, bool)
+    signal_end_game = pyqtSignal(bool, str, str)
 
     def __init__(self):
         super().__init__()
@@ -26,19 +27,22 @@ class GameWindow(QWidget):
         self.turn = 0
         self.turn_label = QLabel(str(self.turn))
 
-        self.next_turn_button = QPushButton(self)
+        self.next_turn_button = QPushButton("Fin Turno", self)
         self.next_turn_button.clicked.connect(self.next_turn)
 
         layout = QGridLayout(self)
-        layout.addWidget(self.player_marbles_label, 0, 0)
-        layout.addWidget(self.bet_amount_input, 1, 0)
-        layout.addWidget(self.bet_even_button, 0, 1)
-        layout.addWidget(self.bet_odd_button, 1, 1)
+        layout.addWidget(self.player_marbles_label, 0, 1)
+        layout.addWidget(self.bet_amount_input, 1, 1)
+        layout.addWidget(self.bet_even_button, 0, 2)
+        layout.addWidget(self.bet_odd_button, 1, 2)
         layout.addWidget(self.turn_label, 2, 0)
         layout.addWidget(self.next_turn_button, 2, 1)
         layout.addWidget(self.opponent_marbles_label, 3, 0)
 
     def start(self, player, opponent, starter):
+        self.player = player
+        self.opponent = opponent
+
         self.starter = starter
         self.turn = 0
         self.player_marbles = p.STARTING_MARBLES
@@ -95,3 +99,7 @@ class GameWindow(QWidget):
         if (self.turn % 2 == 0) == self.starter:
             self.bet_even_button.setEnabled(True)
             self.bet_odd_button.setEnabled(True)
+
+    def end_game(self, won):
+        self.close()
+        self.signal_end_game.emit(won, self.player, self.opponent)

@@ -15,6 +15,7 @@ from main_window import MainWindow
 from main_logic import MainLogic
 from game_window import GameWindow
 from game_logic import GameLogic
+from end_window import EndWindow
 
 # Código de contenidos Semana 7.1
 # https://github.com/IIC2233/contenidos/blob/main/semana-07/1-interfaces-gr%C3%A1ficas.ipynb
@@ -59,6 +60,8 @@ if __name__ == '__main__':
     game_window = GameWindow()
     game_logic = GameLogic(client)
 
+    end_window = EndWindow()
+
     start_window.signal_verify_user.connect(
             start_logic.verify_user
             )
@@ -95,8 +98,16 @@ if __name__ == '__main__':
             game_logic.next_turn
             )
 
+    game_window.signal_end_game.connect(
+            end_window.end_game
+            )
+
     game_logic.signal_display_next_turn.connect(
             game_window.display_next_turn
+            )
+
+    end_window.signal_go_back.connect(
+            start_window.show
             )
    
     client.signal_prompt_invite.connect(
@@ -116,7 +127,7 @@ if __name__ == '__main__':
             )
 
     client.signal_end_game.connect(
-            game_window.hide
+            game_window.end_game
             )
 
     start_window.show()

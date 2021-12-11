@@ -47,6 +47,7 @@ class ClientConnection(DCConnection, QObject):
 
         elif cmd == "end_game":
             self.signal_end_game.emit(msg["won"])
+            self.send_command("logout", blocking=False)
             return
 
     def send_command(self, cmd, blocking=True, **kwargs):

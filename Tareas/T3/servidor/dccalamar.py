@@ -120,6 +120,8 @@ class MarbleGame(Thread):
         other_player = (self.turn + 1) % 2
         winner = None
 
+        print(self.turn, betting_player, other_player, self.is_odd_bet)
+
         if (self.marbles[other_player] % 2 == 1) == self.is_odd_bet:
             winner = betting_player
             loser = other_player
