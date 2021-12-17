@@ -16,19 +16,19 @@ url = info_curso["ability"]["url"]
 info_habilidad = obtener_info_habilidad(url)
 pokemones = obtener_pokemones(info_habilidad["pokemon"])
 
-#mas_alto = obtener_pokemon_mas_alto(pokemones)
-#mas_rapido = obtener_pokemon_mas_rapido(pokemones)
-#mejores_atacantes = obtener_mejores_atacantes(pokemones)
-#pokemones_por_tipo = obtener_pokemones_por_tipo(pokemones)
+mas_alto = obtener_pokemon_mas_alto(pokemones)
+mas_rapido = obtener_pokemon_mas_rapido(pokemones)
+mejores_atacantes = obtener_mejores_atacantes(pokemones)
+pokemones_por_tipo = obtener_pokemones_por_tipo(pokemones)
 
-#print("Mas alto", mas_alto)
-#print("Mas rapido", mas_rapido)
-#print("Mejores atacantes", mejores_atacantes)
-#print("Pokemones por tipo", pokemones_por_tipo)
+print("Mas alto", mas_alto)
+print("Mas rapido", mas_rapido)
+print("Mejores atacantes", mejores_atacantes)
+print("Pokemones por tipo", pokemones_por_tipo)
 
-print(enviar_test(token, 1, obtener_info_habilidad(url)),
-enviar_test(token, 2, obtener_pokemones(info_habilidad["pokemon"])),
-enviar_test(token, 3, obtener_pokemon_mas_alto(pokemones)),
-enviar_test(token, 4, obtener_pokemon_mas_rapido(pokemones)),
-enviar_test(token, 5, obtener_mejores_atacantes(pokemones)),
-enviar_test(token, 6, obtener_pokemones_por_tipo(pokemones)))
+print(enviar_test(token, 1, info_habilidad),
+enviar_test(token, 2, pokemones),
+enviar_test(token, 3, mas_alto),
+enviar_test(token, 4, mas_rapido),
+enviar_test(token, 5, mejores_atacantes),
+enviar_test(token, 6, pokemones_por_tipo))

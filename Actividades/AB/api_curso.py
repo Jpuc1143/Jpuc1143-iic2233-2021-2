@@ -1,8 +1,11 @@
 import requests
-
+from json import JSONDecodeError
 
 def info_api_curso(token):
-    return requests.get(f"https://www.avanzada.ml/api/v2/bonus/ability?api_token={token}").json()
+    try:
+        return requests.get(f"https://www.avanzada.ml/api/v2/bonus/ability?api_token={token}").json()
+    except JSONDecodeError:
+        return dict()
 
 def enviar_test(token, test_id, respuesta):
     func_id = {
@@ -18,5 +21,7 @@ def enviar_test(token, test_id, respuesta):
             "function_response": respuesta
             }
     response = requests.post(f"https://www.avanzada.ml/api/v2/bonus/tests/{test_id}?api_token={token}", json={"test": data})
-    print(response.json())
-    return response.json()["result"] == "success"
+    try:
+        return response.json()["result"] == "success"
+    except JSONDecodeError:
+        return False

@@ -31,15 +31,17 @@ def obtener_pokemones(pokemones):
     return result
 
 def obtener_pokemon_mas_alto(pokemones):
-    return max(pokemones, key=lambda x: x["height"])["name"]
+    return max(pokemones, key=lambda x: int(x["height"]))["name"]
 
 
 def obtener_pokemon_mas_rapido(pokemones):
-    return max(pokemones, key=lambda x: x["stats"].get("speed", {"base_stat": 0})["base_stat"])["name"]
+    result = max(reversed(pokemones), key=lambda x: int(x["stats"].get("speed", {"base_stat": 0})["base_stat"]))
+    #result = list(map(lambda x: int(x["stats"].get("speed", {"base_stat": 0})["base_stat"]), reversed(pokemones)))
+    return result["name"]
 
 
 def obtener_mejores_atacantes(pokemones):
-    result = list(map(lambda x: x["name"], sorted(filter(lambda x: "attack" in x["stats"] and "defense" in x["stats"], pokemones), key=lambda x: x["stats"]["attack"]["base_stat"]/x["stats"]["defense"]["base_stat"], reverse=True)))
+    result = sorted(filter(lambda x: "attack" in x["stats"] and "defense" in x["stats"], reversed(pokemones)), key=lambda x: x["stats"]["attack"]["base_stat"]/x["stats"]["defense"]["base_stat"], reverse=True)
     return result[:min(5, len(result))]
 
 
