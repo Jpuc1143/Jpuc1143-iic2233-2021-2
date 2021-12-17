@@ -4,7 +4,7 @@ from pokemon import (obtener_info_habilidad, obtener_pokemones,
 from api_curso import info_api_curso
 
 
-token = ""  # Ingresar tu API Token personal aquí
+token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2VtYWlsIjoiamFpbWUucGVyZXpAdWMuY2wifQ.SVhiW_TbcjCRaFPl_HdW4ncslIk3u90tGfkes4xpuv0"  # Ingresar tu API Token personal aquí
 
 info_curso = info_api_curso(token)
 
